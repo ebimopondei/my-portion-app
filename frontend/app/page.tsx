@@ -1,27 +1,36 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ShoppingCart, Users, Shield, Truck, ArrowRight, Leaf, Menu, X } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+"use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  ShoppingCart,
+  Users,
+  Shield,
+  Truck,
+  ArrowRight,
+  Leaf,
+  Menu,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 export default function LandingPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-50">
+      <header className="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-50 relative">
         <div className="container mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
           <div>
             <Link href="/" className="flex items-center">
-              <Image src="/placeholder.svg?height=36&width=140" width={140} height={36} alt="portion-logo" />
+              <Image src="/logo.png" width={140} height={36} alt="portion-logo" />
             </Link>
           </div>
 
@@ -58,35 +67,35 @@ export default function LandingPage() {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden border-t border-gray-100 bg-white"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-40"
             >
-              <div className="container mx-auto px-6 py-4 space-y-4">
+              <div className="container mx-auto px-6 py-6 space-y-4">
                 <Link
                   href="#how-it-works"
-                  className="block py-2 text-gray-600 hover:text-primary transition-colors"
+                  className="block py-3 text-gray-600 hover:text-primary transition-colors border-b border-gray-100 last:border-b-0"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   How it Works
                 </Link>
                 <Link
                   href="#benefits"
-                  className="block py-2 text-gray-600 hover:text-primary transition-colors"
+                  className="block py-3 text-gray-600 hover:text-primary transition-colors border-b border-gray-100 last:border-b-0"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Benefits
                 </Link>
                 <Link
                   href="#testimonials"
-                  className="block py-2 text-gray-600 hover:text-primary transition-colors"
+                  className="block py-3 text-gray-600 hover:text-primary transition-colors border-b border-gray-100 last:border-b-0"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Reviews
                 </Link>
-                <div className="pt-4 space-y-3">
+                <div className="pt-4 space-y-3 border-t border-gray-100">
                   <Button variant="outline" size="lg" asChild className="w-full bg-transparent">
                     <Link href="/login">Sign In</Link>
                   </Button>
@@ -101,12 +110,16 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 lg:py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-16 lg:py-20 bg-[url('/bg.png')] bg-cover bg-center">
         <div className="container mx-auto px-6 lg:px-16">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             {/* Left: Text Content */}
             <div className="w-full lg:w-[55%] text-center lg:text-left">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
                 <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-6 py-2 rounded-full text-sm font-medium">
                   🎉 Join 10,000+ smart shoppers saving money
                 </Badge>
@@ -125,8 +138,8 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.4 }}
               >
-                Connect with verified wholesale food vendors and save up to 40% on groceries through group buying and
-                bulk purchases.
+                Connect with verified wholesale food vendors and save up to 40%
+                on groceries through group buying and bulk purchases.
               </motion.p>
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
@@ -134,12 +147,21 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.6 }}
               >
-                <Button asChild size={"lg"} className="h-12 text-base font-semibold">
+                <Button
+                  asChild
+                  size={"lg"}
+                  className="h-12 text-base font-semibold"
+                >
                   <Link href="/register/buyer">
                     Start Saving Today <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
-                <Button variant="outline" asChild size={"lg"} className="h-12 text-base font-semibold bg-transparent">
+                <Button
+                  variant="outline"
+                  asChild
+                  size={"lg"}
+                  className="h-12 text-base font-semibold"
+                >
                   <Link href="/register/vendor">Partner with Us</Link>
                 </Button>
               </motion.div>
@@ -152,7 +174,7 @@ export default function LandingPage() {
               transition={{ duration: 1.2, delay: 0.8 }}
             >
               <Image
-                src="/placeholder.svg?height=500&width=800"
+                src="/hero.png"
                 alt="Portion Platform Dashboard"
                 width={800}
                 height={500}
@@ -173,7 +195,9 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-black text-gray-900 mb-6">How Portion Works</h2>
+            <h2 className="text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+              How Portion Works
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Simple steps to start saving on your grocery bills
             </p>
@@ -193,10 +217,15 @@ export default function LandingPage() {
                 <Users className="w-8 h-8 text-white" />
               </motion.div>
               <div className="relative">
-                <span className="absolute -top-4 -left-4 text-6xl font-bold text-primary/10">01</span>
-                <h3 className="text-2xl font-black mb-4 text-gray-900">Create an Account</h3>
+                <span className="absolute -top-4 -left-4 text-6xl font-bold text-primary/10">
+                  01
+                </span>
+                <h3 className="text-2xl font-black mb-4 text-gray-900">
+                  Create an Account
+                </h3>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-sm mx-auto">
-                  Find existing buying groups or create your own to reach minimum order quantities for wholesale prices.
+                  Find existing buying groups or create your own to reach
+                  minimum order quantities for wholesale prices.
                 </p>
               </div>
             </motion.div>
@@ -214,10 +243,15 @@ export default function LandingPage() {
                 <ShoppingCart className="w-8 h-8 text-white" />
               </motion.div>
               <div className="relative">
-                <span className="absolute -top-4 -left-4 text-6xl font-bold text-secondary/10">02</span>
-                <h3 className="text-2xl font-black mb-4 text-gray-900">Browse & Compare</h3>
+                <span className="absolute -top-4 -left-4 text-6xl font-bold text-secondary/10">
+                  02
+                </span>
+                <h3 className="text-2xl font-black mb-4 text-gray-900">
+                  Browse & Compare
+                </h3>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-sm mx-auto">
-                  Compare prices from verified wholesalers and choose the best deals on rice, beans, yam, and more.
+                  Compare prices from verified wholesalers and choose the best
+                  deals on rice, beans, yam, and more.
                 </p>
               </div>
             </motion.div>
@@ -235,10 +269,15 @@ export default function LandingPage() {
                 <Truck className="w-8 h-8 text-white" />
               </motion.div>
               <div className="relative">
-                <span className="absolute -top-4 -left-4 text-6xl font-bold text-primary/10">03</span>
-                <h3 className="text-2xl font-black mb-4 text-gray-900">Get Delivered</h3>
+                <span className="absolute -top-4 -left-4 text-6xl font-bold text-primary/10">
+                  03
+                </span>
+                <h3 className="text-2xl font-black mb-4 text-gray-900">
+                  Get Delivered
+                </h3>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-sm mx-auto">
-                  Enjoy convenient delivery to your doorstep and track your order every step of the way.
+                  Enjoy convenient delivery to your doorstep and track your
+                  order every step of the way.
                 </p>
               </div>
             </motion.div>
@@ -256,7 +295,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Why Choose Portion?</h2>
+            <h2 className="text-4xl lg:text-5xl font-black text-gray-900 mb-4">Why Choose Portion?</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">Experience the benefits of smart bulk buying</p>
           </motion.div>
 
@@ -268,10 +307,10 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="group"
             >
-              <Card className="border-0 shadow-none bg-gradient-to-br from-green-50 to-green-100/50 hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+              <Card className="border border-gray-200 shadow-none bg-white transition-all duration-300 group-hover:scale-105">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <span className="text-2xl">💰</span>
+                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span className="text-2xl text-gray-600">💰</span>
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-gray-900">Save Up to 40%</h3>
                   <p className="text-gray-600 leading-relaxed">
@@ -288,10 +327,10 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="group"
             >
-              <Card className="border-0 shadow-none bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+              <Card className="border border-gray-200 shadow-none bg-white transition-all duration-300 group-hover:scale-105">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <Shield className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Shield className="w-8 h-8 text-gray-600" />
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-gray-900">Verified Sellers</h3>
                   <p className="text-gray-600 leading-relaxed">
@@ -308,10 +347,10 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="group"
             >
-              <Card className="border-0 shadow-none bg-gradient-to-br from-orange-50 to-orange-100/50 hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+              <Card className="border border-gray-200 shadow-none bg-white transition-all duration-300 group-hover:scale-105">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <Users className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Users className="w-8 h-8 text-gray-600" />
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-gray-900">Group Buying</h3>
                   <p className="text-gray-600 leading-relaxed">
@@ -328,10 +367,10 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="group"
             >
-              <Card className="border-0 shadow-none bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+              <Card className="border border-gray-200 shadow-none bg-white transition-all duration-300 group-hover:scale-105">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <Truck className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Truck className="w-8 h-8 text-gray-600" />
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-gray-900">Fast Delivery</h3>
                   <p className="text-gray-600 leading-relaxed">Quick and reliable delivery straight to your door</p>
@@ -351,20 +390,28 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Ready to Start Saving?</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              Ready to Start Saving?
+            </h2>
             <p className="text-xl lg:text-2xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of smart shoppers and start saving on your grocery bills today.
+              Join thousands of smart shoppers and start saving on your grocery
+              bills today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
               <Input
                 placeholder="Enter your email address"
                 className="bg-white text-gray-900 border-0 h-12 text-lg px-4"
               />
-              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white h-12 px-8">
+              <Button
+                size="lg"
+                className="bg-secondary hover:bg-secondary/90 text-white h-12 px-8"
+              >
                 Get Started
               </Button>
             </div>
-            <p className="text-sm opacity-75 mt-6">No spam, unsubscribe at any time.</p>
+            <p className="text-sm opacity-75 mt-6">
+              No spam, unsubscribe at any time.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -381,13 +428,18 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 className="flex items-center space-x-3 mb-6"
               >
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                  <Leaf className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-2xl font-bold text-gray-900">Portion</span>
+                <Link href="/" className="flex items-center">
+                  <Image
+                    src="/logo.png"
+                    width={140}
+                    height={36}
+                    alt="portion-logo"
+                  />
+                </Link>
               </motion.div>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Connecting communities to wholesale food vendors for smarter, cheaper grocery shopping.
+                Connecting communities to wholesale food vendors for smarter,
+                cheaper grocery shopping.
               </p>
             </div>
 
@@ -395,17 +447,26 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-6 text-gray-900">For Buyers</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/register/buyer" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/register/buyer"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Sign Up
                   </Link>
                 </li>
                 <li>
-                  <Link href="/how-it-works" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/how-it-works"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     How It Works
                   </Link>
                 </li>
                 <li>
-                  <Link href="/categories" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/categories"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Browse Categories
                   </Link>
                 </li>
@@ -416,17 +477,26 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-6 text-gray-900">For Vendors</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/register/vendor" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/register/vendor"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Partner with Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/vendor-benefits" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/vendor-benefits"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Benefits
                   </Link>
                 </li>
                 <li>
-                  <Link href="/vendor-support" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/vendor-support"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Support
                   </Link>
                 </li>
@@ -437,17 +507,26 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-6 text-gray-900">Support</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/help" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/help"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Help Center
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/contact"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Contact Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/privacy" className="text-gray-600 hover:text-primary transition-colors">
+                  <Link
+                    href="/privacy"
+                    className="text-gray-600 hover:text-primary transition-colors"
+                  >
                     Privacy Policy
                   </Link>
                 </li>
@@ -457,12 +536,20 @@ export default function LandingPage() {
 
           <div className="border-t border-gray-200 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-600">&copy; 2024 Portion. All rights reserved.</p>
+              <p className="text-gray-600">
+                &copy; 2024 Portion. All rights reserved.
+              </p>
               <div className="flex items-center space-x-6">
-                <Link href="/terms" className="text-gray-600 hover:text-primary transition-colors text-sm">
+                <Link
+                  href="/terms"
+                  className="text-gray-600 hover:text-primary transition-colors text-sm"
+                >
                   Terms of Service
                 </Link>
-                <Link href="/privacy" className="text-gray-600 hover:text-primary transition-colors text-sm">
+                <Link
+                  href="/privacy"
+                  className="text-gray-600 hover:text-primary transition-colors text-sm"
+                >
                   Privacy Policy
                 </Link>
               </div>
@@ -471,5 +558,5 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
