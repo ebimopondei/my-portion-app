@@ -3,6 +3,7 @@ import cors from 'cors'
 import path from 'path'
 import { PORT } from './config/server'
 import { APPROUTER } from './routes'
+import { databaseErrorHandler, globalErrorHandler, notFoundErrorHandler } from './middleware/errorhandling'
 
 const app = express()
 
@@ -20,6 +21,10 @@ app.use(cors(
         credentials: true
     }
 ));
+
+app.use(notFoundErrorHandler)
+app.use(databaseErrorHandler)
+app.use(globalErrorHandler)
 
 app.listen(PORT, ()=>{
     console.info(`server started! ${PORT}`)

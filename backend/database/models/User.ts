@@ -1,11 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../setup'
 
-enum Role {
-  Buyer= 'buyer',
-  Seller = 'seller'
-}
-
+type Role = "buyer" | "seller" | "admin" | "subadmin";
 
 interface UserAttributes {
     id?: number;
@@ -74,7 +70,7 @@ User.init({
       },
 
       role: {
-        type: DataTypes.ENUM('buyer', 'seller'),
+        type: DataTypes.ENUM('buyer', 'seller', 'admin', 'subadmin'),
         allowNull: false
       }
       

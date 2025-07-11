@@ -23,6 +23,7 @@ const signupController = async ( req: Request, res: Response ) => {
       lastname: validated.lastname,
       email: validated.email,
       password: hashedPassword,
+      role: validated.role
     });
 
 
@@ -49,7 +50,7 @@ const loginController = async ( req: Request, res: Response ) => {
     });
 
     if (!user) {
-        res.status(400).json({ success: false, message: 'Invalid Credentials' });
+        res.status(401).json({ success: false, message: 'Invalid Credentials' });
         return 
     }
 
