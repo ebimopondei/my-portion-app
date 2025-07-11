@@ -15,14 +15,14 @@ const baseConfig = {
 
 const sequelizeConfig: any = { ...baseConfig };
 
-if (process.env.NODE_ENV === 'production') {
-  sequelizeConfig.dialectOptions = {
-    ssl: {
-      require: true, // Enforce SSL connection
-      rejectUnauthorized: true, 
-    }
-  };
-}
+// if (process.env.NODE_ENV === 'production') {
+//   sequelizeConfig.dialectOptions = {
+//     ssl: {
+//       require: true, // Enforce SSL connection
+//       rejectUnauthorized: true, 
+//     }
+//   };
+// }
 
 const sequelize = new Sequelize(sequelizeConfig);
 
