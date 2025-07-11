@@ -24,7 +24,9 @@
     "dev:frontend": "npm run dev --workspace frontend",
     "watch:backend": "npm run watch --workspace backend",
     "dev:backend": "npm run dev --workspace backend",
-    "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" "
+    "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" ",
+    "migrate": "npm run migrate --workspace backend",
+    "migrate:undo": "npm run migrate:undo --workspace backend"
   },
   "workspaces": [
     "backend",
