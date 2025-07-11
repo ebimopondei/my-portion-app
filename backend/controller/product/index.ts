@@ -1,0 +1,1 @@
+export { addNewProduct, getProductById, getProductByLocation, updateProductById } from './product.controller'
