@@ -1,6 +1,11 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../setup'
 
+enum Role {
+  Buyer= 'buyer',
+  Seller = 'seller'
+}
+
 
 interface UserAttributes {
     id?: number;
@@ -9,6 +14,7 @@ interface UserAttributes {
     lastname: string;
     email: string;
     password: string;
+    role: Role;
 
     updatedAt?: Date;
     deletedAt?: Date,
@@ -23,6 +29,7 @@ class User extends Model<UserAttributes> implements UserAttributes{
     public lastname!: string;
     public username!: string;
     public password!: string;
+    public role!: Role;
     
     public readonly updatedAt?: Date;
     public readonly deletedAt?: Date;
@@ -64,11 +71,19 @@ User.init({
       password: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+
+      role: {
+        type: DataTypes.ENUM('buyer', 'seller'),
+        allowNull: false
       }
       
   }, {
     sequelize: sequelize,
-    modelName: 'Users',
+    modelName: 'User',
+    tableName: 'user',
+    paranoid: true,
+    
     hooks: {
       beforeCreate: (user) => {
         if (!user.username && user.firstname) {

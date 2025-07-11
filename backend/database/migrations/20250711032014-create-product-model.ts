@@ -7,55 +7,68 @@ import { QueryInterface, DataTypes } from 'sequelize';
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
     await queryInterface.sequelize.transaction( async(t) => {
-      await queryInterface.createTable('user', {
+
+      await queryInterface.createTable('product', {
         id: {
           type: Sequelize.UUID,
           defaultValue: Sequelize.UUIDV4,
           primaryKey: true
         },
   
-        username: {
+        seller_id: {
+          type: Sequelize.UUID,
+            allowNull: false,
+            references: {
+              model: 'user',
+              key: 'id',
+            },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+        },
+        
+        name: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        
+        description: {
           type: Sequelize.STRING,
           allowNull: true,
-          unique: true,
-        },
-        
-        firstname: {
-          type: Sequelize.STRING,
-          allowNull: false,
-        },
-        
-        lastname: {
-          type: Sequelize.STRING,
-          allowNull: false,
         },
   
-        password: {
+        image_url: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true
         },
   
-        role: {
-          type: Sequelize.ENUM('buyer', 'seller', 'admin', 'subadmin'),
-          allowNull: false,
+        total_quantity: {
+          type: Sequelize.INTEGER,
+          allowNull: false
         },
-        
-        email: {
+  
+        portion_size: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        },
+  
+        price_per_portion: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        },
+
+        available_portions: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        },
+
+        location: {
           type: Sequelize.STRING,
-          allowNull: false,
-          unique: true,
-          validate: { 
-            isEmail: true,
-          }
+          allowNull: false
         },
+  
   
         createdAt: {
           allowNull: false,
-          type: Sequelize.DATE
-        },
-
-        deletedAt: {
-          allowNull: true,
           type: Sequelize.DATE
         },
   
@@ -69,7 +82,7 @@ module.exports = {
   },
   async down(queryInterface: QueryInterface) {
     await queryInterface.sequelize.transaction( async(t) => {
-      await queryInterface.dropTable('user');
+      await queryInterface.dropTable('product');
     })
   }
 };

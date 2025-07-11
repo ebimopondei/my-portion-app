@@ -26,7 +26,8 @@
     "dev:backend": "npm run dev --workspace backend",
     "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" ",
     "migrate": "npm run migrate --workspace backend",
-    "migrate:undo": "npm run migrate:undo --workspace backend"
+    "migrate:undo": "npm run migrate:undo --workspace backend",
+    "migrate:skeleton": "npm run migrate:skeleton --workspace backend"
   },
   "workspaces": [
     "backend",

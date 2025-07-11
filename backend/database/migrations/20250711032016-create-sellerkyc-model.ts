@@ -7,55 +7,43 @@ import { QueryInterface, DataTypes } from 'sequelize';
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
     await queryInterface.sequelize.transaction( async(t) => {
-      await queryInterface.createTable('user', {
+      await queryInterface.createTable('seller_kyc', {
         id: {
           type: Sequelize.UUID,
           defaultValue: Sequelize.UUIDV4,
           primaryKey: true
         },
   
-        username: {
+        user_id: {
+          type: Sequelize.UUID,
+            allowNull: false,
+            references: {
+              model: 'user',
+              key: 'id',
+            },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+        },
+        
+        id_image_url: {
           type: Sequelize.STRING,
           allowNull: true,
-          unique: true,
         },
         
-        firstname: {
+        address_proof_url: {
           type: Sequelize.STRING,
-          allowNull: false,
-        },
-        
-        lastname: {
-          type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true,
         },
   
-        password: {
-          type: Sequelize.STRING,
+        is_verified: {
+          type: Sequelize.BOOLEAN,
           allowNull: false,
+          defaultValue: false
         },
   
-        role: {
-          type: Sequelize.ENUM('buyer', 'seller', 'admin', 'subadmin'),
-          allowNull: false,
-        },
-        
-        email: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          unique: true,
-          validate: { 
-            isEmail: true,
-          }
-        },
   
         createdAt: {
           allowNull: false,
-          type: Sequelize.DATE
-        },
-
-        deletedAt: {
-          allowNull: true,
           type: Sequelize.DATE
         },
   
@@ -64,12 +52,11 @@ module.exports = {
           type: Sequelize.DATE
         }
       }, { transaction: t });
-
     })
   },
   async down(queryInterface: QueryInterface) {
     await queryInterface.sequelize.transaction( async(t) => {
-      await queryInterface.dropTable('user');
+      await queryInterface.dropTable('seller_kyc')
     })
   }
 };
