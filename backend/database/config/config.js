@@ -37,14 +37,14 @@ const production = {
 }
 
 
-if (process.env.NODE_ENV === 'production') {
-production.dialectOptions = {
-  ssl: {
-    require: true, // Enforce SSL connection
-    rejectUnauthorized: true, 
-  }
-};
-}
+// if (process.env.NODE_ENV === 'production') {
+// production.dialectOptions = {
+//   ssl: {
+//     require: true, // Enforce SSL connection
+//     rejectUnauthorized: true, 
+//   }
+// };
+// }
 
 module.exports = {
     
