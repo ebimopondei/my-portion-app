@@ -14,12 +14,12 @@ router.get('/', (req: Request, res:Response) =>{
 
 router.use('/auth', auth)
 
-router.use('product', verifyJwt, product)
+router.use('/product', verifyJwt, product)
 
 // router.use('user', user)
 
-router.use('order', verifyJwt, order)
+router.use('/order', verifyJwt, order)
 
-router.use('rating', verifyJwt, rating)
+router.use('/rating', verifyJwt, rating)
 
 export const APPROUTER = router

@@ -3,12 +3,12 @@ import { Product as controller} from '../../controller/index';
 
 const router = express.Router();
 
-router.get('/product', controller.getProductByLocation );
+router.get('/', controller.getProductByLocation );
 
-router.get('/product/:id', controller.getProductById );
+router.get('/:id', controller.getProductById );
 
-router.post('/product', controller.addNewProduct );
+router.post('/', controller.addNewProduct );
 
-router.put('/product/:id', controller.updateProductById );
+router.put('/:id', controller.updateProductById );
 
 export const product = router;
