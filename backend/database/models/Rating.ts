@@ -3,20 +3,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
-
-interface RatingAttribute {
-    id?: string;
-    buyer_id: string;
-    seller_id: string;
-    order_id: string;
-    stars: number;
-    comment: string;
-
-    
-    updatedAt?: Date;
-    deletedAt?: Date,
-    createdAt?: Date,
-}
+import { RatingAttribute} from '@shared/types/rating'
 
 class Rating extends Model<RatingAttribute> implements RatingAttribute{
     public id!: string;

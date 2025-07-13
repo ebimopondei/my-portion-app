@@ -1,21 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../setup'
-
-type Role = "buyer" | "seller" | "admin" | "subadmin";
-
-interface UserAttributes {
-    id?: number;
-    username?: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    password: string;
-    role: Role;
-
-    updatedAt?: Date;
-    deletedAt?: Date,
-    createdAt?: Date,
-}
+import { UserAttributes} from '@shared/types/user'
+import { Role } from '@shared/types/role'
 
 
 class User extends Model<UserAttributes> implements UserAttributes{

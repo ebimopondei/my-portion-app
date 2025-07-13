@@ -23,3 +23,19 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
         return;
     }
 }
+
+export const authorizeRoles = (...allowedRoles: string[]) =>{
+    return (req: Request, res: Response, next: NextFunction) => {
+        // @ts-expect-error
+        const user = req.parsedToken;
+        console.log(user.role)
+        console.log(user)
+
+        if(!user || !allowedRoles.includes(user.role)){
+            
+            return res.status(403).json({ success: false, message: 'Forbidden: insufficient rights'})
+        }
+
+        next();
+    }
+}
