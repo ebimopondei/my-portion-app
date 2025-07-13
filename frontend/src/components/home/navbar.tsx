@@ -2,7 +2,7 @@ import { Search, ShoppingCart, Menu } from "lucide-react"
 import { Input } from "../../components/ui/input"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
-import { Link } from "react-router-dom";
+import Logo from "../shared/Logo"
 
 
 
@@ -22,9 +22,7 @@ export function Navbar({ searchQuery, setSearchQuery, cartItems, onMenuClick, on
         <div className="hidden md:flex items-center justify-between gap-4">
           {/* Logo */}
           <div>
-            <Link to="/" className="flex items-center">
-              <img src="/logo.png" width={140} height={36} alt="portion-logo" />
-            </Link>
+            <Logo />
           </div>
 
           {/* Search Bar */}
@@ -63,11 +61,8 @@ export function Navbar({ searchQuery, setSearchQuery, cartItems, onMenuClick, on
           {/* Top Row: Logo and Actions */}
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">P</span>
-              </div>
-              <span className="text-xl font-semibold text-gray-900">Portion</span>
+            <div>
+              <Logo />
             </div>
 
             {/* Right Side Actions */}
