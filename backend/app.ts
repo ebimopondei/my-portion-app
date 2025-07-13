@@ -11,16 +11,17 @@ app.use(express.urlencoded( { extended: true, }))
 app.use(express.json())
 app.use("/uploads", express.static(path.join(__dirname,'uploads')));
 
-app.use('/v1/', APPROUTER)
 
 app.use(cors(
     { 
-        origin: '*', 
+        origin: ["http://localhost:5173", "https://my-portion-app.vercel.app"], 
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         allowedHeaders: "Content-Type,Authorization",
         credentials: true
     }
 ));
+
+app.use('/v1/', APPROUTER)
 
 app.use(notFoundErrorHandler)
 app.use(databaseErrorHandler)

@@ -7,25 +7,25 @@ const router = express.Router();
 
 router.get(
     '/', 
-    authorizeRoles( Roles.SELLER, Roles.ADMIN, Roles.BUYER,Roles.SUBADMIN), 
+    authorizeRoles( Roles.USER, Roles.ADMIN, Roles.VENDOR,Roles.SUBADMIN), 
     controller.getProductByFilter 
 );
 
 router.get(
     '/:id', 
-    authorizeRoles( Roles.SELLER, Roles.ADMIN, Roles.BUYER,Roles.SUBADMIN), 
+    authorizeRoles( Roles.USER, Roles.ADMIN, Roles.VENDOR,Roles.SUBADMIN), 
     controller.getProductById 
 );
 
 router.post(
     '/', 
-    authorizeRoles( Roles.SELLER, Roles.ADMIN, Roles.SUBADMIN), 
+    authorizeRoles( Roles.USER, Roles.ADMIN, Roles.SUBADMIN), 
     controller.addNewProduct 
 );
 
 router.put(
     '/:id', 
-    authorizeRoles( Roles.SELLER, Roles.ADMIN, Roles.SUBADMIN), 
+    authorizeRoles( Roles.USER, Roles.ADMIN, Roles.SUBADMIN), 
     controller.updateProductById 
 );
 

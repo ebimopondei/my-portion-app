@@ -6,8 +6,13 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Checkbox } from "../components/ui/checkbox";
 import { Link } from "react-router-dom";
+import useLogin from "@/hooks/form-hooks/use-login-hook";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export default function LoginPage() {
+
+  const { form, onLogin } = useLogin()
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -42,75 +47,72 @@ export default function LoginPage() {
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <Label
-              htmlFor="email"
-              className="text-gray-700 font-medium mb-2 block"
-            >
-              Email address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div>
-            <Label
-              htmlFor="password"
-              className="text-gray-700 font-medium mb-2 block"
-            >
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="remember"
-                checked={formData.rememberMe}
-                onCheckedChange={(checked) =>
-                  setFormData({ ...formData, rememberMe: checked as boolean })
-                }
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onLogin)} className="space-y-6">
+            <div>
+              <FormField
+                control={form.control}
+                name="email"
+                
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Email Address</FormLabel>
+                    <FormControl>
+                          <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" type="email" placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Label htmlFor="remember" className="text-sm text-gray-600">
-                Remember me
-              </Label>
             </div>
-            <Link
-              to="/forgot-password"
-              className="text-sm text-primary hover:text-primary/80 transition-colors"
-            >
-              Forgot password?
-            </Link>
-          </div>
 
-          <Button
-            type="submit"
-            className="w-full h-12 text-base font-semibold"
-          >
-            Sign in
-          </Button>
-        </form>
+            <div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Password</FormLabel>
+                    <FormControl>
+                          <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" type="password" placeholder="Password" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember"
+                  checked={formData.rememberMe}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, rememberMe: checked as boolean })
+                  }
+                />
+                <Label htmlFor="remember" className="text-sm text-gray-600">
+                  Remember me
+                </Label>
+              </div>
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary hover:text-primary/80 transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold"
+            >
+              Sign in
+            </Button>
+          </form>
+        </Form>
 
         {/* Sign up link */}
         <div className="text-center mt-8">

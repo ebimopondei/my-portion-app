@@ -1,5 +1,8 @@
 import { X, Edit, Package, Heart, Bell, LogOut } from "lucide-react"
 import { Button } from "../../components/ui/button"
+import useAuth from "@/hooks/auth-provider"
+import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 interface SlideMenuProps {
   isOpen: boolean
@@ -7,6 +10,15 @@ interface SlideMenuProps {
 }
 
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
+  const { logoutAuth } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutAuth();
+    toast.success('Logging out ')
+    navigate('/login')
+  };
+
   const menuItems = [
     { icon: Package, label: "Orders", href: "#" },
     { icon: Heart, label: "Wishlist", href: "#" },
@@ -70,7 +82,7 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
 
           {/* Logout */}
           <div className="p-6 border-t border-gray-100">
-            <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
+            <Button onClick={handleLogout} variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
               <LogOut className="w-5 h-5 mr-3" />
               Logout
             </Button>

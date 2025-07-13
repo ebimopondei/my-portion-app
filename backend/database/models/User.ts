@@ -56,7 +56,7 @@ User.init({
       },
 
       role: {
-        type: DataTypes.ENUM('buyer', 'seller', 'admin', 'subadmin'),
+        type: DataTypes.ENUM('vendor', 'user', 'admin', 'subadmin'),
         allowNull: false
       }
       
