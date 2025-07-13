@@ -39,9 +39,9 @@ export default function RegisterVendor() {
             </Link>
           </div>
           <h1 className="text-4xl font-black text-gray-900 mb-2">
-            Create an account
+            Vendor Sign Up
           </h1>
-          <p className="text-gray-500 text-lg">Start your journey with us</p>
+          <p className="text-gray-500 text-lg">Register to sell products</p>
         </div>
 
         {/* Sign Up Form */}

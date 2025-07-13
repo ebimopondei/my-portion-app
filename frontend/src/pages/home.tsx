@@ -14,6 +14,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../components/shared/Logo";
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,12 +24,10 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-50 relative">
+      <header className="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-50 ">
         <div className="container mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
           <div>
-            <Link to="/" className="flex items-center">
-              <img src="/logo.png" width={140} height={36} alt="portion-logo" />
-            </Link>
+            <Logo />
           </div>
 
           {/* Desktop Navigation */}
@@ -46,11 +45,11 @@ export default function LandingPage() {
 
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size={"lg"} asChild>
-              <Link to="/login">Sign In</Link>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/dashboard">Marketplace</Link>
             </Button>
-            <Button className="bg-primary hover:bg-primary/90" size={"lg"} asChild>
-              <Link to="/register">Get Started</Link>
+            <Button className="bg-primary hover:bg-primary/90" size="lg" asChild>
+              <Link to="/register/vendor">Vendors</Link>
             </Button>
           </div>
 
@@ -94,10 +93,10 @@ export default function LandingPage() {
                 </Link>
                 <div className="pt-4 space-y-3 border-t border-gray-100">
                   <Button variant="outline" size="lg" asChild className="w-full bg-transparent">
-                    <Link to="/login">Sign In</Link>
+                    <Link to="/dashboard">Marketplace</Link>
                   </Button>
                   <Button className="bg-primary hover:bg-primary/90 w-full" size="lg" asChild>
-                    <Link to="/register">Get Started</Link>
+                    <Link to="/register/vendor">Vendors</Link>
                   </Button>
                 </div>
               </div>
