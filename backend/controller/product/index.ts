@@ -1,1 +1,1 @@
-export { addNewProduct, getProductById, getProductByLocation, updateProductById } from './product.controller'
+export { addNewProduct, getProductById, getProductByFilter, updateProductById } from './product.controller'

@@ -3,7 +3,35 @@ import { productSchema } from '../../../shared/validation/product-schema'
 import Product from "../../database/models/Product";
 
 
-const getProductByLocation = async (req: Request, res: Response) => {
+const getProductByFilter = async (req: Request, res: Response) => {
+     
+     const whereClause: Partial<Product> = {};
+     
+     const { state = undefined, limit = "10", page = "1" } = req.query;
+
+
+     if (state) {
+          whereClause.location = state.toString().toLocaleLowerCase();
+     }
+
+     const productCount = await Product.count( { paranoid: true });
+     const start =  ( Number(page) -1 ) * Number(limit);
+
+     const product = await Product.findAll(
+          {
+               where: whereClause,
+               order: [ ["createdAt", "DESC"]],
+               offset: Number(start), limit: Number(limit)
+          }
+     )
+     const totalPages = Math.ceil(productCount/Number(limit));
+
+     res.status(200).json({
+          success: true,
+          data: { totalPages, productCount, product },
+          message: "Products found!"
+     })
+     
     
 }
 
@@ -40,7 +68,7 @@ const updateProductById = async (req: Request, res: Response) => {
 
 export {
      getProductById,
-     getProductByLocation,
+     getProductByFilter,
      addNewProduct,
      updateProductById
 }

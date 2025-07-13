@@ -1,20 +1,10 @@
 'use strict';
 
 import { Model, DataTypes } from "sequelize";
+import { SellerKycAttribute } from '@shared/types/sellerkyc'
+
 import { sequelize } from "../setup";
 
-interface SellerKycAttribute {
-    id?: string;
-    user_id: string;
-    id_image_url: string;
-    address_proof_url:string;
-    is_verified:boolean;
-
-    
-    updatedAt?: Date;
-    deletedAt?: Date,
-    createdAt?: Date,
-}
 
 class SellerKyc extends Model<SellerKycAttribute> implements SellerKycAttribute{
     public id!: string;

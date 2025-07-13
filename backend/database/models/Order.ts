@@ -3,27 +3,10 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
-enum Status {
-    Pending = 'pending',
-    Delivered = 'delivered',
-    Cancelled = 'cancelled'
-}
+import { OrderAttribute } from '@shared/types/order'
+import { Status } from "@shared/enums";
 
-interface OrderAttribute {
-    id?: string;
-    buyer_id: string;
-    product_id: string;
-    status: Status;
-    quantity: number;
-    total_price: number;
-    delivery_address: number;
-    available_portions: number;
 
-    
-    updatedAt?: Date;
-    deletedAt?: Date,
-    createdAt?: Date,
-}
 
 class Order extends Model<OrderAttribute> implements OrderAttribute{
     public id!: string;

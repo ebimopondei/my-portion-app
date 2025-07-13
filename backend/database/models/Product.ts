@@ -3,23 +3,8 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
-interface ProductAttribute {
-    id?: string;
-    seller_id: string;
-    name: string;
-    description: string;
-    image_url: string;
-    total_quantity: number;
-    portion_size: number;
-    price_per_portion: number;
-    available_portions: number;
-    location: string;
+import { ProductAttribute } from '@shared/types/product'
 
-    
-    updatedAt?: Date;
-    deletedAt?: Date,
-    createdAt?: Date,
-}
 
 class Product extends Model<ProductAttribute> implements ProductAttribute{
     public id!: string;

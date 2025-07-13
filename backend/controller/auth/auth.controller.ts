@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { loginSchema } from '../../../shared/validation/login-schema'
-import { signupSchema } from '../../../shared/validation/signup-schema'
+import { loginSchema } from '@shared/validation/login-schema'
+import { signupSchema } from '@shared/validation/signup-schema'
 
 import User from "../../database/models/User";
 
@@ -45,7 +45,7 @@ const loginController = async ( req: Request, res: Response ) => {
                     username: validated.email 
                 }
             ]},
-        attributes:  ['id', 'username', 'email', 'password']
+        attributes:  ['id', 'username', 'email', 'role', 'password']
         
     });
 
