@@ -1,6 +1,4 @@
 
-import type React from "react";
-import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -73,14 +71,14 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="fmodlex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="remember"
-                  checked={formData.rememberMe}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, rememberMe: checked as boolean })
-                  }
+
+
+
+
                 />
                 <Label htmlFor="remember" className="text-sm text-gray-600">
                   Remember me
