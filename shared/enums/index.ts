@@ -3,3 +3,7 @@ export enum Status {
     Delivered = 'delivered',
     Cancelled = 'cancelled'
 }
+
+export enum quantity_unit {
+    KG = 'kg'
+}

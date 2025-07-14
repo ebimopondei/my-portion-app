@@ -1,6 +1,7 @@
 import useAuth from '@/hooks/auth-provider';
 
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { useNavigate} from 'react-router-dom';
 
 const API = () => {
@@ -29,6 +30,7 @@ const API = () => {
             if (error?.response?.status === 401) {
                 logoutAuth()
                 setTimeout( ()=>navigate('/login'), 1000);
+                toast.error('Unauthorized access! Login.')
             }
               
             if (error?.response?.status === 403 && !prevRequest?.sent) {

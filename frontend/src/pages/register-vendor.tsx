@@ -1,27 +1,18 @@
 
 "use client";
 
-import type React from "react";
-import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Checkbox } from "../components/ui/checkbox";
 import { Link } from "react-router-dom";
+import useSignup from "@/hooks/form-hooks/use-signup-hook";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function RegisterVendor() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    agreeToTerms: false,
-  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign-up logic here
-    console.log("Register:", formData);
-  };
+  const { onSignUp, form } = useSignup();
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
@@ -38,101 +29,150 @@ export default function RegisterVendor() {
               />
             </Link>
           </div>
-          <h1 className="text-4xl font-black text-gray-900 mb-2">
+          <h1 className="text-xl md:text-3xl font-bold text-green-900 mb-2">
             Vendor Sign Up
           </h1>
           <p className="text-gray-500 text-lg">Register to sell products</p>
         </div>
 
         {/* Sign Up Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <Label
-              htmlFor="name"
-              className="text-gray-700 font-medium mb-2 block"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSignUp)} className="space-y-6">
+            <div>
+              <FormField
+                control={form.control}
+                name="firstname"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">First Name</FormLabel>
+                    <FormControl>
+                      <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" placeholder="John" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="lastname"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Last Name</FormLabel>
+                    <FormControl>
+                      <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Email</FormLabel>
+                    <FormControl>
+                      <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" placeholder="johndoe@mail.com" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="role"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Role</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="vendor">Vendor</SelectItem>
+                          <SelectItem value="user">User</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Password</FormLabel>
+                    <FormControl>
+                      <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" type="password" placeholder="password" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-medium mb-2 block">Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary" type="password" placeholder="confirm password" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="terms"
+                
+                required
+              />
+              <Label htmlFor="terms" className="text-sm text-gray-600">
+                I agree to the{" "}
+                <Link
+                  to="/terms"
+                  className="text-primary hover:text-primary/80 underline"
+                >
+                  Terms & Conditions
+                </Link>
+              </Label>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold"
             >
-              Full name
-            </Label>
-            <Input
-              id="name"
-              type="text"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary"
-              placeholder="Enter your full name"
-              required
-            />
-          </div>
-
-          <div>
-            <Label
-              htmlFor="email"
-              className="text-gray-700 font-medium mb-2 block"
-            >
-              Email address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div>
-            <Label
-              htmlFor="password"
-              className="text-gray-700 font-medium mb-2 block"
-            >
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              className="h-12 text-base border-gray-200 focus:border-primary focus:ring-primary"
-              placeholder="Create a password"
-              required
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="terms"
-              checked={formData.agreeToTerms}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, agreeToTerms: checked as boolean })
-              }
-              required
-            />
-            <Label htmlFor="terms" className="text-sm text-gray-600">
-              I agree to the{" "}
-              <Link
-                to="/terms"
-                className="text-primary hover:text-primary/80 underline"
-              >
-                Terms & Conditions
-              </Link>
-            </Label>
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full h-12 text-base font-semibold"
-          >
-            Create account
-          </Button>
-        </form>
+              Create account
+            </Button>
+          </form>
+        </Form>
 
         {/* Sign in link */}
         <div className="text-center mt-8">

@@ -6,6 +6,7 @@ export const productSchema = z.object( {
     description: z.string(),
     image_url: z.string(),
     total_quantity: z.number(),
+    quantity_unit: z.string(),
     portion_size: z.number(),
     price_per_portion: z.number(),
     available_portions: z.number(),
