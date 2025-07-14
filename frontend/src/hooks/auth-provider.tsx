@@ -5,8 +5,6 @@ import type { Props } from "@/types";
 import type { loginProps } from "@/types/api-response-type";
 import type { UserAttributes } from '@shared/types/user'
 
-import API from "@/api/api-config";
-
 
 type AuthContextType = {
     loginAuth: ( { }: loginProps) => void;
@@ -40,8 +38,6 @@ export default function useAuth(){
 
 export function AuthProvider({children}: Props){
     
-    const { apiPrivate  } = API();
-
     const { getCookie, setCookie, resetItem} = useCookie();
     const [ user, setUser ] = useState<UserAttributes | null>(null);
     const [ token, setToken] = useState<string>("");
@@ -75,14 +71,18 @@ export function AuthProvider({children}: Props){
 
         if(isLoading) return; 
 
-        async function checkAuth(){
-            await apiPrivate.post('/auth/auth-check', { token })
-            .then((res)=>{
-                setIsLoggedIn(res.data.isAuthenticated);
-            })
-            .finally( ()=> setIsLoading(false))
-        }
-        checkAuth();
+        // Comment out the auth-check since the endpoint doesn't exist yet
+        // async function checkAuth(){
+        //     await apiPrivate.post('/auth/auth-check', { token })
+        //     .then((res)=>{
+        //         setIsLoggedIn(res.data.isAuthenticated);
+        //     })
+        //     .finally( ()=> setIsLoading(false))
+        // }
+        // checkAuth();
+        
+        // For now, just set loading to false
+        setIsLoading(false);
 
     },[isLoading])
 

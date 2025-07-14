@@ -71,7 +71,6 @@ export interface ProductCardProps {
 export interface OrderCardProps {
   order: ProductOrder;
   onMarkDelivered: (productId: number) => void;
-  onViewDetails: (order: ProductOrder) => void;
 }
 
 export interface VendorNavbarProps {

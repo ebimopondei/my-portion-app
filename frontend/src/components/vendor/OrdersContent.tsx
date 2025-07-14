@@ -4,10 +4,9 @@ import type { ProductOrder } from "./types"
 interface OrdersContentProps {
   recentOrders: ProductOrder[]
   onMarkDelivered: (productId: number) => void
-  onViewDetails: (order: ProductOrder) => void
 }
 
-const OrdersContent = ({ recentOrders, onMarkDelivered, onViewDetails }: OrdersContentProps) => {
+const OrdersContent = ({ recentOrders, onMarkDelivered }: OrdersContentProps) => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -30,7 +29,6 @@ const OrdersContent = ({ recentOrders, onMarkDelivered, onViewDetails }: OrdersC
             key={order.productId} 
             order={order}
             onMarkDelivered={onMarkDelivered}
-            onViewDetails={onViewDetails}
           />
         ))}
       </div>

@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { DollarSign, CreditCard, TrendingUp, Upload, CheckCircle, Clock, AlertTriangle } from "lucide-react"
 import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
+import WithdrawFundsModal from "./WithdrawFundsModal"
 
 interface WalletContentProps {
   walletBalance: number
@@ -11,8 +10,8 @@ interface WalletContentProps {
     accountNumber: string
     accountName: string
   }
-  kycStatus: "verified" | "pending" | "rejected"
-  onWithdrawFunds: () => void
+  kycStatus: "verified" | "pending" | "rejected" | "unverified"
+  onWithdrawFunds: (amount: number) => void
 }
 
 // Mock transaction history
@@ -54,20 +53,9 @@ const WalletContent = ({
 }: WalletContentProps) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'bank' | 'kyc' | 'transactions'>('overview')
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const [withdrawAmount, setWithdrawAmount] = useState("")
 
-  const handleWithdraw = () => {
-    if (kycStatus !== 'verified') {
-      alert('Please complete KYC verification before withdrawing funds')
-      return
-    }
-    if (!bankDetails.accountName) {
-      alert('Please add bank account details before withdrawing funds')
-      return
-    }
-    onWithdrawFunds()
-    setShowWithdrawModal(false)
-    setWithdrawAmount("")
+  const handleWithdraw = async (amount: number) => {
+    await onWithdrawFunds(amount)
   }
 
   const getKycStatusConfig = () => {
@@ -360,56 +348,15 @@ const WalletContent = ({
         </div>
       )}
 
-      {/* Withdraw Modal */}
-      {showWithdrawModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Withdraw Funds</h3>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="amount" className="text-sm font-medium text-gray-700">
-                  Amount (₦)
-                </Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  value={withdrawAmount}
-                  onChange={(e) => setWithdrawAmount(e.target.value)}
-                  placeholder="Enter amount"
-                  max={walletBalance}
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Available: ₦{walletBalance.toLocaleString()}
-                </p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600">
-                  Funds will be transferred to: <strong>{bankDetails.accountName}</strong>
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {bankDetails.bankName} • {bankDetails.accountNumber}
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                <Button
-                  onClick={() => setShowWithdrawModal(false)}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleWithdraw}
-                  disabled={!withdrawAmount || Number(withdrawAmount) > walletBalance}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-                >
-                  Withdraw
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Withdraw Funds Modal */}
+      <WithdrawFundsModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        onWithdraw={handleWithdraw}
+        walletBalance={walletBalance}
+        bankDetails={bankDetails}
+        kycStatus={kycStatus}
+      />
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import { Plus } from "lucide-react"
+import { useState } from "react"
 import { VendorProductCard } from "../shared/ProductCard"
+import ProductDetailsModal from "./ProductDetailsModal"
 import type { Product } from "./types"
 
 interface ProductsContentProps {
@@ -7,16 +9,22 @@ interface ProductsContentProps {
   onAddProduct: () => void
   onEditProduct: (product: Product) => void
   onShareProduct: (product: Product) => void
-  onViewProduct: (product: Product) => void
 }
 
 const ProductsContent = ({ 
   vendorProducts, 
   onAddProduct, 
   onEditProduct, 
-  onShareProduct, 
-  onViewProduct 
+  onShareProduct 
 }: ProductsContentProps) => {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+
+  const handleViewProduct = (product: Product) => {
+    setSelectedProduct(product)
+    setShowDetailsModal(true)
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -36,10 +44,19 @@ const ProductsContent = ({
             product={product}
             onEdit={onEditProduct}
             onShare={onShareProduct}
-            onView={onViewProduct}
+            onView={handleViewProduct}
           />
         ))}
       </div>
+
+      {/* Product Details Modal */}
+      <ProductDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        product={selectedProduct}
+        onEdit={onEditProduct}
+        onShare={onShareProduct}
+      />
     </div>
   )
 }

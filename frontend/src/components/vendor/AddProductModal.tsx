@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { X, Camera, MapPin, Package, DollarSign, Users } from "lucide-react"
+import { X, MapPin, Package, DollarSign, Users, Video, Upload, Star, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface AddProductModalProps {
@@ -10,9 +10,10 @@ interface AddProductModalProps {
 }
 
 interface ProductFormData {
-  images: File[]
+  defaultImage: File | null
+  additionalImages: File[]
+  video: File | null
   productName: string
-  category: string
   sellingMethod: 'whole' | 'portions'
   totalPrice: number
   quantityAvailable: number
@@ -24,25 +25,12 @@ interface ProductFormData {
   pickupLocation: string
 }
 
-const categories = [
-  "Grains",
-  "Tubers", 
-  "Fruits",
-  "Vegetables",
-  "Oils",
-  "Legumes",
-  "Spices",
-  "Dairy",
-  "Meat",
-  "Fish",
-  "Other"
-]
-
-export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft }: AddProductModalProps) {
+export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProductModalProps) {
   const [formData, setFormData] = useState<ProductFormData>({
-    images: [],
+    defaultImage: null,
+    additionalImages: [],
+    video: null,
     productName: '',
-    category: '',
     sellingMethod: 'whole',
     totalPrice: 0,
     quantityAvailable: 1,
@@ -54,25 +42,100 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
     pickupLocation: ''
   })
 
-  const [imagePreview, setImagePreview] = useState<string[]>([])
+  const [defaultImagePreview, setDefaultImagePreview] = useState<string | null>(null)
+  const [additionalImagePreviews, setAdditionalImagePreviews] = useState<string[]>([])
+  const [videoPreview, setVideoPreview] = useState<string | null>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDefaultImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setFormData(prev => ({ ...prev, defaultImage: file }))
+      
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setDefaultImagePreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleAdditionalImagesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
-    setFormData(prev => ({ ...prev, images: [...prev.images, ...files] }))
+    setFormData(prev => ({ ...prev, additionalImages: [...prev.additionalImages, ...files] }))
     
-    // Create preview URLs
     files.forEach(file => {
       const reader = new FileReader()
       reader.onload = (e) => {
-        setImagePreview(prev => [...prev, e.target?.result as string])
+        setAdditionalImagePreviews(prev => [...prev, e.target?.result as string])
       }
       reader.readAsDataURL(file)
     })
   }
 
-  const removeImage = (index: number) => {
-    setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
-    setImagePreview(prev => prev.filter((_, i) => i !== index))
+  const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setFormData(prev => ({ ...prev, video: file }))
+      
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setVideoPreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeDefaultImage = () => {
+    setFormData(prev => ({ ...prev, defaultImage: null }))
+    setDefaultImagePreview(null)
+  }
+
+  const removeAdditionalImage = (index: number) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      additionalImages: prev.additionalImages.filter((_, i) => i !== index) 
+    }))
+    setAdditionalImagePreviews(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (e: React.DragEvent, isDefault: boolean = false) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    
+    const files = Array.from(e.dataTransfer.files)
+    const imageFiles = files.filter(file => file.type.startsWith('image/'))
+    
+    if (isDefault && imageFiles.length > 0) {
+      const file = imageFiles[0]
+      setFormData(prev => ({ ...prev, defaultImage: file }))
+      
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setDefaultImagePreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else if (!isDefault) {
+      setFormData(prev => ({ ...prev, additionalImages: [...prev.additionalImages, ...imageFiles] }))
+      
+      imageFiles.forEach(file => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          setAdditionalImagePreviews(prev => [...prev, e.target?.result as string])
+        }
+        reader.readAsDataURL(file)
+      })
+    }
   }
 
   const calculateTotalEarnings = () => {
@@ -87,10 +150,6 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
     onClose()
   }
 
-  const handleSaveDraft = () => {
-    onSaveDraft(formData)
-    onClose()
-  }
 
   return (
     <AnimatePresence>
@@ -107,7 +166,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col"
+            className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sticky Header */}
@@ -130,53 +189,6 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
                   The Basics (What are you selling?)
                 </h3>
                 
-                {/* Product Image */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Image
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      <Camera className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                      <p className="text-lg font-medium text-gray-700 mb-1">
-                        Click here to upload product photo
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        JPG, PNG up to 5MB each
-                      </p>
-                    </label>
-                  </div>
-                  
-                  {/* Image Previews */}
-                  {imagePreview.length > 0 && (
-                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {imagePreview.map((preview, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={preview}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-24 object-cover rounded-lg"
-                          />
-                          <button
-                            onClick={() => removeImage(index)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 {/* Product Name */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -194,21 +206,198 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
                   </p>
                 </div>
 
-                {/* Category */}
+                {/* Default Product Image */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2  items-center">
+                    <Star className="w-4 h-4 mr-1 text-amber-500" />
+                    Default Product Image * (Main showcase image)
+                  </label>
+                  
+                  {!defaultImagePreview ? (
+                    <div 
+                      className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
+                        isDragOver 
+                          ? 'border-green-500 bg-green-50' 
+                          : 'border-gray-300 hover:border-green-500'
+                      }`}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, true)}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleDefaultImageUpload}
+                        className="hidden"
+                        id="default-image-upload"
+                      />
+                      <label htmlFor="default-image-upload" className="cursor-pointer">
+                        <div className="flex flex-col items-center">
+                          <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-4">
+                            <ImageIcon className="w-8 h-8 text-green-600" />
+                          </div>
+                          <p className="text-lg font-medium text-gray-700 mb-2">
+                            Upload your main product image
+                          </p>
+                          <p className="text-sm text-gray-500 mb-4">
+                            This will be the primary image customers see first
+                          </p>
+                          <div className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                            Choose Default Image
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2">
+                            or drag and drop here
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <div className="relative w-full h-48 rounded-lg overflow-hidden">
+                        <img
+                          src={defaultImagePreview}
+                          alt="Default product image"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                          <Star className="w-3 h-3 mr-1" />
+                          Default
+                        </div>
+                        <button
+                          onClick={removeDefaultImage}
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Product Images */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                    Additional Product Images (2-4 more images recommended)
                   </label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  
+                  <div 
+                    className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
+                      isDragOver 
+                        ? 'border-blue-500 bg-blue-50' 
+                        : 'border-gray-300 hover:border-blue-500'
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, false)}
                   >
-                    <option value="">Select a category</option>
-                    {categories.map(category => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleAdditionalImagesUpload}
+                      className="hidden"
+                      id="additional-images-upload"
+                    />
+                    <label htmlFor="additional-images-upload" className="cursor-pointer">
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-3">
+                          <Upload className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <p className="text-md font-medium text-gray-700 mb-1">
+                          Add more product photos
+                        </p>
+                        <p className="text-sm text-gray-500 mb-3">
+                          Show different angles, details, or packaging
+                        </p>
+                        <div className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                          Add More Images
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">
+                          or drag and drop multiple images
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                  
+                  {/* Additional Images Preview */}
+                  {additionalImagePreviews.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">
+                        Additional Images ({additionalImagePreviews.length})
+                      </h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {additionalImagePreviews.map((preview, index) => (
+                          <motion.div 
+                            key={index} 
+                            className="relative group"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <img
+                              src={preview}
+                              alt={`Additional image ${index + 1}`}
+                              className="w-full h-20 object-cover rounded-lg"
+                            />
+                            <button
+                              onClick={() => removeAdditionalImage(index)}
+                              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                            <div className="absolute bottom-1 left-1 bg-black/50 text-white text-xs px-1 py-0.5 rounded">
+                              {index + 1}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Product Video */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Video * (Required)
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleVideoUpload}
+                      className="hidden"
+                      id="video-upload"
+                    />
+                    <label htmlFor="video-upload" className="cursor-pointer">
+                      <Video className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                      <p className="text-lg font-medium text-gray-700 mb-1">
+                        Click here to upload product video
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        MP4, MOV up to 50MB. Video is required.
+                      </p>
+                    </label>
+                  </div>
+                  
+                  {/* Video Preview */}
+                  {videoPreview && (
+                    <div className="mt-4">
+                      <video
+                        src={videoPreview}
+                        controls
+                        className="w-full max-w-md mx-auto rounded-lg"
+                      />
+                      <button
+                        onClick={() => {
+                          setFormData(prev => ({ ...prev, video: null }))
+                          setVideoPreview(null)
+                        }}
+                        className="mt-2 text-red-600 text-sm hover:text-red-700"
+                      >
+                        Remove video
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -394,18 +583,12 @@ export default function AddProductModal({ isOpen, onClose, onSubmit, onSaveDraft
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 p-6 border-t border-gray-200">
-              <button
-                onClick={handleSaveDraft}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-              >
-                Save as Draft
-              </button>
+            <div className="flex justify-center p-6 border-t border-gray-200">
               <button
                 onClick={handleSubmit}
-                className="flex-1 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+                className="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
               >
-                Submit Product for Review
+                Submit Product
               </button>
             </div>
           </motion.div>
