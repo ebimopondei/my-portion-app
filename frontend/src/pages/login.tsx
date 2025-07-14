@@ -13,17 +13,6 @@ export default function LoginPage() {
 
   const { form, onLogin } = useLogin()
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Login:", formData);
-  };
 
   return (
     <div className="min-h-screen bg-[url('/bg.png')] bg-cover bg-center flex items-center justify-center px-6 py-12">
