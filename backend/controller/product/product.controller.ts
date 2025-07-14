@@ -7,7 +7,9 @@ const getProductByFilter = async (req: Request, res: Response) => {
      
      const whereClause: Partial<Product> = {};
      
-     const { state = undefined, limit = "10", page = "1" } = req.query;
+     const { state, limit=10, page=1 } = req.query;
+
+
 
 
      if (state) {
@@ -49,6 +51,7 @@ const addNewProduct = async (req: Request, res: Response) => {
           description: validated.description,
           image_url: validated.image_url,
           total_quantity: validated.total_quantity,
+          quantity_unit: validated.quantity_unit,
           portion_size: validated.portion_size,
           price_per_portion: validated.price_per_portion,
           available_portions: validated.available_portions,

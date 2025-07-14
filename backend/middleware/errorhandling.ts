@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../types/error";
-import { AssociationError,  BaseError, ConnectionError, DatabaseError, ForeignKeyConstraintError, HostNotFoundError, HostNotReachableError, InstanceError, TimeoutError, UniqueConstraintError } from 'sequelize'
+import { AssociationError,  BaseError, ConnectionError, DatabaseError, ForeignKeyConstraintError, HostNotFoundError, HostNotReachableError, InstanceError, TimeoutError, UniqueConstraintError, ValidationError } from 'sequelize'
 
 export const databaseErrorHandler = (error:CustomError, req:Request, res:Response, next:NextFunction) => {
     console.log(error.name)
@@ -11,15 +11,14 @@ export const databaseErrorHandler = (error:CustomError, req:Request, res:Respons
     } else if (error instanceof ForeignKeyConstraintError) {
       res.status(422).json({ status: 'fail', statusCode: 422,  message: `Failed due to a foreign key constraint violation in ${error.table} table` });
       return; 
-    } else if (error instanceof DatabaseError) {
-      console.error('Sequelize Database Error:', error.message, error.sql);
-      if (error.parent) {
-        console.error('Underlying Database Error:', error.parent);
-      }
-      res.status(500).json({ status: 'fail', statusCode: 503,  message: 'A database error occurred. Please try again later.' });
-      return;
     } else if (error instanceof TimeoutError) {
       res.status(408).json({ status: 'fail', statusCode: 503,  message: 'The database operation timed out.' });
+      return; 
+    } else if (error instanceof ValidationError) {
+      if(error.errors[0].validatorName == 'isIn'){
+        res.status(408).json({ status: 'fail', statusCode: 503,  message: `Unknown unit type: ${error.errors[0].value}` });
+      }
+      
       return; 
     } else if (
       error instanceof ConnectionError ||

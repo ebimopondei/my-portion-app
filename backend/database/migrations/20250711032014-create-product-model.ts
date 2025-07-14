@@ -46,6 +46,14 @@ module.exports = {
           allowNull: false
         },
   
+        quantity_unit: {
+          type: Sequelize.STRING,
+          validate: {
+            isIn: [['kg', 'bag', 'cup', 'rubber']]
+          },
+          allowNull: false
+        },
+  
         portion_size: {
           type: Sequelize.INTEGER,
           allowNull: false

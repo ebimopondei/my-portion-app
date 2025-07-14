@@ -9,7 +9,8 @@ const app = express()
 
 app.use(express.urlencoded( { extended: true, }))
 app.use(express.json())
-app.use("/uploads", express.static(path.join(__dirname,'uploads')));
+app.use("/v1/uploads", express.static(path.join(__dirname,'uploads')));
+
 
 
 app.use(cors(

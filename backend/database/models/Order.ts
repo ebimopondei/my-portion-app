@@ -54,8 +54,11 @@ Order.init({
   },
 
   status: {
-    type: DataTypes.ENUM('pending', 'delivered', 'cancelled'),
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [['pending', 'delivered', 'cancelled']]
+    }
   },
 
   quantity: {

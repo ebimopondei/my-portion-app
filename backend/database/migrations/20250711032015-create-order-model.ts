@@ -36,10 +36,13 @@ module.exports = {
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
         },
-  
+
         status: {
-          type: Sequelize.ENUM('pending', 'delivered', 'cancelled'),
-          allowNull: false
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            isIn: [['pending', 'delivered', 'cancel']]
+          }
         },
   
         quantity: {

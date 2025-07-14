@@ -22,11 +22,12 @@
     "build": "npm run build:backend && npm run build:frontend",
     "dev": "concurrently \"npm run dev:frontend \" \"npm run start:dev:backend\"",
     "dev:frontend": "npm run dev --workspace frontend",
-    "watch:backend": "npm run watch --workspace backend",
+    "watch:backend": "concurrently \"npm run watch --workspace backend\" \"npm run watch:alias --workspace backend\" ",
     "dev:backend": "npm run dev --workspace backend",
     "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" ",
     "migrate": "npm run migrate --workspace backend",
     "migrate:undo": "npm run migrate:undo --workspace backend",
+    "migrate:undo:all": "npm run migrate:undo:all --workspace backend",
     "migrate:skeleton": "npm run migrate:skeleton --workspace backend"
   },
   "workspaces": [

@@ -56,8 +56,11 @@ User.init({
       },
 
       role: {
-        type: DataTypes.ENUM('vendor', 'user', 'admin', 'subadmin'),
-        allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['user', 'vendor', 'admin', 'subadmin']]
+        }
       }
       
   }, {

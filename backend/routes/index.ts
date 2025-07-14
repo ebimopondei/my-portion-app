@@ -14,7 +14,7 @@ router.get('/', (req: Request, res:Response) =>{
 
 router.use('/auth', auth)
 
-router.use('/product', verifyJwt, product)
+router.use('/product', product)
 
 // router.use('user', user)
 

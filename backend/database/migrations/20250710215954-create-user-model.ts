@@ -34,10 +34,13 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
-  
+
         role: {
-          type: Sequelize.ENUM('vendor', 'user', 'admin', 'subadmin'),
+          type: DataTypes.STRING,
           allowNull: false,
+          validate: {
+            isIn: [['user', 'vendor', 'admin', 'subadmin']]
+          }
         },
         
         email: {
