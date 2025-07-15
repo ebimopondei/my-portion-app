@@ -49,7 +49,7 @@ export default function LandingPage() {
               <Link to="/dashboard">Marketplace</Link>
             </Button>
             <Button className="bg-primary hover:bg-primary/90" size="lg" asChild>
-              <Link to="/register/vendor">Vendors</Link>
+              <Link to="/login?vendor=true">Vendors</Link>
             </Button>
           </div>
 
@@ -96,7 +96,7 @@ export default function LandingPage() {
                     <Link to="/dashboard">Marketplace</Link>
                   </Button>
                   <Button className="bg-primary hover:bg-primary/90 w-full" size="lg" asChild>
-                    <Link to="/register/vendor">Vendors</Link>
+                    <Link to="/login?vendor=true">Vendors</Link>
                   </Button>
                 </div>
               </div>

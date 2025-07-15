@@ -3,13 +3,15 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Checkbox } from "../components/ui/checkbox";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import useLogin from "@/hooks/form-hooks/use-login-hook";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export default function LoginPage() {
 
   const { form, onLogin } = useLogin()
+  const [searchParams] = useSearchParams()
+  const isVendorFlow = searchParams.get('vendor') === 'true'
 
 
   return (
@@ -28,9 +30,11 @@ export default function LoginPage() {
             </Link>
           </div>
           <h1 className="text-4xl font-black text-gray-900 mb-2">
-            Welcome back
+            {isVendorFlow ? "Vendor Login" : "Welcome back"}
           </h1>
-          <p className="text-gray-500 text-lg">Sign in to your account</p>
+          <p className="text-gray-500 text-lg">
+            {isVendorFlow ? "Sign in to your vendor account" : "Sign in to your account"}
+          </p>
         </div>
 
         {/* Login Form */}
@@ -106,7 +110,7 @@ export default function LoginPage() {
           <p className="text-gray-600">
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to={isVendorFlow ? "/register/vendor" : "/register"}
               className="text-primary hover:text-primary/80 font-semibold transition-colors"
             >
               Sign up

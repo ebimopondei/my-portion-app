@@ -57,22 +57,7 @@ export const vendorProducts: Product[] = [
     pickupAvailable: true,
     deliveryAvailable: false
   },
-  {
-    id: 3,
-    name: "Fresh Yam Tubers",
-    price: 25000,
-    unit: "100kg",
-    totalQuantity: 200,
-    totalPortions: 8,
-    availablePortions: 8,
-    bookedPortions: 0,
-    image: "/placeholder.svg?height=200&width=300",
-    status: "pending_approval",
-    created: "2024-01-20",
-    category: "Tubers",
-    pickupAvailable: true,
-    deliveryAvailable: true
-  }
+
 ]
 
 // Mock recent orders

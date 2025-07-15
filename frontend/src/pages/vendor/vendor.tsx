@@ -8,12 +8,11 @@ import {
   WalletContent,
   BusinessProfileTab,
   AddProductModal,
-  type TabId,
+  type TabId,  
   vendorData,
   dashboardStats,
   recentOrders,
   notifications,
-  type ProductOrder
 } from "../../components/vendor"
 import type { ProductAttribute } from "@shared/types/product";
 import ProductApi from "@/api/products/products-api";
@@ -64,16 +63,8 @@ export default function VendorDashboard() {
     console.log('Share product:', product)
   }
 
-  const handleViewProduct = (product: ProductAttribute) => {
-    console.log('View product:', product)
-  }
-
   const handleMarkDelivered = (productId: number) => {
     console.log('Mark delivered for product:', productId)
-  }
-
-  const handleViewOrderDetails = (order: ProductOrder) => {
-    console.log('View order details:', order)
   }
 
   const handleAddProduct = () => {
@@ -88,8 +79,8 @@ export default function VendorDashboard() {
     console.log('Save draft:', productData)
   }
 
-  const handleWithdrawFunds = () => {
-    console.log('Withdraw funds')
+  const handleWithdrawFunds = (amount: number) => {
+    console.log('Withdraw funds:', amount)
   }
 
   // Profile handlers
@@ -105,6 +96,8 @@ export default function VendorDashboard() {
           <DashboardContent
             vendorProducts={vendorProducts}
             dashboardStats={dashboardStats}
+            bankDetails={profileData.bankDetails}
+            kycStatus={profileData.kycStatus}
             onAddProduct={handleAddProduct}
             onEditProduct={handleEditProduct}
             onShareProduct={handleShareProduct}
@@ -118,7 +111,6 @@ export default function VendorDashboard() {
             onAddProduct={handleAddProduct}
             onEditProduct={handleEditProduct}
             onShareProduct={handleShareProduct}
-            onViewProduct={handleViewProduct}
           />
         )
       case 'orders':
@@ -126,7 +118,6 @@ export default function VendorDashboard() {
           <OrdersContent
             recentOrders={recentOrders}
             onMarkDelivered={handleMarkDelivered}
-            onViewDetails={handleViewOrderDetails}
           />
         )
       case 'wallet':

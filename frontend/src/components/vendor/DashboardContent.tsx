@@ -1,6 +1,8 @@
-import { Package, Plus, Share2, Edit3, ArrowRight } from "lucide-react"
+import { Package, Plus, Share2, Edit3 } from "lucide-react"
+import { useState } from "react"
 import type { ProductAttribute } from "@shared/types/product"
 import { Status } from "@shared/enums"
+import WithdrawFundsModal from "./WithdrawFundsModal"
 
 interface DashboardContentProps {
   vendorProducts: ProductAttribute[]
@@ -9,21 +11,38 @@ interface DashboardContentProps {
     newOrders: number
     productViews: number
   }
+  bankDetails: {
+    bankName: string
+    accountNumber: string
+    accountName: string
+  }
+  kycStatus: "verified" | "pending" | "rejected" | "unverified"
   onAddProduct: () => void
   onEditProduct: (product: ProductAttribute) => void
   onShareProduct: (product: ProductAttribute) => void
-  onWithdrawFunds: () => void
+  onWithdrawFunds: (amount: number) => void
 }
 
 const DashboardContent = ({ 
   vendorProducts, 
   dashboardStats, 
+  bankDetails,
+  kycStatus,
   onAddProduct, 
   onEditProduct, 
   onShareProduct, 
   onWithdrawFunds 
 }: DashboardContentProps) => {
   const hasProducts = vendorProducts.length > 0
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false)
+
+  const handleWithdrawClick = () => {
+    setShowWithdrawModal(true)
+  }
+
+  const handleWithdraw = async (amount: number) => {
+    await onWithdrawFunds(amount)
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -146,7 +165,7 @@ const DashboardContent = ({
             <p className="text-sm text-gray-600">Available for withdrawal</p>
           </div>
           <button 
-            onClick={onWithdrawFunds}
+            onClick={handleWithdrawClick}
             className="w-full bg-green-500 text-white py-2 sm:py-3 rounded-lg hover:bg-green-600 font-medium"
           >
             Withdraw Funds
@@ -168,27 +187,17 @@ const DashboardContent = ({
           </div>
         </div>
 
-        {/* Help Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <h3 className="text-base sm:text-lg font-semibold mb-4">Need Help?</h3>
-          <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">How to share your products</span>
-                <ArrowRight size={16} className="text-gray-400" />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Watch a 1-min video</p>
-            </button>
-            <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Getting more sales</span>
-                <ArrowRight size={16} className="text-gray-400" />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Tips and strategies</p>
-            </button>
-          </div>
-        </div>
       </div>
+
+      {/* Withdraw Funds Modal */}
+      <WithdrawFundsModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        onWithdraw={handleWithdraw}
+        walletBalance={dashboardStats.walletBalance}
+        bankDetails={bankDetails}
+        kycStatus={kycStatus}
+      />
     </div>
   )
 }
