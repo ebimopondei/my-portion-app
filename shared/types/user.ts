@@ -8,6 +8,8 @@ export interface UserAttributes {
     email: string;
     password: string;
     role: Role;
+    email_verified: Boolean;
+    kyc_verified: Boolean;
 
     updatedAt?: Date;
     deletedAt?: Date,

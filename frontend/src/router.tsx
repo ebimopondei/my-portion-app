@@ -22,7 +22,6 @@ const AppRouter = () => (
           <Route element={<ProtectedRoutes />}>
             <Route path="/vendor/kyc" element={<KYCPage />} />
             <Route path="/vendor" element={<VendorPage />} />
-
           </Route>
         </Routes>
 );

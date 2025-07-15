@@ -12,6 +12,8 @@ class User extends Model<UserAttributes> implements UserAttributes{
     public username!: string;
     public password!: string;
     public role!: Role;
+    public email_verified!: Boolean;
+    public kyc_verified!: Boolean;
     
     public readonly updatedAt?: Date;
     public readonly deletedAt?: Date;
@@ -61,6 +63,18 @@ User.init({
         validate: {
           isIn: [['user', 'vendor', 'admin', 'subadmin']]
         }
+      },
+
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+
+      kyc_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       }
       
   }, {
