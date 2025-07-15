@@ -1,7 +1,7 @@
-import { Package, Plus, Share2, Edit3 } from "lucide-react"
-import { useState } from "react"
 import type { ProductAttribute } from "@shared/types/product"
 import { Status } from "@shared/enums"
+import { Package, Plus, Share2, Edit3 } from "lucide-react"
+import { useState } from "react"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 
 interface DashboardContentProps {
