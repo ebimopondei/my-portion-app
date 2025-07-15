@@ -1,10 +1,11 @@
+import type { ProductAttribute } from "@shared/types/product"
+import { Status } from "@shared/enums"
 import { Package, Plus, Share2, Edit3 } from "lucide-react"
 import { useState } from "react"
-import type { Product } from "./types"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 
 interface DashboardContentProps {
-  vendorProducts: Product[]
+  vendorProducts: ProductAttribute[]
   dashboardStats: {
     walletBalance: number
     newOrders: number
@@ -17,8 +18,8 @@ interface DashboardContentProps {
   }
   kycStatus: "verified" | "pending" | "rejected" | "unverified"
   onAddProduct: () => void
-  onEditProduct: (product: Product) => void
-  onShareProduct: (product: Product) => void
+  onEditProduct: (product: ProductAttribute) => void
+  onShareProduct: (product: ProductAttribute) => void
   onWithdrawFunds: (amount: number) => void
   onRedirectToBank?: () => void
 }
@@ -47,7 +48,7 @@ const DashboardContent = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-      {/* Main Panel - Your Live Products */}
+
       <div className="lg:col-span-2">
         <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -91,31 +92,31 @@ const DashboardContent = ({
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
                         <h3 className="font-semibold text-base sm:text-lg">{product.name}</h3>
                         <span className={`px-2 py-1 rounded text-xs font-medium w-fit ${
-                          product.status === 'active' ? 'bg-green-100 text-green-800' :
-                          product.status === 'pending_approval' ? 'bg-yellow-100 text-yellow-800' :
+                          product.status === Status.Delivered ? 'bg-green-100 text-green-800' :
+                          product.status === Status.Pending ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
-                          {product.status === 'active' ? 'Active' : 
-                           product.status === 'pending_approval' ? 'Pending Approval' : 'Inactive'}
+                          {product.status === Status.Delivered ? Status.Delivered : 
+                           product.status === Status.Pending ? Status.Pending : Status.Cancelled}
                         </span>
                       </div>
                       
-                      <p className="text-green-600 font-bold text-base sm:text-lg mb-2">₦{product.price.toLocaleString()}</p>
-                      <p className="text-gray-600 text-sm mb-3">{product.unit} • {product.category}</p>
+                      <p className="text-green-600 font-bold text-base sm:text-lg mb-2">₦{product.price_per_portion}</p>
+                      {/* <p className="text-gray-600 text-sm mb-3">{product.quantity_unit} • {product.category}</p> */}
                       
-                      {product.status === 'active' && (
+                      {product.status === Status.Pending && (
                         <p className="text-sm text-gray-600 mb-3">
-                          {product.bookedPortions} of {product.totalPortions} portions booked
+                          {product.available_portions } of {(product.total_quantity / product.portion_size)} portions booked
                         </p>
                       )}
                       
-                      {product.status === 'pending_approval' && (
+                      {product.status === Status.Pending && (
                         <p className="text-sm text-yellow-600 mb-3">
                           We're reviewing your product. It will be live shortly.
                         </p>
                       )}
                       
-                      {product.bookedPortions === product.totalPortions && product.status === 'active' && (
+                      {product.available_portions == 0 && (
                         <p className="text-sm text-red-600 mb-3 font-medium">
                           Sold Out!
                         </p>
@@ -123,7 +124,7 @@ const DashboardContent = ({
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                      {product.status === 'active' && (
+                      {product.status === Status.Pending && (
                         <>
                           <button 
                             onClick={() => onShareProduct(product)}
@@ -142,11 +143,11 @@ const DashboardContent = ({
                         </>
                       )}
                       
-                      {product.bookedPortions === product.totalPortions && product.status === 'active' && (
+                      {/* {product.bookedPortions === product.totalPortions && product.status === 'active' && (
                         <button className="bg-green-500 text-white px-3 sm:px-4 py-2 rounded text-sm hover:bg-green-600">
                           Re-list this Product
                         </button>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
@@ -162,7 +163,7 @@ const DashboardContent = ({
         <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold mb-4">Your Wallet</h3>
           <div className="text-center mb-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">₦{dashboardStats.walletBalance.toLocaleString()}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">₦{dashboardStats.walletBalance}</h1>
             <p className="text-sm text-gray-600">Available for withdrawal</p>
           </div>
           <button 

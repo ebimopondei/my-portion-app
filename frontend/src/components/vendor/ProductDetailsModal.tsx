@@ -1,15 +1,16 @@
-import { Package, MapPin, Truck, Share2, Edit3, AlertCircle } from "lucide-react"
+import { Package, Truck, Share2, Edit3 } from "lucide-react"
 import Modal from "../ui/modal"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
-import type { Product } from "./types"
+import type { ProductAttribute } from "@shared/types/product"
+import { Status } from "@shared/enums"
 
 interface ProductDetailsModalProps {
   isOpen: boolean
   onClose: () => void
-  product: Product | null
-  onEdit: (product: Product) => void
-  onShare: (product: Product) => void
+  product: ProductAttribute | null
+  onEdit: (product: ProductAttribute) => void
+  onShare: (product: ProductAttribute) => void
 }
 
 export default function ProductDetailsModal({
@@ -21,20 +22,20 @@ export default function ProductDetailsModal({
 }: ProductDetailsModalProps) {
   if (!product) return null
 
-  const getStatusColor = (status: Product['status']): string => {
+  const getStatusColor = (status: ProductAttribute['status']): string => {
     switch(status) {
-      case 'active': return 'bg-green-100 text-green-700'
-      case 'pending_approval': return 'bg-amber-100 text-amber-700'
-      case 'inactive': return 'bg-gray-100 text-gray-700'
+      case Status.Delivered: return 'bg-green-100 text-green-700'
+      case Status.Pending: return 'bg-amber-100 text-amber-700'
+      case Status.Cancelled: return 'bg-gray-100 text-gray-700'
       default: return 'bg-gray-100 text-gray-700'
     }
   }
 
-  const getStatusText = (status: Product['status']): string => {
+  const getStatusText = (status: ProductAttribute['status']): string => {
     switch(status) {
-      case 'active': return 'Active'
-      case 'pending_approval': return 'Pending Approval'
-      case 'inactive': return 'Inactive'
+      case Status.Pending: return Status.Pending
+      case Status.Delivered: return Status.Delivered
+      case Status.Cancelled: return Status.Cancelled
       default: return 'Unknown'
     }
   }
@@ -69,7 +70,7 @@ export default function ProductDetailsModal({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-1">
             <img 
-              src={product.image} 
+              src={product.image_url} 
               alt={product.name}
               className="w-full h-48 object-cover rounded-lg"
             />
@@ -83,26 +84,27 @@ export default function ProductDetailsModal({
                   {getStatusText(product.status)}
                 </Badge>
                 <span className="text-sm text-gray-500">•</span>
-                <span className="text-sm text-gray-500">{product.category}</span>
+                {/* <span className="text-sm text-gray-500">{product.category}</span> */}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Price:</span>
-                <span className="text-lg font-bold text-green-600">₦{product.price.toLocaleString()}</span>
+                <span className="text-lg font-bold text-green-600">₦{product.price_per_portion}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Unit:</span>
-                <span className="font-medium text-sm">{product.unit}</span>
+                <span className="font-medium text-sm">{product.quantity_unit}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Created:</span>
-                <span className="font-medium text-sm">{formatDate(product.created)}</span>
+                {/* @ts-expect-error */}
+                <span className="font-medium text-sm">{formatDate(product.createdAt)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Total Portions:</span>
-                <span className="font-medium text-sm">{product.totalPortions}</span>
+                <span className="font-medium text-sm">{product.total_quantity}</span>
               </div>
             </div>
           </div>
@@ -116,22 +118,22 @@ export default function ProductDetailsModal({
           </h4>
           <div className="grid grid-cols-4 gap-3">
             <div className="text-center">
-              <div className="text-lg font-bold text-gray-900">{product.availablePortions}</div>
+              <div className="text-lg font-bold text-gray-900">{product.available_portions}</div>
               <div className="text-xs text-gray-600">Available</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-blue-600">{product.bookedPortions}</div>
+              <div className="text-lg font-bold text-blue-600">{product.total_quantity - product.available_portions}</div>
               <div className="text-xs text-gray-600">Booked</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-green-600">
-                ₦{(product.bookedPortions * product.price).toLocaleString()}
+                ₦{((product.total_quantity - product.available_portions) * product.price_per_portion)}
               </div>
               <div className="text-xs text-gray-600">Revenue</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-purple-600">
-                {product.totalPortions > 0 ? Math.round((product.bookedPortions / product.totalPortions) * 100) : 0}%
+                {product.available_portions }/{(product.total_quantity / product.portion_size)}%
               </div>
               <div className="text-xs text-gray-600">Sold</div>
             </div>
@@ -145,24 +147,24 @@ export default function ProductDetailsModal({
             Delivery Options
           </h4>
           <div className="flex space-x-2">
-            {product.pickupAvailable && (
+            {/* {product.pickupAvailable && (
               <Badge className="bg-blue-100 text-blue-700 text-xs">
                 <MapPin className="w-3 h-3 mr-1" />
                 Pickup
               </Badge>
-            )}
-            {product.deliveryAvailable && (
+            )} */}
+            {/* {product.deliveryAvailable && (
               <Badge className="bg-green-100 text-green-700 text-xs">
                 <Truck className="w-3 h-3 mr-1" />
                 Delivery
               </Badge>
-            )}
-            {!product.pickupAvailable && !product.deliveryAvailable && (
+            )} */}
+            {/* {!product.pickupAvailable && !product.deliveryAvailable && (
               <div className="flex items-center text-amber-600 text-xs">
                 <AlertCircle className="w-3 h-3 mr-1" />
                 No delivery options
               </div>
-            )}
+            )} */}
           </div>
         </div>
 

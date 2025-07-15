@@ -8,14 +8,14 @@ import {
   WalletContent,
   BusinessProfileTab,
   AddProductModal,
-  type TabId, 
-  type Product, 
+  type TabId,  
   vendorData,
   dashboardStats,
-  vendorProducts,
   recentOrders,
-  notifications
+  notifications,
 } from "../../components/vendor"
+import type { ProductAttribute } from "@shared/types/product";
+import ProductApi from "@/api/products/products-api";
 
 // Mock vendor profile data
 const vendorProfileData = {
@@ -44,6 +44,11 @@ const vendorProfileData = {
 }
 
 export default function VendorDashboard() {
+
+  const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
+
+  const { getAllProducts } = ProductApi()
+
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
   const [profileData] = useState(vendorProfileData)
@@ -58,11 +63,11 @@ export default function VendorDashboard() {
   }, [activeTab, redirectToBankSection])
 
   // Event handlers
-  const handleEditProduct = (product: Product) => {
+  const handleEditProduct = (product: ProductAttribute) => {
     console.log('Edit product:', product)
   }
 
-  const handleShareProduct = (product: Product) => {
+  const handleShareProduct = (product: ProductAttribute) => {
     console.log('Share product:', product)
   }
 
@@ -187,6 +192,17 @@ export default function VendorDashboard() {
         )
     }
   }
+
+  useEffect(()=>{
+    async function handleFetchProducts(){
+      const response = await getAllProducts();
+      console.log(response.data.product)
+      setVendorProducts(response.data.product)
+
+    }
+
+    handleFetchProducts()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from 'jsonwebtoken';
 import { SECRET } from '../config/secret';
 import { JwtPayload } from "../types/misc";
+import multer from "multer";
+import path from "path";
 
 export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers['authorization']?.split(' ')[1];  
@@ -39,3 +41,20 @@ export const authorizeRoles = (...allowedRoles: string[]) =>{
         next();
     }
 }
+
+
+export const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './dist/uploads/');
+  },
+  
+  filename: (req, file, cb) => {
+
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const fileExtension = path.extname(file.originalname);
+    const newFileName = file.originalname + uniqueSuffix + fileExtension;
+    cb(null, newFileName);
+  },
+});
+
+export const upload = multer({storage});

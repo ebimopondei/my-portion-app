@@ -2,13 +2,14 @@ import { Plus } from "lucide-react"
 import { useState } from "react"
 import { VendorProductCard } from "../shared/ProductCard"
 import ProductDetailsModal from "./ProductDetailsModal"
-import type { Product } from "./types"
+import type { ProductAttribute } from "@shared/types/product"
 
 interface ProductsContentProps {
-  vendorProducts: Product[]
+  vendorProducts: ProductAttribute[]
   onAddProduct: () => void
-  onEditProduct: (product: Product) => void
-  onShareProduct: (product: Product) => void
+  onEditProduct: (product: ProductAttribute) => void
+  onShareProduct: (product: ProductAttribute) => void
+  // onViewProduct: (product: ProductAttribute) => void
 }
 
 const ProductsContent = ({ 
@@ -17,10 +18,10 @@ const ProductsContent = ({
   onEditProduct, 
   onShareProduct 
 }: ProductsContentProps) => {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<ProductAttribute | null>(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
 
-  const handleViewProduct = (product: Product) => {
+  const handleViewProduct = (product: ProductAttribute) => {
     setSelectedProduct(product)
     setShowDetailsModal(true)
   }
