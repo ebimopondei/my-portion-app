@@ -10,13 +10,21 @@ interface SlideMenuProps {
 }
 
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
-  const { logoutAuth } = useAuth();
+  const { logoutAuth, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logoutAuth();
     toast.success('Logging out ')
     navigate('/login')
+  };
+
+  const handleLogin = () => {
+    navigate('/login')
+  };
+
+  const handleSignup = () => {
+    navigate('/register')
   };
 
   const menuItems = [
@@ -28,7 +36,7 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
   return (
     <>
       {/* Overlay */}
-      {isOpen && <div className="fixed inset-0 bg-black bg-opacity-20 z-50 transition-opacity" onClick={onClose} />}
+      {isOpen && <div className="fixed inset-0 bg-green-500/30 bg-opacity-20 z-50 transition-opacity" onClick={onClose} />}
 
       {/* Slide Menu */}
       <div
@@ -46,47 +54,86 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           </div>
 
           {/* User Profile */}
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <img
-                  src="/placeholder.svg?height=60&width=60"
-                  alt="Profile"
-                  width={60}
-                  height={60}
-                  className="rounded-full"
-                />
+          {isLoggedIn ? (
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <img
+                    src="/placeholder.svg?height=60&width=60"
+                    alt="Profile"
+                    width={60}
+                    height={60}
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900">John Doe</h3>
+                  <p className="text-sm text-gray-500">john@example.com</p>
+                </div>
+                <Button variant="ghost" size="sm" className="p-2">
+                  <Edit className="w-4 h-4" />
+                </Button>
               </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">John Doe</h3>
-                <p className="text-sm text-gray-500">john@example.com</p>
-              </div>
-              <Button variant="ghost" size="sm" className="p-2">
-                <Edit className="w-4 h-4" />
-              </Button>
             </div>
-          </div>
+          ) : (
+            <div className="p-6 border-b border-gray-100">
+              <div className="text-center">
+                <h3 className="font-medium text-gray-900 mb-2">Welcome to Portion</h3>
+                <p className="text-sm text-gray-500 mb-4">Sign in to access your account</p>
+                <div className="space-y-2">
+                  <Button onClick={handleLogin} className="w-full">
+                    Sign In
+                  </Button>
+                  <Button onClick={handleSignup} variant="outline" className="w-full">
+                    Create Account
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Menu Items */}
           <div className="flex-1 py-4">
-            {menuItems.map((item) => (
-              <button
-                key={item.label}
-                className="w-full flex items-center space-x-4 px-6 py-4 text-left hover:bg-gray-50 transition-colors"
-              >
-                <item.icon className="w-5 h-5 text-gray-600" />
-                <span className="text-gray-900">{item.label}</span>
-              </button>
-            ))}
+            {isLoggedIn ? (
+              menuItems.map((item) => (
+                <button
+                  key={item.label}
+                  className="w-full flex items-center space-x-4 px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <item.icon className="w-5 h-5 text-gray-600" />
+                  <span className="text-gray-900">{item.label}</span>
+                </button>
+              ))
+            ) : (
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-500 mb-4">Sign in to access:</p>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3 text-sm text-gray-600">
+                    <Package className="w-4 h-4" />
+                    <span>Order History</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-sm text-gray-600">
+                    <Heart className="w-4 h-4" />
+                    <span>Wishlist</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-sm text-gray-600">
+                    <Bell className="w-4 h-4" />
+                    <span>Notifications</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Logout */}
-          <div className="p-6 border-t border-gray-100">
-            <Button onClick={handleLogout} variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
-              <LogOut className="w-5 h-5 mr-3" />
-              Logout
-            </Button>
-          </div>
+          {isLoggedIn && (
+            <div className="p-6 border-t border-gray-100">
+              <Button onClick={handleLogout} variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
+                <LogOut className="w-5 h-5 mr-3" />
+                Logout
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

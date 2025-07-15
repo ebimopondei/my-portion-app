@@ -48,6 +48,12 @@ const nigerianStates = [
   "Yobe", "Zamfara"
 ]
 
+const cities = [
+  "Ibadan",
+  "Lagos", 
+  "Akure"
+]
+
 
 
 const idTypes = [
@@ -194,12 +200,16 @@ export default function KYCPage() {
         </div>
         <div>
           <Label htmlFor="city">City *</Label>
-          <Input
-            id="city"
-            value={formData.city}
-            onChange={(e) => handleInputChange('city', e.target.value)}
-            placeholder="Enter your city"
-          />
+          <Select value={formData.city} onValueChange={(value) => handleInputChange('city', value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select your city" />
+            </SelectTrigger>
+            <SelectContent>
+              {cities.map(city => (
+                <SelectItem key={city} value={city}>{city}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="state">State *</Label>

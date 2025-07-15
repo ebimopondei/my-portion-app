@@ -148,7 +148,7 @@ export default function LandingPage() {
                   size={"lg"}
                   className="h-12 text-base font-semibold"
                 >
-                  <Link to="/register/buyer">
+                  <Link to="/register">
                     Start Saving Today <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
@@ -444,7 +444,7 @@ export default function LandingPage() {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    to="/register/buyer"
+                    to="/register"
                     className="text-gray-600 hover:text-primary transition-colors"
                   >
                     Sign Up

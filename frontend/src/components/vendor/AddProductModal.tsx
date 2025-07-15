@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { X, MapPin, Package, DollarSign, Users, Video, Upload, Star, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { ProductCategory } from "@shared/enums"
 
 interface AddProductModalProps {
   isOpen: boolean
@@ -14,6 +15,7 @@ interface ProductFormData {
   additionalImages: File[]
   video: File | null
   productName: string
+  category: string
   sellingMethod: 'whole' | 'portions'
   totalPrice: number
   quantityAvailable: number
@@ -31,6 +33,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
     additionalImages: [],
     video: null,
     productName: '',
+    category: '',
     sellingMethod: 'whole',
     totalPrice: 0,
     quantityAvailable: 1,
@@ -46,6 +49,9 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
   const [additionalImagePreviews, setAdditionalImagePreviews] = useState<string[]>([])
   const [videoPreview, setVideoPreview] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+
+  // Get categories from shared enum
+  const categories = Object.values(ProductCategory)
 
   const handleDefaultImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -188,7 +194,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                   <Package className="w-5 h-5 mr-2 text-green-600" />
                   The Basics (What are you selling?)
                 </h3>
-                
+
                 {/* Product Name */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -203,6 +209,29 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                   />
                   <p className="text-sm text-gray-500 mt-1">
                     Be specific about size and type
+                  </p>
+                </div>
+
+                {/* Product Category */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Category *
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Choose the most appropriate category for your product
                   </p>
                 </div>
 
@@ -342,7 +371,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                             <button
                               onClick={() => removeAdditionalImage(index)}
                               className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100"
-                            >
+                  >
                               <X className="w-3 h-3" />
                             </button>
                             <div className="absolute bottom-1 left-1 bg-black/50 text-white text-xs px-1 py-0.5 rounded">

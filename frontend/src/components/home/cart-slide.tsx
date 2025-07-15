@@ -4,6 +4,8 @@ import { X, Plus, Minus, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import useCartItem from "@/hooks/cart-provider"
+import useAuth from "@/hooks/auth-provider"
+import { useNavigate } from "react-router-dom"
 
 
 interface CartSlideProps {
@@ -13,11 +15,23 @@ interface CartSlideProps {
 
 export function CartSlide({ isOpen, onClose }: CartSlideProps) {
   const { cartItems, updateCartItemQuantity, removeFromCart } = useCartItem()
+  const { isLoggedIn } = useAuth()
+  const navigate = useNavigate()
 
 // @ts-expect-error
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const deliveryFee = 5000
   const total = subtotal + deliveryFee
+
+  const handleCheckout = () => {
+    if (!isLoggedIn) {
+      navigate('/login')
+      onClose()
+    } else {
+      // Handle checkout for authenticated users
+      console.log('Proceeding to checkout...')
+    }
+  }
 
   return (
     <>
@@ -141,7 +155,12 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">Proceed to Checkout</Button>
+                <Button 
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  onClick={handleCheckout}
+                >
+                  {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
+                </Button>
                 <Button variant="outline" className="w-full bg-transparent" onClick={onClose}>
                   Continue Shopping
                 </Button>

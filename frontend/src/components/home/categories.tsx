@@ -1,27 +1,44 @@
 import { useState } from "react"
+import { ProductCategory } from "@shared/enums"
 
-const categories = [
-  { name: "All", icon: "🏪", count: 250 },
-  { name: "Rice", icon: "🌾", count: 45 },
-  { name: "Beans", icon: "🫘", count: 32 },
-  { name: "Yam", icon: "🍠", count: 28 },
-  { name: "Plantain", icon: "🍌", count: 22 },
-  { name: "Tomatoes", icon: "🍅", count: 38 },
-  { name: "Onions", icon: "🧅", count: 25 },
-  { name: "Pepper", icon: "🌶️", count: 19 },
-  { name: "Garri", icon: "🥣", count: 15 },
+interface CategoriesProps {
+  onCategoryChange?: (category: string) => void;
+}
+
+// Map categories to icons and default counts
+const categoryData = [
+  { name: "All", icon: "🏪", count: 0 },
+  { name: ProductCategory.GrainsAndCereals, icon: "🌾", count: 0 },
+  { name: ProductCategory.TubersAndRootCrops, icon: "🍠", count: 0 },
+  { name: ProductCategory.LegumesAndBeans, icon: "🫘", count: 0 },
+  { name: ProductCategory.Vegetables, icon: "🥬", count: 0 },
+  { name: ProductCategory.Fruits, icon: "🍎", count: 0 },
+  { name: ProductCategory.SpicesAndHerbs, icon: "🌶️", count: 0 },
+  { name: ProductCategory.NutsAndSeeds, icon: "🥜", count: 0 },
+  { name: ProductCategory.LivestockAndPoultry, icon: "🐔", count: 0 },
+  { name: ProductCategory.FishAndSeafood, icon: "🐟", count: 0 },
+  { name: ProductCategory.DairyProducts, icon: "🥛", count: 0 },
+  { name: ProductCategory.ProcessedFoods, icon: "🍞", count: 0 },
+  { name: ProductCategory.OrganicProducts, icon: "🌱", count: 0 },
+  { name: ProductCategory.FertilizersAndInputs, icon: "🌿", count: 0 },
+  { name: ProductCategory.AgriculturalEquipment, icon: "🚜", count: 0 },
 ]
 
-export function Categories() {
+export function Categories({ onCategoryChange }: CategoriesProps) {
   const [activeCategory, setActiveCategory] = useState("All")
+
+  const handleCategoryClick = (categoryName: string) => {
+    setActiveCategory(categoryName);
+    onCategoryChange?.(categoryName);
+  };
 
   return (
     <div className="mb-8">
       <div className="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
-        {categories.map((category) => (
+        {categoryData.map((category) => (
           <button
             key={category.name}
-            onClick={() => setActiveCategory(category.name)}
+            onClick={() => handleCategoryClick(category.name)}
             className={`flex-shrink-0 flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all ${
               activeCategory === category.name
                 ? "bg-emerald-600 text-white border-emerald-600"

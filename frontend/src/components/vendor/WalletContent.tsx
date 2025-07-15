@@ -12,6 +12,7 @@ interface WalletContentProps {
   }
   kycStatus: "verified" | "pending" | "rejected" | "unverified"
   onWithdrawFunds: (amount: number) => void
+  onRedirectToBank?: () => void
 }
 
 // Mock transaction history
@@ -49,13 +50,19 @@ const WalletContent = ({
   walletBalance, 
   bankDetails, 
   kycStatus, 
-  onWithdrawFunds
+  onWithdrawFunds,
+  onRedirectToBank
 }: WalletContentProps) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'bank' | 'kyc' | 'transactions'>('overview')
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
 
   const handleWithdraw = async (amount: number) => {
-    await onWithdrawFunds(amount)
+    try {
+      await onWithdrawFunds(amount)
+      // The success message will be shown by the WithdrawFundsModal
+    } catch (error) {
+      console.error("Withdrawal failed:", error)
+    }
   }
 
   const getKycStatusConfig = () => {
@@ -356,6 +363,7 @@ const WalletContent = ({
         walletBalance={walletBalance}
         bankDetails={bankDetails}
         kycStatus={kycStatus}
+        onRedirectToBank={onRedirectToBank}
       />
     </div>
   )

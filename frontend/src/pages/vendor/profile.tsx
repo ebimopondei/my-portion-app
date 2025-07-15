@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { 
   BusinessProfileTab,
-  BankAccountTab,
   VerificationTab,
   SettingsTab
 } from "../../components/vendor"
@@ -35,25 +34,12 @@ const vendorProfileData = {
   }
 }
 
-type ProfileTab = 'business' | 'bank' | 'verification' | 'settings'
+type ProfileTab = 'business' | 'verification' | 'settings'
 
 export default function VendorProfile() {
   const [activeTab, setActiveTab] = useState<ProfileTab>('business')
   const [profileData, setProfileData] = useState(vendorProfileData)
   const navigate = useNavigate()
-
-  const handleSaveBusinessProfile = (data: any) => {
-    console.log('Saving business profile:', data)
-    setProfileData(prev => ({ ...prev, ...data }))
-  }
-
-  const handleUpdateBankDetails = (data: any) => {
-    console.log('Updating bank details:', data)
-    setProfileData(prev => ({ 
-      ...prev, 
-      bankDetails: { ...prev.bankDetails, ...data } 
-    }))
-  }
 
   const handleUploadDocument = (documentType: string, file: File) => {
     console.log('Uploading document:', documentType, file)
@@ -85,14 +71,7 @@ export default function VendorProfile() {
         return (
           <BusinessProfileTab
             profileData={profileData}
-            onSave={handleSaveBusinessProfile}
-          />
-        )
-      case 'bank':
-        return (
-          <BankAccountTab
             bankDetails={profileData.bankDetails}
-            onUpdate={handleUpdateBankDetails}
           />
         )
       case 'verification':
@@ -122,8 +101,7 @@ export default function VendorProfile() {
   }
 
   const profileTabs = [
-    { id: 'business', label: 'Business Profile' },
-    { id: 'bank', label: 'Bank Account' },
+    { id: 'business', label: 'Profile' },
     { id: 'verification', label: 'Verification' },
     { id: 'settings', label: 'Settings' }
   ]

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   VendorNavbar, 
   VendorHeader, 
@@ -46,8 +46,16 @@ const vendorProfileData = {
 export default function VendorDashboard() {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
-  const [profileData, setProfileData] = useState(vendorProfileData)
+  const [profileData] = useState(vendorProfileData)
+  const [redirectToBankSection, setRedirectToBankSection] = useState(false)
   const unreadNotifications = notifications.filter(n => !n.read).length
+
+  // Reset redirect flag when wallet tab is accessed normally
+  useEffect(() => {
+    if (activeTab === 'wallet' && !redirectToBankSection) {
+      setRedirectToBankSection(false)
+    }
+  }, [activeTab, redirectToBankSection])
 
   // Event handlers
   const handleEditProduct = (product: Product) => {
@@ -78,11 +86,12 @@ export default function VendorDashboard() {
     console.log('Withdraw funds:', amount)
   }
 
-  // Profile handlers
-  const handleSaveBusinessProfile = (data: any) => {
-    console.log('Saving business profile:', data)
-    setProfileData(prev => ({ ...prev, ...data }))
+  const handleRedirectToBank = () => {
+    setActiveTab('wallet')
+    // The WalletContent component will handle showing the bank account section
   }
+
+  // Profile handlers
 
   const renderContent = () => {
     switch(activeTab) {
@@ -97,6 +106,7 @@ export default function VendorDashboard() {
             onEditProduct={handleEditProduct}
             onShareProduct={handleShareProduct}
             onWithdrawFunds={handleWithdrawFunds}
+            onRedirectToBank={handleRedirectToBank}
           />
         )
       case 'products':
@@ -122,6 +132,7 @@ export default function VendorDashboard() {
             bankDetails={profileData.bankDetails}
             kycStatus={profileData.kycStatus}
             onWithdrawFunds={handleWithdrawFunds}
+            onRedirectToBank={handleRedirectToBank}
           />
         )
       case 'profile':
@@ -132,13 +143,13 @@ export default function VendorDashboard() {
               <div className="border-b border-gray-200">
                 <div className="px-6 py-4">
                   <h3 className="text-lg font-semibold text-gray-900">Business Profile</h3>
-                  <p className="text-gray-600 mt-1">Manage your business information and settings</p>
+                  <p className="text-gray-600 mt-1">View your business information and bank details</p>
                 </div>
               </div>
               <div className="p-6">
                 <BusinessProfileTab
                   profileData={profileData}
-                  onSave={handleSaveBusinessProfile}
+                  bankDetails={profileData.bankDetails}
                 />
               </div>
             </div>

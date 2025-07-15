@@ -2,6 +2,7 @@ export interface ProductAttribute {
     id?: string;
     seller_id: string;
     name: string;
+    category: string;
     description: string;
     image_url: string;
     total_quantity: number;

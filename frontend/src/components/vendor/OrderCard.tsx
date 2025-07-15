@@ -85,7 +85,11 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
             </thead>
             <tbody>
               {order.customerOrders.map((customer: CustomerOrder) => (
-                <tr key={customer.id} className="border-b border-gray-100">
+                <tr 
+                  key={customer.id} 
+                  className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                  onClick={() => openCustomerModal(customer)}
+                >
                   <td className="py-2">
                     <div>
                       <p className="font-medium text-gray-900">{customer.customerName}</p>
@@ -105,7 +109,10 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
                   </td>
                   <td className="py-2">
                     <button 
-                      onClick={() => openCustomerModal(customer)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openCustomerModal(customer)
+                      }}
                       className="text-gray-500 hover:text-gray-700 p-1"
                     >
                       <MoreHorizontal size={16} />

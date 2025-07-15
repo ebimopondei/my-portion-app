@@ -20,6 +20,7 @@ interface DashboardContentProps {
   onEditProduct: (product: Product) => void
   onShareProduct: (product: Product) => void
   onWithdrawFunds: (amount: number) => void
+  onRedirectToBank?: () => void
 }
 
 const DashboardContent = ({ 
@@ -30,7 +31,8 @@ const DashboardContent = ({
   onAddProduct, 
   onEditProduct, 
   onShareProduct, 
-  onWithdrawFunds 
+  onWithdrawFunds,
+  onRedirectToBank
 }: DashboardContentProps) => {
   const hasProducts = vendorProducts.length > 0
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
@@ -196,6 +198,7 @@ const DashboardContent = ({
         walletBalance={dashboardStats.walletBalance}
         bankDetails={bankDetails}
         kycStatus={kycStatus}
+        onRedirectToBank={onRedirectToBank}
       />
     </div>
   )
