@@ -10,6 +10,23 @@ module.exports = {
     await queryInterface.sequelize.transaction( async (t) => {
       await queryInterface.addColumn(
         'product',
+        'category', 
+        {
+          type: DataTypes.STRING,
+          allowNull: false,
+          defaultValue:'food'
+
+      }, { transaction: t })
+      await queryInterface.addColumn(
+        'product',
+        'video_url', 
+        {
+          type: DataTypes.STRING,
+          allowNull: true,
+
+      }, { transaction: t })
+      await queryInterface.addColumn(
+        'product',
         'status', 
         {
           type: DataTypes.STRING,
@@ -39,7 +56,9 @@ module.exports = {
      */
 
     await queryInterface.sequelize.transaction( async (t)=> {
-      await queryInterface.removeColumn('Person', 'petName', { transaction: t });
+      await queryInterface.removeColumn('product', 'status', { transaction: t });
+      await queryInterface.removeColumn('product', 'category', { transaction: t });
+      await queryInterface.removeColumn('product', 'video_url', { transaction: t });
     })
   }
 };

@@ -1,12 +1,17 @@
 import { useState } from "react"
-import { X, MapPin, Package, DollarSign, Users, Video, Upload, Star, Image as ImageIcon } from "lucide-react"
+import { X, Package, DollarSign, Users, Video, Upload, Star, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ProductCategory } from "@shared/enums"
+import useCreateProduct from "@/hooks/form-hooks/use-create-product-hook"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { Input } from "../ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { Button } from "../ui/button"
+import toast from "react-hot-toast"
 
 interface AddProductModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (productData: any) => void
   onSaveDraft: (productData: any) => void
 }
 
@@ -27,14 +32,14 @@ interface ProductFormData {
   pickupLocation: string
 }
 
-export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProductModalProps) {
+export default function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
   const [formData, setFormData] = useState<ProductFormData>({
     defaultImage: null,
     additionalImages: [],
     video: null,
     productName: '',
     category: '',
-    sellingMethod: 'whole',
+    sellingMethod: 'portions',
     totalPrice: 0,
     quantityAvailable: 1,
     totalStock: '',
@@ -79,18 +84,6 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
     })
   }
 
-  const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setFormData(prev => ({ ...prev, video: file }))
-      
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setVideoPreview(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
 
   const removeDefaultImage = () => {
     setFormData(prev => ({ ...prev, defaultImage: null }))
@@ -145,16 +138,11 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
   }
 
   const calculateTotalEarnings = () => {
-    if (formData.sellingMethod === 'portions') {
-      return formData.numberOfPortions * formData.pricePerPortion
-    }
-    return formData.totalPrice * formData.quantityAvailable
+    return formData.numberOfPortions * formData.pricePerPortion
   }
 
-  const handleSubmit = () => {
-    onSubmit(formData)
-    onClose()
-  }
+
+  const { form, onCreateProduct } = useCreateProduct();
 
 
   return (
@@ -175,7 +163,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
             className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Sticky Header */}
+                {/* Sticky Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white sticky top-0 z-10 rounded-t-lg">
               <h2 className="text-xl font-semibold text-gray-800">Add New Product</h2>
               <button
@@ -186,8 +174,13 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
               </button>
             </div>
 
-            {/* Scrollable Form Content */}
             <div className="p-6 space-y-8 overflow-y-auto flex-1">
+            <Form {...form}>
+
+              <form  onSubmit={form.handleSubmit(onCreateProduct)}>
+
+            {/* Scrollable Form Content */}
+            <div >
               {/* Section 1: The Basics */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
@@ -197,16 +190,22 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
 
                 {/* Product Name */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.productName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, productName: e.target.value }))}
-                    placeholder="e.g., 50kg Bag of Ofada Rice"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  />
+                  <FormField
+                      control={form.control}
+                      name="name"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Product Name</FormLabel>
+                          <FormControl>
+                            <Input 
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                              placeholder="e.g., 50kg Bag of Ofada Rice" {...field} />
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                      />
                   <p className="text-sm text-gray-500 mt-1">
                     Be specific about size and type
                   </p>
@@ -214,22 +213,29 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
 
                 {/* Product Category */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Category *
-                  </label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                  >
-                    <option value="">Select a category</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Role</FormLabel>
+                        <FormControl>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Select Role" />
+                            </SelectTrigger>
+                            <SelectContent className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                              {categories.map((category) => (
+                                  <SelectItem value={category}>{category}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                    />
                   <p className="text-sm text-gray-500 mt-1">
                     Choose the most appropriate category for your product
                   </p>
@@ -237,12 +243,17 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
 
                 {/* Default Product Image */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2  items-center">
-                    <Star className="w-4 h-4 mr-1 text-amber-500" />
-                    Default Product Image * (Main showcase image)
-                  </label>
-                  
-                  {!defaultImagePreview ? (
+                  <FormField
+                      control={form.control}
+                      name="image_url"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel className="block text-sm font-medium text-gray-700 mb-2  items-center">
+                            <Star className="w-4 h-4 mr-1 text-amber-500" />
+                            Default Product Image * (Main showcase image)
+                          </FormLabel>
+                          <FormControl>
+                            {!defaultImagePreview ? (
                     <div 
                       className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
                         isDragOver 
@@ -253,13 +264,31 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                       onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDrop(e, true)}
                     >
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleDefaultImageUpload}
-                        className="hidden"
-                        id="default-image-upload"
-                      />
+                      <Input
+          type="file"
+          accept="image/*"
+          id="default-image-upload"
+          className="hidden"
+          onChange={(e) => {
+            handleDefaultImageUpload(e);
+            const selectedFile = e.target.files?.[0]
+            if (!selectedFile) {
+              toast.error("Cancelled select file!")
+              return
+            }
+
+            // Pass the File to React Hook Form
+            field.onChange(selectedFile)
+
+            // Generate preview
+            const reader = new FileReader()
+            reader.onloadend = () => {
+              toast.success("📂 Image loaded")
+              // setAvatarPreview(String(reader.result))
+            }
+            reader.readAsDataURL(selectedFile)
+          }}
+        />
                       <label htmlFor="default-image-upload" className="cursor-pointer">
                         <div className="flex flex-col items-center">
                           <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-4">
@@ -301,10 +330,18 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                       </div>
                     </div>
                   )}
+                            {/* <Input placeholder="John" {...field} /> */}
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                      />
                 </div>
 
                 {/* Additional Product Images */}
                 <div className="mb-6">
+                  
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Additional Product Images (2-4 more images recommended)
                   </label>
@@ -386,29 +423,62 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
 
                 {/* Product Video */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Product Video * (Required)
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={handleVideoUpload}
-                      className="hidden"
-                      id="video-upload"
-                    />
-                    <label htmlFor="video-upload" className="cursor-pointer">
-                      <Video className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                      <p className="text-lg font-medium text-gray-700 mb-1">
-                        Click here to upload product video
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        MP4, MOV up to 50MB. Video is required.
-                      </p>
-                    </label>
-                  </div>
-                  
-                  {/* Video Preview */}
+                  <FormField
+                      control={form.control}
+                      name="video_url"
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel className="block text-sm font-medium text-gray-700 mb-2">
+                            Product Video * (Required)
+                          </FormLabel>
+
+                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
+                            <Input
+                              type="file"
+                              accept="video/*"
+                              id="video-upload"
+                              className="hidden"
+                              onChange={(e) => {
+                                // handleVideoUpload(e);
+                                const selectedFile = e.target.files?.[0]
+                                if (!selectedFile) {
+                                  toast.error("Cancelled select file!")
+                                  return
+                                }
+
+                                // Pass the File to React Hook Form
+                                field.onChange(selectedFile)
+
+                                // Generate preview
+                                const reader = new FileReader()
+                                reader.onloadend = () => {
+                                  toast.success("📂 Video loaded")
+                                  setVideoPreview(String(reader.result))
+                                }
+                                reader.readAsDataURL(selectedFile)
+                              }}
+                            />
+
+                            <FormLabel htmlFor="video-upload" className="cursor-pointer"  >
+
+                              <Video className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                                <p className="text-lg font-medium text-gray-700 mb-1">
+                                Click here to upload product video
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                MP4, MOV up to 50MB. Video is required.
+                              </p>
+
+                            </FormLabel >
+
+                          </div>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                      />
+
+
                   {videoPreview && (
                     <div className="mt-4">
                       <video
@@ -427,6 +497,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                       </button>
                     </div>
                   )}
+
                 </div>
               </div>
 
@@ -436,14 +507,13 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                   <DollarSign className="w-5 h-5 mr-2 text-green-600" />
                   Pricing & Quantity (How do you want to sell it?)
                 </h3>
-
-                {/* Selling Method */}
+                
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     How do you want to sell this?
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
+                    {/* <button
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, sellingMethod: 'whole' }))}
                       className={`p-4 rounded-lg border-2 text-center transition-colors ${
@@ -454,7 +524,7 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                     >
                       <Package className="w-6 h-6 mx-auto mb-2" />
                       <span className="font-medium">As a Whole Item</span>
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, sellingMethod: 'portions' }))}
@@ -471,7 +541,6 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                 </div>
 
                 {formData.sellingMethod === 'whole' ? (
-                  /* Whole Item Fields */
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -503,47 +572,66 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                     </div>
                   </div>
                 ) : (
-                  /* Portions Fields */
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        What is your total stock?
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.totalStock}
-                        onChange={(e) => setFormData(prev => ({ ...prev, totalStock: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="e.g., One 100kg bag of beans"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        How many portions do you want to divide this into?
-                      </label>
-                      <input
-                        type="number"
-                        value={formData.numberOfPortions || ''}
-                        onChange={(e) => setFormData(prev => ({ ...prev, numberOfPortions: Number(e.target.value) }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="10"
-                        min="1"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Price for each portion
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₦</span>
-                        <input
-                          type="number"
-                          value={formData.pricePerPortion || ''}
-                          onChange={(e) => setFormData(prev => ({ ...prev, pricePerPortion: Number(e.target.value) }))}
-                          className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="0"
+                      <FormField
+                        control={form.control}
+                        name="total_quantity"
+                        render={({field}) => (
+                          <FormItem>
+                            <FormLabel className="block text-sm font-medium text-gray-700 mb-2">What is your total stock?</FormLabel>
+                            <FormControl>
+                              <Input 
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                placeholder="100" {...field} />
+                            </FormControl>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
                         />
-                      </div>
+                      
+                    </div>
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="portion_size"
+                        render={({field}) => (
+                          <FormItem>
+                            <FormLabel className="block text-sm font-medium text-gray-700 mb-2">How many portions do you want to divide this into?</FormLabel>
+                            <FormControl>
+                              <Input 
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                placeholder="10" {...field} />
+                            </FormControl>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                        />
+                      
+                    </div>
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="price_per_portion"
+                        render={({field}) => (
+                          <FormItem>
+                            <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Price for each portion</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₦</span>
+                                <Input 
+                                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                  placeholder="0" {...field} />
+
+                              </div>
+                            </FormControl>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                        />
                       {formData.numberOfPortions > 0 && formData.pricePerPortion > 0 && (
                         <p className="text-sm text-green-600 mt-1">
                           If you sell {formData.numberOfPortions} portions, you will earn a total of ₦{calculateTotalEarnings().toLocaleString()}.
@@ -555,13 +643,12 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
               </div>
 
               {/* Section 3: Logistics */}
-              <div>
+              {/* <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                   <MapPin className="w-5 h-5 mr-2 text-green-600" />
                   Logistics (How will customers get it?)
                 </h3>
 
-                {/* Fulfillment Options */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     How can customers receive this item?
@@ -588,7 +675,6 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                   </div>
                 </div>
 
-                {/* Pickup Location */}
                 {formData.pickupAvailable && (
                   <div className="mb-6">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -608,17 +694,22 @@ export default function AddProductModal({ isOpen, onClose, onSubmit }: AddProduc
                     </p>
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
 
             {/* Footer Buttons */}
             <div className="flex justify-center p-6 border-t border-gray-200">
-              <button
-                onClick={handleSubmit}
+              <Button
+                type="submit"
                 className="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
               >
                 Submit Product
-              </button>
+              </Button>
+            </div>
+              </form>
+
+            </Form>
+
             </div>
           </motion.div>
         </motion.div>

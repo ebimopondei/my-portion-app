@@ -12,8 +12,10 @@ class Product extends Model<ProductAttribute> implements ProductAttribute{
     public seller_id!: string;
     public name!: string;
     public status!: Status;
+    public category!: string;
     public description!: string;
     public image_url!: string;
+    public video_url!: string;
     public total_quantity!: number;
     public quantity_unit!: string;
     public portion_size!: number;
@@ -55,7 +57,17 @@ Product.init({
     allowNull: true
   },
 
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+
   image_url: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+
+  video_url: {
     type: DataTypes.STRING,
     allowNull: false
   },

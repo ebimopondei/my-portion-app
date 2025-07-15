@@ -13,6 +13,7 @@ export interface ProductAttribute {
     portion_size: number;
     price_per_portion: number;
     available_portions: number;
+    video_url: string;
     location: string;
 
     

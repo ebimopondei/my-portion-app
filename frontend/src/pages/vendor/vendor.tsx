@@ -47,7 +47,7 @@ export default function VendorDashboard() {
 
   const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
 
-  const { getAllProducts } = ProductApi()
+  const { getProducts } = ProductApi()
 
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
@@ -77,10 +77,6 @@ export default function VendorDashboard() {
 
   const handleAddProduct = () => {
     setIsAddProductModalOpen(true)
-  }
-
-  const handleSubmitProduct = (productData: any) => {
-    console.log('Submit product:', productData)
   }
 
   const handleSaveDraft = (productData: any) => {
@@ -195,7 +191,7 @@ export default function VendorDashboard() {
 
   useEffect(()=>{
     async function handleFetchProducts(){
-      const response = await getAllProducts();
+      const response = await getProducts();
       console.log(response.data.product)
       setVendorProducts(response.data.product)
 
@@ -220,7 +216,6 @@ export default function VendorDashboard() {
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={() => setIsAddProductModalOpen(false)}
-        onSubmit={handleSubmitProduct}
         onSaveDraft={handleSaveDraft}
       />
     </div>

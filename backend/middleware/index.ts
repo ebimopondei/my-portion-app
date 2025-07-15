@@ -30,8 +30,6 @@ export const authorizeRoles = (...allowedRoles: string[]) =>{
     return (req: Request, res: Response, next: NextFunction) => {
         // @ts-expect-error
         const user = req.parsedToken;
-        console.log(user.role)
-        console.log(user)
 
         if(!user || !allowedRoles.includes(user.role)){
             
@@ -45,7 +43,7 @@ export const authorizeRoles = (...allowedRoles: string[]) =>{
 
 export const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './dist/uploads/');
+    cb(null, './build/backend/uploads/');
   },
   
   filename: (req, file, cb) => {

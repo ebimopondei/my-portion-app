@@ -7,6 +7,7 @@ import DashboardPage from "./pages/dashboard";
 import OrdersPage from "./pages/orders";
 import VendorPage from "./pages/vendor/vendor";
 import KYCPage from "./pages/vendor/kyc";
+import ProtectedRoutes from "./hooks/protected-routes";
 
 const AppRouter = () => (
   
@@ -17,8 +18,12 @@ const AppRouter = () => (
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/vendor" element={<VendorPage />} />
-          <Route path="/vendor/kyc" element={<KYCPage />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/vendor/kyc" element={<KYCPage />} />
+            <Route path="/vendor" element={<VendorPage />} />
+
+          </Route>
         </Routes>
 );
 
