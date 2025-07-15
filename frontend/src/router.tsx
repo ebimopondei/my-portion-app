@@ -6,6 +6,7 @@ import RegisterVendor from "./pages/register-vendor";
 import HomePage from "./pages/home";
 import DashboardPage from "./pages/dashboard";
 import VendorPage from "./pages/vendor/vendor";
+import ProtectedRoutes from "./hooks/protected-routes";
 
 const AppRouter = () => (
   
@@ -16,7 +17,10 @@ const AppRouter = () => (
           <Route path="/register/buyer" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/vendor" element={<VendorPage />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/vendor" element={<VendorPage />} />
+          </Route>
         </Routes>
 );
 

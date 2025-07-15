@@ -1,7 +1,10 @@
+import { Status } from "../enums";
+
 export interface ProductAttribute {
     id?: string;
     seller_id: string;
     name: string;
+    status: Status,
     description: string;
     image_url: string;
     total_quantity: number;

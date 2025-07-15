@@ -4,12 +4,14 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
 import { ProductAttribute } from '@shared/types/product'
+import { Status } from "@shared/enums";
 
 
 class Product extends Model<ProductAttribute> implements ProductAttribute{
     public id!: string;
     public seller_id!: string;
     public name!: string;
+    public status!: Status;
     public description!: string;
     public image_url!: string;
     public total_quantity!: number;
@@ -68,6 +70,14 @@ Product.init({
     allowNull: false,
     validate: {
       isIn: [['kg', 'bag', 'cup', 'rubber']]
+    },
+  },
+
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [[Status.Cancelled, Status.Delivered, Status.Pending]]
     },
   },
 

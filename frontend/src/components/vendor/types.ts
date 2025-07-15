@@ -1,3 +1,4 @@
+import type { ProductAttribute } from "@shared/types/product";
 import type { LucideIcon } from "lucide-react"
 
 export type TabId = 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
@@ -62,10 +63,10 @@ export interface StatsCardProps {
 }
 
 export interface ProductCardProps {
-  product: Product;
-  onEdit: (product: Product) => void;
-  onShare: (product: Product) => void;
-  onView: (product: Product) => void;
+  product: ProductAttribute;
+  onEdit: (product: ProductAttribute) => void;
+  onShare: (product: ProductAttribute) => void;
+  onView: (product: ProductAttribute) => void;
 }
 
 export interface OrderCardProps {

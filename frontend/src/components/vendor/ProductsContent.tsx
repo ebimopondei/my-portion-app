@@ -1,13 +1,13 @@
 import { Plus } from "lucide-react"
 import { VendorProductCard } from "../shared/ProductCard"
-import type { Product } from "./types"
+import type { ProductAttribute } from "@shared/types/product"
 
 interface ProductsContentProps {
-  vendorProducts: Product[]
+  vendorProducts: ProductAttribute[]
   onAddProduct: () => void
-  onEditProduct: (product: Product) => void
-  onShareProduct: (product: Product) => void
-  onViewProduct: (product: Product) => void
+  onEditProduct: (product: ProductAttribute) => void
+  onShareProduct: (product: ProductAttribute) => void
+  onViewProduct: (product: ProductAttribute) => void
 }
 
 const ProductsContent = ({ 

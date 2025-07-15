@@ -1,6 +1,8 @@
 import { Star, ShoppingCart, Users, Eye, Edit3, Share2 } from "lucide-react"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
+import type { ProductAttribute } from "@shared/types/product"
+import { Status } from "@shared/enums"
 
 // Customer Product Interface
 interface CustomerProduct {
@@ -18,23 +20,6 @@ interface CustomerProduct {
   currentOrders: number
 }
 
-// Vendor Product Interface (from vendor types)
-interface VendorProduct {
-  id: number
-  name: string
-  price: number
-  unit: string
-  totalQuantity: number
-  totalPortions: number
-  availablePortions: number
-  bookedPortions: number
-  image: string
-  status: 'active' | 'pending_approval' | 'inactive'
-  created: string
-  category: string
-  pickupAvailable: boolean
-  deliveryAvailable: boolean
-}
 
 interface CustomerProductCardProps {
   product: CustomerProduct
@@ -42,10 +27,10 @@ interface CustomerProductCardProps {
 }
 
 interface VendorProductCardProps {
-  product: VendorProduct
-  onEdit: (product: VendorProduct) => void
-  onShare: (product: VendorProduct) => void
-  onView: (product: VendorProduct) => void
+  product: ProductAttribute
+  onEdit: (product: ProductAttribute) => void
+  onShare: (product: ProductAttribute) => void
+  onView: (product: ProductAttribute) => void
 }
 
 // Customer Product Card
@@ -136,20 +121,20 @@ export function CustomerProductCard({ product, onAddToCart }: CustomerProductCar
 
 // Vendor Product Card
 export function VendorProductCard({ product, onEdit, onShare, onView }: VendorProductCardProps) {
-  const getStatusColor = (status: VendorProduct['status']): string => {
+  const getStatusColor = (status: ProductAttribute['status']): string => {
     switch(status) {
-      case 'active': return 'bg-green-100 text-green-800'
-      case 'pending_approval': return 'bg-yellow-100 text-yellow-800'
-      case 'inactive': return 'bg-gray-100 text-gray-800'
+      case Status.Delivered: return 'bg-green-100 text-green-800'
+      case Status.Pending: return 'bg-yellow-100 text-yellow-800'
+      case Status.Cancelled: return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
 
-  const getStatusText = (status: VendorProduct['status']): string => {
+  const getStatusText = (status: ProductAttribute['status']): string => {
     switch(status) {
-      case 'active': return 'Active'
-      case 'pending_approval': return 'Pending Approval'
-      case 'inactive': return 'Inactive'
+      case Status.Cancelled: return Status.Cancelled
+      case Status.Delivered: return Status.Delivered
+      case Status.Pending: return Status.Pending
       default: return 'Unknown'
     }
   }
@@ -157,7 +142,7 @@ export function VendorProductCard({ product, onEdit, onShare, onView }: VendorPr
   return (
     <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
       <div className="relative">
-        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+        <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover" />
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(product.status)}`}>
             {getStatusText(product.status)}
@@ -167,22 +152,22 @@ export function VendorProductCard({ product, onEdit, onShare, onView }: VendorPr
       
       <div className="p-4">
         <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-        <p className="text-green-600 font-bold text-xl mb-2">₦{product.price.toLocaleString()}</p>
-        <p className="text-gray-600 text-sm mb-2">{product.unit} • {product.category}</p>
+        <p className="text-green-600 font-bold text-xl mb-2">₦{product.price_per_portion}</p>
+        {/* <p className="text-gray-600 text-sm mb-2">{product.quantity_unit} • {product.category}</p> */}
         
         <div className="flex justify-between text-sm text-gray-500 mb-3">
-          <span>Available: {product.availablePortions}/{product.totalPortions}</span>
-          <span>Booked: {product.bookedPortions}</span>
+          <span>Available: {product.available_portions}</span>
+          <span>Booked: {product.available_portions}</span>
         </div>
         
-        <div className="flex items-center space-x-2 mb-4">
+        {/* <div className="flex items-center space-x-2 mb-4">
           {product.pickupAvailable && (
             <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Pickup</span>
           )}
           {product.deliveryAvailable && (
             <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Delivery</span>
           )}
-        </div>
+        </div> */}
         
         <div className="flex space-x-2">
           <button 

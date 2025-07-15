@@ -19,6 +19,8 @@ type AuthContextType = {
     isLoading:boolean,
     user: UserAttributes | null,
     setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+    setRole: Dispatch<SetStateAction<string>>;
+    role: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -32,6 +34,8 @@ const AuthContext = createContext<AuthContextType>({
     isLoading: false,
     setIsLoggedIn: ()=>{},
     user: null,
+    setRole: ()=> {},
+    role: "",
 });
 
 export default function useAuth(){
@@ -43,6 +47,7 @@ export function AuthProvider({children}: Props){
     const { apiPrivate  } = API();
 
     const { getCookie, setCookie, resetItem} = useCookie();
+    const [ role, setRole] = useState<string>('');
     const [ user, setUser ] = useState<UserAttributes | null>(null);
     const [ token, setToken] = useState<string>("");
     const [ isLoading, setIsLoading] = useState<boolean>(true);
@@ -58,6 +63,8 @@ export function AuthProvider({children}: Props){
         setCookie('user', JSON.stringify(user) );
         setCookie('refreshToken', JSON.stringify(refreshToken) );
         setCookie('isLoggedIn', JSON.stringify(true) );
+        setCookie('role', JSON.stringify(user?.role) );
+
     }
     
     const logoutAuth = ()=> {
@@ -67,8 +74,10 @@ export function AuthProvider({children}: Props){
         setRefreshToken(''); 
         resetItem("token");
         resetItem("user");
+        resetItem("role");
         resetItem("refreshToken");
         resetItem('isLoggedIn');
+
     }
 
     useEffect( ()=>{
@@ -108,6 +117,11 @@ export function AuthProvider({children}: Props){
             const temp =  getCookie('refreshToken');
             setRefreshToken(JSON.parse(temp));
         }
+        
+        if(getCookie('role')){
+            const temp =  getCookie('role');
+            setRole(JSON.parse(temp));
+        }
 
         setIsLoading(false)
     },[])
@@ -116,7 +130,7 @@ export function AuthProvider({children}: Props){
     if(isLoading) return; 
 
     return(
-        <AuthContext.Provider value={{ user, isLoggedIn, isLoading, setIsLoggedIn, loginAuth, logoutAuth, token, setToken, refreshToken, setRefreshToken}}>
+        <AuthContext.Provider value={{ role, setRole, user, isLoggedIn, isLoading, setIsLoggedIn, loginAuth, logoutAuth, token, setToken, refreshToken, setRefreshToken}}>
             {children}
         </AuthContext.Provider>
     )

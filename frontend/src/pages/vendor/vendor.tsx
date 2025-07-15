@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   VendorNavbar, 
   VendorHeader, 
@@ -8,15 +8,15 @@ import {
   WalletContent,
   BusinessProfileTab,
   AddProductModal,
-  type TabId, 
-  type Product, 
-  type ProductOrder,
+  type TabId,
   vendorData,
   dashboardStats,
-  vendorProducts,
   recentOrders,
-  notifications
+  notifications,
+  type ProductOrder
 } from "../../components/vendor"
+import type { ProductAttribute } from "@shared/types/product";
+import ProductApi from "@/api/products/products-api";
 
 // Mock vendor profile data
 const vendorProfileData = {
@@ -45,21 +45,26 @@ const vendorProfileData = {
 }
 
 export default function VendorDashboard() {
+
+  const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
+
+  const { getAllProducts } = ProductApi()
+
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
   const [profileData, setProfileData] = useState(vendorProfileData)
   const unreadNotifications = notifications.filter(n => !n.read).length
 
   // Event handlers
-  const handleEditProduct = (product: Product) => {
+  const handleEditProduct = (product: ProductAttribute) => {
     console.log('Edit product:', product)
   }
 
-  const handleShareProduct = (product: Product) => {
+  const handleShareProduct = (product: ProductAttribute) => {
     console.log('Share product:', product)
   }
 
-  const handleViewProduct = (product: Product) => {
+  const handleViewProduct = (product: ProductAttribute) => {
     console.log('View product:', product)
   }
 
@@ -92,9 +97,6 @@ export default function VendorDashboard() {
     console.log('Saving business profile:', data)
     setProfileData(prev => ({ ...prev, ...data }))
   }
-
-
-
 
   const renderContent = () => {
     switch(activeTab) {
@@ -188,6 +190,17 @@ export default function VendorDashboard() {
         )
     }
   }
+
+  useEffect(()=>{
+    async function handleFetchProducts(){
+      const response = await getAllProducts();
+      console.log(response.data.product)
+      setVendorProducts(response.data.product)
+
+    }
+
+    handleFetchProducts()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50">

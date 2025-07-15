@@ -2,7 +2,6 @@ import { Star, ShoppingCart } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import type { ProductAttribute } from "@shared/types/product"
-import API from "@/api/api-config"
 
 interface ProductCardProps {
   product: ProductAttribute
@@ -11,7 +10,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
-  const { backendHost } = API(); 
   const discountPercentage = Math.round(((product.price_per_portion - product.price_per_portion) / product.price_per_portion) * 100)
   
   const groupProgress = (((product.total_quantity / product.portion_size) - ((product.total_quantity / product.portion_size) - product.available_portions)) / (product.total_quantity / product.portion_size)) * 100;
@@ -21,7 +19,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       {/* Image */}
       <div className="relative">
         <img
-          src={ `${backendHost}/uploads/${product.image_url || "/placeholder.svg"}`}
+          src={ `${product.image_url}`}
           alt={product.name}
           width={300}
           height={200}
