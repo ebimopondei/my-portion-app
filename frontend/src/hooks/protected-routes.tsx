@@ -10,7 +10,7 @@ const ProtectedRoutes = () => {
     const location = useLocation();
     const pathName = location.pathname;
     const { apiPrivate } = API();
-    const {token, user, isLoading, role, setUser, refreshUser } = useAuth();
+    const {token, isLoading, role, setUser, refreshUser } = useAuth();
     
     useEffect(()=>{
 
