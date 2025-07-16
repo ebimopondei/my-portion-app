@@ -1,7 +1,7 @@
 export interface KycPersonalAttribute {
     id?: string;
     user_id: string;
-    firstnname: string,
+    firstname: string,
     lastname: string,
     date_of_birth: Date,
     phone_number: string,
