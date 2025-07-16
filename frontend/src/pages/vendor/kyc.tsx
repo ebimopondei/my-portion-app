@@ -1,10 +1,13 @@
 import { useState } from "react"
-import { Upload, Camera, FileText, Building, User, CheckCircle, AlertCircle } from "lucide-react"
+import { Upload, FileText, Building, User, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import Logo from "../../components/shared/Logo"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import useCompleteKyc from "@/hooks/form-hooks/use-complete-kyc-hook"
+import toast from "react-hot-toast"
 
 interface KYCFormData {
   // Personal Information
@@ -125,104 +128,185 @@ export default function KYCPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="firstName">First Name *</Label>
-          <Input
-            id="firstName"
-            value={formData.firstName}
-            onChange={(e) => handleInputChange('firstName', e.target.value)}
-            placeholder="Enter your first name"
-          />
+          <FormField
+            control={form.control}
+            name="firstname"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your first name" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="lastName">Last Name *</Label>
-          <Input
-            id="lastName"
-            value={formData.lastName}
-            onChange={(e) => handleInputChange('lastName', e.target.value)}
-            placeholder="Enter your last name"
-          />
+          <FormField
+            control={form.control}
+            name="lastname"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your last name" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="dateOfBirth">Date of Birth *</Label>
-          <Input
-            id="dateOfBirth"
-            type="date"
-            value={formData.dateOfBirth}
-            onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-          />
+          <FormField
+            control={form.control}
+            name="date_of_birth"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Date of Birth *</FormLabel>
+                <FormControl>
+                  <Input type="date" placeholder="Enter your first name" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="phoneNumber">Phone Number *</Label>
-          <Input
-            id="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-            placeholder="08012345678"
-          />
+          <FormField
+            control={form.control}
+            name="phone_number"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Phone Number *</FormLabel>
+                <FormControl>
+                  <Input placeholder="08123456789" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+
         </div>
         <div>
-          <Label htmlFor="email">Email Address *</Label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            placeholder="your@email.com"
-          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="johndoe@mail.com" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="bvn">BVN (Bank Verification Number) *</Label>
-          <Input
-            id="bvn"
-            value={formData.bvn}
-            onChange={(e) => handleInputChange('bvn', e.target.value)}
-            placeholder="12345678901"
-            maxLength={11}
-          />
+          <FormField
+            control={form.control}
+            name="bvn"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>BVN (Bank Verification Number) *</FormLabel>
+                <FormControl>
+                  <Input placeholder="12345678901" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+
         </div>
         <div className="md:col-span-2">
-          <Label htmlFor="address">Residential Address *</Label>
-          <Input
-            id="address"
-            value={formData.address}
-            onChange={(e) => handleInputChange('address', e.target.value)}
-            placeholder="Enter your full address"
+          <FormField
+            control={form.control}
+            name="address"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Residential Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your full address" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+        </div>
+        <div>
+          <FormField
+            control={form.control}
+            name="town"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Town *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your town" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
         <div>
-          <Label htmlFor="town">Town *</Label>
-          <Input
-            id="town"
-            value={formData.town}
-            onChange={(e) => handleInputChange('town', e.target.value)}
-            placeholder="Enter your town"
-          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>City *</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select City" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cities.map((city) => (
+                          <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+          
         </div>
         <div>
-          <Label htmlFor="city">City *</Label>
-          <Select value={formData.city} onValueChange={(value) => handleInputChange('city', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select your city" />
-            </SelectTrigger>
-            <SelectContent>
-              {cities.map(city => (
-                <SelectItem key={city} value={city}>{city}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="state">State *</Label>
-          <Select value={formData.state} onValueChange={(value) => handleInputChange('state', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select your state" />
-            </SelectTrigger>
-            <SelectContent>
-              {nigerianStates.map(state => (
-                <SelectItem key={state} value={state}>{state}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <FormField
+            control={form.control}
+            name="state"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>State *</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select State" />
+                    </SelectTrigger>
+                    <SelectContent >
+                      {nigerianStates.map((state) => (
+                          <SelectItem key={state} value={state}>{state}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
       </div>
     </div>
@@ -242,59 +326,101 @@ export default function KYCPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="md:col-span-2">
-          <Label htmlFor="businessName">Business Name *</Label>
-          <Input
-            id="businessName"
-            value={formData.businessName}
-            onChange={(e) => handleInputChange('businessName', e.target.value)}
-            placeholder="Enter your business name"
-          />
+          <FormField
+            control={form.control}
+            name="business_name"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Business Name *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your business name" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="businessPhone">Business Phone *</Label>
-          <Input
-            id="businessPhone"
-            value={formData.businessPhone}
-            onChange={(e) => handleInputChange('businessPhone', e.target.value)}
-            placeholder="08012345678"
-          />
+          <FormField
+            control={form.control}
+            name="business_phone_number"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Business Phone *</FormLabel>
+                <FormControl>
+                  <Input placeholder="081234568901" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="businessEmail">Business Email</Label>
-          <Input
-            id="businessEmail"
-            type="email"
-            value={formData.businessEmail}
-            onChange={(e) => handleInputChange('businessEmail', e.target.value)}
-            placeholder="business@email.com"
-          />
+          <FormField
+            control={form.control}
+            name="business_email"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Business Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your business@mail.com" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="cacNumber">CAC Number (if applicable)</Label>
-          <Input
-            id="cacNumber"
-            value={formData.cacNumber}
-            onChange={(e) => handleInputChange('cacNumber', e.target.value)}
-            placeholder="RC123456"
-          />
+          <FormField
+            control={form.control}
+            name="cac_number"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>CAC Number (if applicable)</FormLabel>
+                <FormControl>
+                  <Input placeholder="RC12345" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
-          <Label htmlFor="taxId">Tax ID (if applicable)</Label>
-          <Input
-            id="taxId"
-            value={formData.taxId}
-            onChange={(e) => handleInputChange('taxId', e.target.value)}
-            placeholder="Enter tax ID"
-          />
+          <FormField
+            control={form.control}
+            name="tax_id"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Tax ID (if applicable)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter tax ID" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+          
         </div>
         <div className="md:col-span-2">
-          <Label htmlFor="businessAddress">Business Address *</Label>
-          <Input
-            id="businessAddress"
-            value={formData.businessAddress}
-            onChange={(e) => handleInputChange('businessAddress', e.target.value)}
-            placeholder="Enter your business address"
-          />
+          <FormField
+            control={form.control}
+            name="business_address"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Business Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your business address" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
       </div>
     </div>
@@ -314,19 +440,45 @@ export default function KYCPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="idType">ID Type *</Label>
-          <Select value={formData.idType} onValueChange={(value) => handleInputChange('idType', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select ID type" />
-            </SelectTrigger>
-            <SelectContent>
-              {idTypes.map(type => (
-                <SelectItem key={type} value={type}>{type}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <FormField
+            control={form.control}
+            name="id_type"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>ID Type *</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Select ID type" />
+                    </SelectTrigger>
+                    <SelectContent className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                      {idTypes.map((type) => (
+                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
         </div>
         <div>
+          <FormField
+            control={form.control}
+            name="id_number"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>ID Number *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your ID Number" {...field} />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
           <Label htmlFor="idNumber">ID Number *</Label>
           <Input
             id="idNumber"
@@ -339,21 +491,173 @@ export default function KYCPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label>ID Front *</Label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
-            <input
-              type="file"
-              accept="image/*,.pdf"
-              onChange={(e) => e.target.files?.[0] && handleFileUpload('idFront', e.target.files[0])}
-              className="hidden"
-              id="idFront"
+          <FormField
+            control={form.control}
+            name="id_front"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="id_front">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    ID Front
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="id_front"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                    placeholder="Enter your first name" />
+
+                <FormLabel htmlFor="id_front">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload ID Front
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
             />
-            <label htmlFor="idFront" className="cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Upload ID Front</p>
-            </label>
-          </div>
-          {formData.idFront && (
+          
+          {true && (
+            <div className="flex items-center text-sm text-green-600">
+              <CheckCircle className="w-4 h-4 mr-1" />
+              File uploaded
+            </div>
+          )}
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="id_back"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="id_back">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    ID Back
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="id_back"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                    placeholder="Enter your first name" />
+
+                <FormLabel htmlFor="id_back">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload ID Front
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+          
+          {true && (
+            <div className="flex items-center text-sm text-green-600">
+              <CheckCircle className="w-4 h-4 mr-1" />
+              File uploaded
+            </div>
+          )}
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="passport"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="passport">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    ID Front
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="passport"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                    placeholder="Enter your first name" />
+
+                <FormLabel htmlFor="passport">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload ID Front
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+          
+          {true && (
             <div className="flex items-center text-sm text-green-600">
               <CheckCircle className="w-4 h-4 mr-1" />
               File uploaded
@@ -361,7 +665,7 @@ export default function KYCPage() {
           )}
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label>ID Back *</Label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
             <input
@@ -405,7 +709,7 @@ export default function KYCPage() {
               File uploaded
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   )
@@ -426,7 +730,57 @@ export default function KYCPage() {
         <div className="space-y-2">
           <Label>Utility Bill (Proof of Address) *</Label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
-            <input
+            
+            <FormField
+            control={form.control}
+            name="utility_bill"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="utility_bill">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    Utility Bill
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="utility_bill"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                    placeholder="Enter your first name" />
+
+                <FormLabel htmlFor="utility_bill">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload Utility Bill
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+            />
+            {/* <input
               type="file"
               accept="image/*,.pdf"
               onChange={(e) => e.target.files?.[0] && handleFileUpload('utilityBill', e.target.files[0])}
@@ -436,7 +790,7 @@ export default function KYCPage() {
             <label htmlFor="utilityBill" className="cursor-pointer">
               <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-600">Upload Utility Bill</p>
-            </label>
+            </label> */}
           </div>
           {formData.utilityBill && (
             <div className="flex items-center text-sm text-green-600">
@@ -449,17 +803,56 @@ export default function KYCPage() {
         <div className="space-y-2">
           <Label>CAC Certificate (if applicable)</Label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
-            <input
-              type="file"
-              accept="image/*,.pdf"
-              onChange={(e) => e.target.files?.[0] && handleFileUpload('cacCertificate', e.target.files[0])}
-              className="hidden"
-              id="cacCertificate"
+            <FormField
+            control={form.control}
+            name="cac_certificate"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="cac_certificate">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    CAC Certificate
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="cac_certificate"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                    placeholder="Enter your first name" />
+
+                <FormLabel htmlFor="cac_certificate">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload CAC Certificate
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
             />
-            <label htmlFor="cacCertificate" className="cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Upload CAC Certificate</p>
-            </label>
+            
           </div>
           {formData.cacCertificate && (
             <div className="flex items-center text-sm text-green-600">
@@ -472,17 +865,55 @@ export default function KYCPage() {
         <div className="space-y-2">
           <Label>Tax Certificate (if applicable)</Label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
-            <input
-              type="file"
-              accept="image/*,.pdf"
-              onChange={(e) => e.target.files?.[0] && handleFileUpload('taxCertificate', e.target.files[0])}
-              className="hidden"
-              id="taxCertificate"
+            <FormField
+            control={form.control}
+            name="tax_certificate"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel htmlFor="tax_certificate">
+                  {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
+                    Tax Certificate
+                </FormLabel>
+                <FormControl>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
+                  <Input 
+                    id="tax_certificate"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0]
+                      if (!selectedFile) {
+                        toast.error("Cancelled select file!")
+                        return
+                      }
+
+                      // Pass the File to React Hook Form
+                      field.onChange(selectedFile)
+
+                      // Generate preview
+                      const reader = new FileReader()
+                      reader.onloadend = () => {
+                        toast.success("📂 Image loaded")
+                        // setAvatarPreview(String(reader.result))
+                      }
+                      reader.readAsDataURL(selectedFile)
+                    }}
+
+                     />
+
+                <FormLabel htmlFor="tax_certificate">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    Upload Tax Certificate
+                </FormLabel>
+                    </div>
+                    
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
             />
-            <label htmlFor="taxCertificate" className="cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Upload Tax Certificate</p>
-            </label>
           </div>
           {formData.taxCertificate && (
             <div className="flex items-center text-sm text-green-600">
@@ -577,6 +1008,30 @@ export default function KYCPage() {
     }
   }
 
+
+  const { form, isLoading, onSubmitKyc }  = useCompleteKyc()
+
+  const validationStepFields = [
+    ["firstname", "lastname", "date_of_birth", "email", "bvn", "address", "town", "city", "state" ], 
+    ["business_name", "business_email", "cac_number", "tax_id", "business_address"],
+    ["id_type", "id_number", "id_front", "id_back", "passport"],
+    ["utility_bill", "cac_certificate", "tax_certificate"]
+  ]
+
+  const handleNextStep = async () => {
+    // @ts-expect-error
+  const isStepValid = await form.trigger(validationStepFields[currentStep-1])  // Fields in current step
+
+  if (isStepValid) {
+    setCurrentStep(currentStep + 1)
+    // setCurrentStep((prev) => prev + 1)
+  } else {
+    console.log("Validation failed")
+  }
+}
+
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -604,10 +1059,14 @@ export default function KYCPage() {
       </div>
 
       {/* Main Content */}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmitKyc)}>
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="bg-white rounded-lg shadow-sm border">
           <div className="p-8">
-            {renderStep()}
+
+                {renderStep()}
+
           </div>
 
           {/* Navigation Buttons */}
@@ -623,15 +1082,14 @@ export default function KYCPage() {
             <div className="flex space-x-3">
               {currentStep < 5 ? (
                 <Button
-                  onClick={() => setCurrentStep(currentStep + 1)}
+                  onClick={handleNextStep}
                   className="bg-green-500 hover:bg-green-600"
                 >
                   Next
                 </Button>
               ) : (
                 <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
+                  type="submit"
                   className="bg-green-500 hover:bg-green-600"
                 >
                   {isSubmitting ? "Submitting..." : "Submit KYC"}
@@ -641,6 +1099,8 @@ export default function KYCPage() {
           </div>
         </div>
       </div>
+              </form>
+            </Form>
     </div>
   )
 } 

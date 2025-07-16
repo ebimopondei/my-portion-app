@@ -8,7 +8,7 @@ const ProtectedRoutes = () => {
     const navigate  = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const {token, isLoading, role } = useAuth();
+    const {token, user, isLoading, role } = useAuth();
     
     useEffect(()=>{
 
@@ -18,7 +18,13 @@ const ProtectedRoutes = () => {
             }
             
             if (role ==  Roles.VENDOR  && !pathName.includes('/vendor')){
-                navigate('/vendor');
+                if(user?.kyc_verified){
+                    navigate('/vendor/kyc');
+
+                }else {
+                    navigate('/vendor');
+
+                }
             }
             
         }

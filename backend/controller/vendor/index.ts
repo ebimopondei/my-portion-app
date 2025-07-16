@@ -1,0 +1,1 @@
+export { submitKyc } from './vendor.controller'

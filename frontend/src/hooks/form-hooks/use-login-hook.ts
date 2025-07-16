@@ -31,7 +31,11 @@ export default function useLogin() {
         if(response.success){
             toast.success(response.message)
             loginAuth(response.data);
-            navigate('/dashboard')
+            if(response.data.user.role == 'vendor'){
+                navigate('/vendor')
+            }else{
+                navigate('/dashboard')
+            }
 
         }else{
             toast.error(response.message)

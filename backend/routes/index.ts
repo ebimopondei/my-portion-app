@@ -5,6 +5,7 @@ import { verifyJwt } from '../middleware';
 // import { user } from './user'
 import { order } from './order'
 import { rating } from './rating'
+import { vendor } from './vendor'
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.use('/product', product)
 router.use('/order', verifyJwt, order)
 
 router.use('/rating', verifyJwt, rating)
+
+router.use('/vendor/', verifyJwt, vendor)
 
 export const APPROUTER = router

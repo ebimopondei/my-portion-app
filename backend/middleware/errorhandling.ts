@@ -3,7 +3,7 @@ import { CustomError } from "../types/error";
 import { AssociationError,  BaseError, ConnectionError, DatabaseError, ForeignKeyConstraintError, HostNotFoundError, HostNotReachableError, InstanceError, TimeoutError, UniqueConstraintError, ValidationError } from 'sequelize'
 
 export const databaseErrorHandler = (error:CustomError, req:Request, res:Response, next:NextFunction) => {
-    console.log(error.name)
+    console.log(error)
     if (error instanceof UniqueConstraintError) {
       const uniqueFields = error.errors.map((e) => e.path).join(', ');
       res.status(409).json({ status: 'fail', statusCode: 409,  message: `The provided value for ${uniqueFields} already exists.` });

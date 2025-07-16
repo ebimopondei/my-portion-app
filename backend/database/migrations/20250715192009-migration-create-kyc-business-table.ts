@@ -58,14 +58,9 @@ module.exports = {
             allowNull: true,
           },
           
-          buiness_address: {
+          business_address: {
             type: Sequelize.STRING,
             allowNull: true,
-          },
-
-          town: {
-            type: Sequelize.STRING,
-            allowNull: false,
           },
  
           createdAt: {
