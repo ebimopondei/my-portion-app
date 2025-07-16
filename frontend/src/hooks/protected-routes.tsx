@@ -2,13 +2,15 @@ import { Roles } from '@shared/enums/index';
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import useAuth from './auth-provider';
+import API from '@/api/api-config';
 
 
 const ProtectedRoutes = () => {
     const navigate  = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const {token, user, isLoading, role } = useAuth();
+    const { apiPrivate } = API();
+    const {token, user, isLoading, role, setUser, refreshUser } = useAuth();
     
     useEffect(()=>{
 
@@ -17,14 +19,9 @@ const ProtectedRoutes = () => {
                 navigate('/admin');
             }
             
-            if (role ==  Roles.VENDOR  && !pathName.includes('/vendor')){
-                if(user?.kyc_verified){
-                    navigate('/vendor/kyc');
+            if (role ==  Roles.VENDOR && !pathName.includes('/vendor') ){
+                navigate('/vendor');
 
-                }else {
-                    navigate('/vendor');
-
-                }
             }
             
         }
@@ -33,6 +30,21 @@ const ProtectedRoutes = () => {
                 navigate('/login');
         }
     }, [isLoading, token, role])
+
+    useEffect( ()=>{
+
+        
+
+        const handleGetUser = async () => {
+            const user = await apiPrivate.get('/user')
+            setUser(user.data.data)
+            console.log(user.data)
+
+        }
+
+        handleGetUser()
+
+    },[refreshUser])
 
      if(isLoading || token =="") {
         return null

@@ -70,6 +70,7 @@ export default function VendorProfile() {
       case 'business':
         return (
           <BusinessProfileTab
+          // @ts-expect-error
             profileData={profileData}
             bankDetails={profileData.bankDetails}
           />

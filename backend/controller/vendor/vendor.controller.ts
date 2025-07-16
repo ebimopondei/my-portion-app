@@ -1,11 +1,48 @@
 import { Request, Response } from "express";
-import { vendorKycSchema } from '../../../shared/validation/vendor-kyc-schema'
 import KycBusiness from "../../database/models/KycBusiness";
 import KycBusinessDocs from "../../database/models/KycBusinessDocs";
 import KycIdVerification from "../../database/models/KycIdVerification";
 import KycPersonal from "../../database/models/KycPersonal";
 import { cloudinary, cloudinaryUploadFolder } from "../../config/cloudinary";
 import fs  from 'fs'
+import User from "../../database/models/User";
+import z from "zod";
+import { kycDetails } from "@shared/types/kyc";
+
+
+
+export const vendorKycSchemaBE = z.object( {
+    firstname: z.string(),
+    lastname: z.string(),
+    date_of_birth: z.string(),
+    phone_number: z.string(),
+    email: z.string(),
+    bvn: z.string().length(11, "must be 11 numbers"),
+    address: z.string(),
+    town: z.string(),
+    city: z.string(),
+    state: z.string(),
+
+
+    business_name: z.string(),
+    business_email:z.email(),
+    business_phone_number:z.string(),
+    cac_number:z.string(),
+    tax_id:z.string(),
+    business_address:z.string(),
+
+
+    id_type:  z.string(),
+    id_number: z.string(),
+    id_front:  z.file().optional(),
+    id_back:  z.file().optional(),
+    passport:  z.file().optional(),
+    
+
+    utility_bill:   z.file().optional(),
+    cac_certificate:  z.file().optional(),
+    tax_certificate:  z.file().optional(),
+})
 
 
 const submitKyc = async (req: Request, res: Response) => {
@@ -15,7 +52,7 @@ const submitKyc = async (req: Request, res: Response) => {
 
      let result;
      
-     const validated = vendorKycSchema.parse(req.body)
+     const validated = vendorKycSchemaBE.parse(req.body)
      // @ts-expect-error
      const id_front_url_path = req?.files['id_front'][0].path
      // @ts-expect-error
@@ -91,22 +128,15 @@ const submitKyc = async (req: Request, res: Response) => {
           utility_bill
      })
 
-     // const product = await .create( {
-     //      seller_id: user.id,
-     //      name: validated.name,
-     //      status: Status.Pending,
-     
-     //      description: validated.description || '',
-     //      image_url,
-     //      video_url,
-     //      category: validated.category,
-     //      total_quantity: Number(validated.total_quantity),
-     //      quantity_unit: 'kg',
-     //      portion_size: Number(validated.portion_size),
-     //      price_per_portion: Number(validated.price_per_portion),
-     //      available_portions: Number(validated.portion_size),
-     //      location: validated.location || ''
-     // })
+     const response = await User.update( {
+          kyc_verified: true,
+     },
+     {
+          where: {
+               id: user.id
+          }
+     }
+)
 
      if (fs.existsSync(id_front_url_path)) {
           fs.unlinkSync(id_front_url_path);
@@ -140,6 +170,50 @@ const submitKyc = async (req: Request, res: Response) => {
 }
 
 
+const getKycDetails = async (req: Request, res: Response ) =>{
+     
+     // @ts-expect-error
+     const user = req.parsedToken;
+
+     const personal = await KycPersonal.findOne({
+          where: {
+               user_id: user.id
+          }
+     })
+
+     const business = await KycBusiness.findOne( {
+          where: {
+               user_id: user.id
+          }
+     })
+
+     const id = await KycIdVerification.findOne( {
+          where: {
+               user_id: user.id
+          }
+     })
+
+     const docs = await KycBusinessDocs.findOne( {
+          where: {
+               user_id: user.id
+          }
+     })
+
+     const kyc: Partial<kycDetails> = {}
+     kyc.personal = personal
+     kyc.business = business
+     kyc.docs = docs
+     kyc.id = id
+
+     res.status(200).json( {
+          success: true,
+          data: kyc,
+          message: 'KYC info found!'
+     })
+}
+
+
 export {
-     submitKyc
+     submitKyc,
+     getKycDetails
 }

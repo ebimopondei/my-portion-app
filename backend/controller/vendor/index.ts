@@ -1,1 +1,1 @@
-export { submitKyc } from './vendor.controller'
+export { submitKyc, getKycDetails } from './vendor.controller'

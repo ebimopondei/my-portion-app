@@ -218,11 +218,11 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                     name="category"
                     render={({field}) => (
                       <FormItem>
-                        <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Role</FormLabel>
+                        <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Category</FormLabel>
                         <FormControl>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Select Role" />
+                              <SelectValue placeholder="Select Category" />
                             </SelectTrigger>
                             <SelectContent className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                               {categories.map((category) => (

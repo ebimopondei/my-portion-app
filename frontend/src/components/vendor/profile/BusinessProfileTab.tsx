@@ -1,17 +1,10 @@
 import { CreditCard, Shield } from "lucide-react"
 import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
-import { Textarea } from "../../ui/textarea"
+import type { kycDetails } from "@shared/types/kyc"
 
 interface BusinessProfileTabProps {
-  profileData: {
-    businessName: string
-    email: string
-    phone: string
-    address: string
-    description: string
-    logo: string
-  }
+  profileData: kycDetails | null,
   bankDetails: {
     bankName: string
     accountNumber: string
@@ -29,7 +22,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
         </Label>
         <Input
           id="businessName"
-          value={profileData.businessName}
+          value={profileData?.business?.business_name}
           disabled
           className="bg-gray-50"
         />
@@ -52,7 +45,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             <Input
               id="email"
               type="email"
-              value={profileData.email}
+              value={profileData?.business?.business_email}
               disabled
               className="bg-gray-50"
             />
@@ -65,7 +58,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             <Input
               id="phone"
               type="tel"
-              value={profileData.phone}
+              value={profileData?.business?.business_phone_number}
               disabled
               className="bg-gray-50"
             />
@@ -83,14 +76,14 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
         </p>
         <Input
           id="address"
-          value={profileData.address}
+          value={profileData?.business?.business_address}
           disabled
           className="bg-gray-50"
         />
       </div>
 
       {/* Business Description */}
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="description" className="text-sm font-medium text-gray-700">
           Business Description (About Us)
         </Label>
@@ -99,12 +92,12 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
         </p>
         <Textarea
           id="description"
-          value={profileData.description}
+          value={profileData.personal}
           disabled
           className="bg-gray-50"
           rows={3}
         />
-      </div>
+      </div> */}
 
       {/* Bank Account Details */}
       <div className="space-y-4">
@@ -135,7 +128,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             </Label>
             <Input
               id="bankName"
-              value={bankDetails.bankName}
+              value={bankDetails?.bankName}
               disabled
               className="bg-gray-50"
             />
@@ -148,7 +141,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             <Input
               id="accountNumber"
               type="text"
-              value={bankDetails.accountNumber}
+              value={bankDetails?.accountNumber}
               disabled
               className="bg-gray-50"
             />
@@ -162,11 +155,11 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
           <Input
             id="accountName"
             type="text"
-            value={bankDetails.accountName}
+            value={bankDetails?.accountName}
             disabled
             className="bg-gray-50"
           />
-          {bankDetails.accountName && (
+          {bankDetails?.accountName && (
             <p className="text-sm text-green-600 flex items-center">
               <CreditCard className="w-4 h-4 mr-1" />
               Account verified

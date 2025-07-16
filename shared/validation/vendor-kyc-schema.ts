@@ -23,14 +23,14 @@ export const vendorKycSchema = z.object( {
 
     id_type:  z.string(),
     id_number: z.string(),
-    id_front:  z.file().optional(),
-    id_back:  z.file().optional(),
-    passport:  z.file().optional(),
+    id_front:  z.file(),
+    id_back:  z.file(),
+    passport:  z.file(),
     
 
-    utility_bill:   z.file().optional(),
-    cac_certificate:  z.file().optional(),
-    tax_certificate:  z.file().optional(),
+    utility_bill:   z.file(),
+    cac_certificate:  z.file(),
+    tax_certificate:  z.file(),
 })
 
 export type VendorKycSchema = z.infer<typeof vendorKycSchema>

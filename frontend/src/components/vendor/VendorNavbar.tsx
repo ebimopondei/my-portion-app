@@ -1,4 +1,4 @@
-import { Bell, Package, ShoppingCart, DollarSign, TrendingUp, Users, Menu, X } from "lucide-react"
+import { Bell, Package, ShoppingCart, DollarSign, TrendingUp, Users, Menu, X, LogOut } from "lucide-react"
 import type { VendorNavbarProps, NavItem } from "./types"
 import Logo from "../shared/Logo"
 import { useState } from "react"
@@ -13,7 +13,8 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'wallet', label: 'Wallet', icon: DollarSign },
     { id: 'profile', label: 'Profile', icon: Users },
-    { id: 'notifications', label: 'Notifications', icon: Bell }
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'logout', label: 'Logout', icon: LogOut }
   ]
 
   const handleNavItemClick = (tabId: string) => {

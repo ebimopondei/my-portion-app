@@ -9,39 +9,42 @@ import {
   BusinessProfileTab,
   AddProductModal,
   type TabId,  
-  vendorData,
   dashboardStats,
   recentOrders,
   notifications,
 } from "../../components/vendor"
 import type { ProductAttribute } from "@shared/types/product";
 import ProductApi from "@/api/products/products-api";
+import KycApi from "@/api/vendor/kyc";
+import useAuth from "@/hooks/auth-provider";
+import type { UserAttributes } from "@shared/types/user";
+import type { kycDetails } from "@shared/types/kyc";
 
 // Mock vendor profile data
-const vendorProfileData = {
-  businessName: "Lagos Wholesale Hub",
-  email: "contact@lagoswholesale.com",
-  phone: "08012345678",
-  address: "123 Victoria Island, Lagos, Nigeria",
-  description: "Premium wholesale supplier of grains, legumes, and fresh produce. Serving Lagos businesses with quality products at competitive prices.",
-  logo: "/placeholder.svg",
-  kycStatus: "verified" as const,
-  bankDetails: {
-    bankName: "First Bank of Nigeria",
-    accountNumber: "1234567890",
-    accountName: "LAGOS WHOLESALE HUB"
-  },
-  kycInfo: {
-    fullName: "John Doe",
-    bvn: "12345678901",
-    idNumber: "NIN12345678901",
-    idType: "NIN"
-  },
-  notificationPreferences: {
-    emailOrders: true,
-    smsOrders: true
-  }
-}
+// const vendorProfileData = {
+//   businessName: "Lagos Wholesale Hub",
+//   email: "contact@lagoswholesale.com",
+//   phone: "08012345678",
+//   address: "123 Victoria Island, Lagos, Nigeria",
+//   description: "Premium wholesale supplier of grains, legumes, and fresh produce. Serving Lagos businesses with quality products at competitive prices.",
+//   logo: "/placeholder.svg",
+//   kycStatus: "verified" as const,
+//   bankDetails: {
+//     bankName: "First Bank of Nigeria",
+//     accountNumber: "1234567890",
+//     accountName: "LAGOS WHOLESALE HUB"
+//   },
+//   kycInfo: {
+//     fullName: "John Doe",
+//     bvn: "12345678901",
+//     idNumber: "NIN12345678901",
+//     idType: "NIN"
+//   },
+//   notificationPreferences: {
+//     emailOrders: true,
+//     smsOrders: true
+//   }
+// }
 
 export default function VendorDashboard() {
 
@@ -51,7 +54,7 @@ export default function VendorDashboard() {
 
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
-  const [profileData] = useState(vendorProfileData)
+  const [profileData] = useState<UserAttributes | null>(null)
   const [redirectToBankSection, setRedirectToBankSection] = useState(false)
   const unreadNotifications = notifications.filter(n => !n.read).length
 
@@ -101,8 +104,9 @@ export default function VendorDashboard() {
           <DashboardContent
             vendorProducts={vendorProducts}
             dashboardStats={dashboardStats}
-            bankDetails={profileData.bankDetails}
-            kycStatus={profileData.kycStatus}
+            // @ts-expect-error
+            bankDetails={profileData?.bankDetails}
+            kycStatus={Boolean(profileData?.kyc_verified)}
             onAddProduct={handleAddProduct}
             onEditProduct={handleEditProduct}
             onShareProduct={handleShareProduct}
@@ -130,8 +134,10 @@ export default function VendorDashboard() {
         return (
           <WalletContent
             walletBalance={dashboardStats.walletBalance}
-            bankDetails={profileData.bankDetails}
-            kycStatus={profileData.kycStatus}
+            // @ts-expect-error
+            bankDetails={profileData?.bankDetails}
+            
+            kycStatus={Boolean(profileData?.kyc_verified)}
             onWithdrawFunds={handleWithdrawFunds}
             onRedirectToBank={handleRedirectToBank}
           />
@@ -149,8 +155,9 @@ export default function VendorDashboard() {
               </div>
               <div className="p-6">
                 <BusinessProfileTab
-                  profileData={profileData}
-                  bankDetails={profileData.bankDetails}
+                  profileData={vendorKycDetails}
+                  // @ts-expect-error
+                  bankDetails={profileData?.bankDetails}
                 />
               </div>
             </div>
@@ -200,6 +207,23 @@ export default function VendorDashboard() {
     handleFetchProducts()
   }, [])
 
+  const { user } = useAuth();
+
+  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
+
+  const { getKycDetails } = KycApi()
+
+  useEffect(()=>{
+
+    async function handleGetVendorKycDetails() {
+      const response = await getKycDetails()
+      setVendorKycDetails(response.data)
+    }
+
+    handleGetVendorKycDetails()
+
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50">
       <VendorNavbar 
@@ -209,7 +233,7 @@ export default function VendorDashboard() {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
-        <VendorHeader vendorData={vendorData} />
+        <VendorHeader vendorData={user} />
         {renderContent()}
       </main>
 

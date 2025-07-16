@@ -16,7 +16,7 @@ interface DashboardContentProps {
     accountNumber: string
     accountName: string
   }
-  kycStatus: "verified" | "pending" | "rejected" | "unverified"
+  kycStatus: boolean
   onAddProduct: () => void
   onEditProduct: (product: ProductAttribute) => void
   onShareProduct: (product: ProductAttribute) => void

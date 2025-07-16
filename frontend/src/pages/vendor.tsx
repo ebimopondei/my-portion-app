@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bell, Package, ShoppingCart, DollarSign, TrendingUp, Users, Plus, Eye, Edit3, Share2, MoreHorizontal } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import Modal from "../components/ui/modal"
+import KycApi from "@/api/vendor/kyc";
+import type { kycDetails } from "@shared/types/kyc";
 
 // Types and Interfaces
 type TabId = 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
@@ -64,16 +66,6 @@ interface ProductCardProps {
 interface OrderCardProps {
   order: Order;
   onMarkDelivered: (orderId: string) => void;
-}
-
-// Enhanced vendor data structure
-const vendorData = {
-  name: "Lagos Wholesale Hub",
-  email: "contact@lagoswholesale.com",
-  phone: "08012345678",
-  city: "Lagos",
-  kycStatus: "verified",
-  joinDate: "Jan 2024"
 }
 
 const dashboardStats = {
@@ -633,6 +625,22 @@ export default function EnhancedVendorDashboard() {
     }
   }
 
+
+  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
+
+  const { getKycDetails } = KycApi()
+
+  useEffect(()=>{
+
+    async function handleGetVendorKycDetails() {
+      const response = await getKycDetails()
+      setVendorKycDetails(response.data)
+    }
+
+    handleGetVendorKycDetails()
+
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50">
       <VendorNavbar 
@@ -647,19 +655,19 @@ export default function EnhancedVendorDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">{vendorData.name.charAt(0)}</span>
+                <span className="text-white font-bold text-xl">{vendorKycDetails?.personal?.firstname.charAt(0)}</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{vendorData.name}</h1>
-                <p className="text-gray-600">{vendorData.email} • {vendorData.city}</p>
-                <p className="text-sm text-gray-500">Joined {vendorData.joinDate}</p>
+                <h1 className="text-2xl font-bold text-gray-800">{vendorKycDetails?.personal?.firstname}</h1>
+                <p className="text-gray-600">{vendorKycDetails?.personal?.email} • {vendorKycDetails?.personal?.city}</p>
+                <p className="text-sm text-gray-500">Joined {String(vendorKycDetails?.personal?.createdAt)}</p>
               </div>
             </div>
             <div className="text-right">
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                vendorData.kycStatus === 'verified' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                vendorKycDetails ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
               }`}>
-                {vendorData.kycStatus === 'verified' ? '✓ Verified' : 'Pending Verification'}
+                {vendorKycDetails ? '✓ Verified' : 'Pending Verification'}
               </div>
             </div>
           </div>

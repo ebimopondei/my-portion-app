@@ -16,7 +16,7 @@ interface WithdrawFundsModalProps {
     accountNumber: string
     accountName: string
   }
-  kycStatus: "verified" | "pending" | "rejected" | "unverified"
+  kycStatus: boolean
   onRedirectToBank?: () => void
 }
 
@@ -57,7 +57,7 @@ export default function WithdrawFundsModal({
     }
   }
 
-  const canWithdraw = kycStatus === "verified" && bankDetails.accountName && Number(withdrawAmount) > 0 && Number(withdrawAmount) <= walletBalance
+  const canWithdraw = kycStatus && bankDetails.accountName && Number(withdrawAmount) > 0 && Number(withdrawAmount) <= walletBalance
 
   return (
     <>
@@ -69,16 +69,16 @@ export default function WithdrawFundsModal({
       >
         <div className="space-y-4">
           {/* KYC Status Warning */}
-          {kycStatus !== "verified" && (
+          {kycStatus && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="text-sm font-medium text-yellow-800">KYC Verification Required</h4>
                   <p className="text-sm text-yellow-700 mt-1">
-                    {kycStatus === "pending" && "Your KYC verification is in progress. You cannot withdraw funds yet."}
-                    {kycStatus === "rejected" && "Your KYC verification was rejected. Please update your documents to withdraw funds."}
-                    {kycStatus === "unverified" && "Please complete KYC verification before withdrawing funds."}
+                    {kycStatus && "Your KYC verification is in progress. You cannot withdraw funds yet."}
+                    {/* {kycStatus === "rejected" && "Your KYC verification was rejected. Please update your documents to withdraw funds."} */}
+                    {!kycStatus  && "Please complete KYC verification before withdrawing funds."}
                   </p>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export default function WithdrawFundsModal({
           )}
 
           {/* Bank Account Warning */}
-          {!bankDetails.accountName && (
+          {!bankDetails?.accountName && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
                 <CreditCard className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
@@ -123,7 +123,7 @@ export default function WithdrawFundsModal({
               onChange={(e) => setWithdrawAmount(e.target.value)}
               placeholder="Enter amount"
               max={walletBalance}
-              disabled={kycStatus !== "verified" || !bankDetails.accountName}
+              disabled={!kycStatus || !bankDetails.accountName}
             />
             <p className="text-xs text-gray-500 mt-1">
               Available: ₦{walletBalance.toLocaleString()}
@@ -131,7 +131,7 @@ export default function WithdrawFundsModal({
           </div>
 
           {/* Bank Account Details */}
-          {bankDetails.accountName && (
+          {bankDetails?.accountName && (
             <div className="bg-gray-50 rounded-lg p-3">
               <p className="text-sm text-gray-600">
                 Funds will be transferred to: <strong>{bankDetails.accountName}</strong>

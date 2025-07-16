@@ -11,8 +11,11 @@ type AuthContextType = {
     logoutAuth: () => void;
     token: string;
     refreshToken: string;
+    refreshUser: UserAttributes | null;
     setToken: Dispatch<SetStateAction<string>>;
     setRefreshToken: Dispatch<SetStateAction<string>>;
+    setRefreshUser: Dispatch<SetStateAction<UserAttributes | null>>;
+    setUser: Dispatch<SetStateAction<UserAttributes | null>>;
     isLoggedIn:boolean,
     isLoading:boolean,
     user: UserAttributes | null,
@@ -26,8 +29,11 @@ const AuthContext = createContext<AuthContextType>({
     logoutAuth: () => {},
     token: "",
     refreshToken: "",
+    refreshUser: null,
     setToken: ()=> {},
     setRefreshToken: ()=> {},
+    setRefreshUser: ()=> {},
+    setUser: ()=> {},
     isLoggedIn: false,
     isLoading: false,
     setIsLoggedIn: ()=>{},
@@ -43,6 +49,7 @@ export default function useAuth(){
 export function AuthProvider({children}: Props){
     
     const { getCookie, setCookie, resetItem} = useCookie();
+    const [ refreshUser, setRefreshUser ] = useState<UserAttributes | null >(null);
     const [ role, setRole] = useState<string>('');
     const [ user, setUser ] = useState<UserAttributes | null>(null);
     const [ token, setToken] = useState<string>("");
@@ -51,7 +58,6 @@ export function AuthProvider({children}: Props){
     const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(false);
 
     const loginAuth = ({token, refreshToken, user}:loginProps) => {
-        setUser(user);
         setToken(token);
         setRefreshToken(refreshToken);
         setIsLoggedIn(true);
@@ -76,9 +82,11 @@ export function AuthProvider({children}: Props){
 
     }
 
+    
+
     useEffect( ()=>{
 
-        if(isLoading) return; 
+        // if(isLoading) return; 
 
         // Comment out the auth-check since the endpoint doesn't exist yet
         // async function checkAuth(){
@@ -91,21 +99,23 @@ export function AuthProvider({children}: Props){
         // checkAuth();
         
         // For now, just set loading to false
-        setIsLoading(false);
+        // setIsLoading(false);
 
     },[isLoading])
 
 
     useEffect(()=>{
+        setIsLoading(true)
+
         if(getCookie('token')){
             const temp = getCookie('token');
             setToken(JSON.parse(temp));
         }
         
-        if(getCookie('user')){
-            const temp = getCookie('user');
-            setUser(JSON.parse(temp));
-        }
+        // if(getCookie('user')){
+        //     const temp = getCookie('user');
+        //     setUser(JSON.parse(temp));
+        // }
         
         if(getCookie('isLoggedIn')){
             const temp =  String(getCookie('isLoggedIn'));
@@ -129,8 +139,9 @@ export function AuthProvider({children}: Props){
     //return early if auth provider not fully loaded.
     if(isLoading) return; 
 
+
     return(
-        <AuthContext.Provider value={{ role, setRole, user, isLoggedIn, isLoading, setIsLoggedIn, loginAuth, logoutAuth, token, setToken, refreshToken, setRefreshToken}}>
+        <AuthContext.Provider value={{ refreshUser, setUser, setRefreshUser, role, setRole, user, isLoggedIn, isLoading, setIsLoggedIn, loginAuth, logoutAuth, token, setToken, refreshToken, setRefreshToken}}>
             {children}
         </AuthContext.Provider>
     )

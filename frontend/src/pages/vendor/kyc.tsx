@@ -96,23 +96,11 @@ export default function KYCPage() {
   })
 
   const [currentStep, setCurrentStep] = useState(1)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (field: keyof KYCFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleFileUpload = (field: keyof KYCFormData, file: File) => {
-    setFormData(prev => ({ ...prev, [field]: file }))
-  }
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    // Handle success
-  }
 
   const renderStep1 = () => (
     <div className="space-y-6">
@@ -614,7 +602,7 @@ export default function KYCPage() {
               <FormItem>
                 <FormLabel htmlFor="passport">
                   {/* <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" /> */}
-                    ID Front
+                    Passport
                 </FormLabel>
                 <FormControl>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-500 transition-colors">
@@ -646,7 +634,7 @@ export default function KYCPage() {
 
                 <FormLabel htmlFor="passport">
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    Upload ID Front
+                    Upload Passport
                 </FormLabel>
                     </div>
                     
@@ -940,23 +928,23 @@ export default function KYCPage() {
         <div>
           <h4 className="font-medium text-gray-900 mb-2">Personal Information</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-            <div><span className="text-gray-600">Name:</span> {formData.firstName} {formData.lastName}</div>
-            <div><span className="text-gray-600">Phone:</span> {formData.phoneNumber}</div>
-            <div><span className="text-gray-600">Email:</span> {formData.email}</div>
-            <div><span className="text-gray-600">BVN:</span> {formData.bvn}</div>
-            <div><span className="text-gray-600">Address:</span> {formData.address}</div>
-            <div><span className="text-gray-600">Town:</span> {formData.town}</div>
-            <div><span className="text-gray-600">City:</span> {formData.city}</div>
-            <div><span className="text-gray-600">State:</span> {formData.state}</div>
+            <div><span className="text-gray-600">Name:</span> {form.getValues("firstname")} {form.getValues("lastname")}</div>
+            <div><span className="text-gray-600">Phone:</span> {form.getValues("phone_number")}</div>
+            <div><span className="text-gray-600">Email:</span> {form.getValues("email")}</div>
+            <div><span className="text-gray-600">BVN:</span> {form.getValues("bvn")}</div>
+            <div><span className="text-gray-600">Address:</span> {form.getValues("address")}</div>
+            <div><span className="text-gray-600">Town:</span> {form.getValues("town")}</div>
+            <div><span className="text-gray-600">City:</span> {form.getValues("city")}</div>
+            <div><span className="text-gray-600">State:</span> {form.getValues("state")}</div>
           </div>
         </div>
 
         <div>
           <h4 className="font-medium text-gray-900 mb-2">Business Information</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-            <div><span className="text-gray-600">Business Name:</span> {formData.businessName}</div>
-            <div><span className="text-gray-600">Business Phone:</span> {formData.businessPhone}</div>
-            <div><span className="text-gray-600">CAC Number:</span> {formData.cacNumber || 'Not provided'}</div>
+            <div><span className="text-gray-600">Business Name:</span> {form.getValues("business_name")}</div>
+            <div><span className="text-gray-600">Business Phone:</span> {form.getValues("business_phone_number")}</div>
+            <div><span className="text-gray-600">CAC Number:</span> {form.getValues("cac_number") || 'Not provided'}</div>
           </div>
         </div>
 
@@ -965,19 +953,19 @@ export default function KYCPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
             <div className="flex items-center">
               <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
-              Utility Bill: {formData.utilityBill ? 'Uploaded' : 'Not uploaded'}
+              Utility Bill: {form.getValues('utility_bill') ? 'Uploaded' : 'Not uploaded'}
             </div>
             <div className="flex items-center">
               <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
-              ID Front: {formData.idFront ? 'Uploaded' : 'Not uploaded'}
+              ID Front: {form.getValues('id_front') ? 'Uploaded' : 'Not uploaded'}
             </div>
             <div className="flex items-center">
               <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
-              ID Back: {formData.idBack ? 'Uploaded' : 'Not uploaded'}
+              ID Back: {form.getValues('id_back') ? 'Uploaded' : 'Not uploaded'}
             </div>
             <div className="flex items-center">
               <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
-              Passport Photo: {formData.passportPhoto ? 'Uploaded' : 'Not uploaded'}
+              Passport Photo: {form.getValues('passport') ? 'Uploaded' : 'Not uploaded'}
             </div>
           </div>
         </div>
@@ -1071,28 +1059,34 @@ export default function KYCPage() {
 
           {/* Navigation Buttons */}
           <div className="flex justify-between items-center p-8 border-t border-gray-200">
-            <Button
-              variant="outline"
-              onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-              disabled={currentStep === 1}
+            {/* dont change to button */}
+            <div
+              onClick={() => {
+                if(!(currentStep < 2)) {
+                  setCurrentStep(Math.max(1, currentStep - 1))
+                }
+              }}
+              
+              // disabled={currentStep === 1}
             >
               Previous
-            </Button>
+            </div>
 
             <div className="flex space-x-3">
               {currentStep < 5 ? (
-                <Button
+                // dont change to button
+                <div
                   onClick={handleNextStep}
                   className="bg-green-500 hover:bg-green-600"
                 >
                   Next
-                </Button>
+                </div>
               ) : (
                 <Button
                   type="submit"
                   className="bg-green-500 hover:bg-green-600"
                 >
-                  {isSubmitting ? "Submitting..." : "Submit KYC"}
+                  {isLoading ? "Submitting..." : "Submit KYC"}
                 </Button>
               )}
             </div>

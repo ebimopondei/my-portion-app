@@ -14,6 +14,8 @@ import ProductApi from "@/api/products/products-api"
 import type { ProductAttribute } from '@shared/types/product'
 import useCartItem from "@/hooks/cart-provider"
 import type { CartItem } from "@/types/cart"
+import API from "@/api/api-config"
+import useAuth from "@/hooks/auth-provider"
 
 
 // const products = [
@@ -170,6 +172,27 @@ export default function DashboardPage() {
     handleGetAllProducts();
 
   }, [])
+
+  const { apiPrivate } = API();
+  const { setUser, refreshUser, isLoggedIn } = useAuth()
+
+  useEffect( ()=>{
+
+        
+
+        const handleGetUser = async () => {
+            const user = await apiPrivate.get('/user')
+            setUser(user.data.data)
+            console.log(user.data)
+
+        }
+
+        if(isLoggedIn){
+          handleGetUser()
+        }
+
+
+    },[refreshUser])
 
   return (
     <div className="min-h-screen bg-gray-50">

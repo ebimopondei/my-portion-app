@@ -15,9 +15,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../components/shared/Logo";
+import useAuth from "@/hooks/auth-provider";
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { isLoggedIn } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -49,7 +52,7 @@ export default function LandingPage() {
               <Link to="/dashboard">Marketplace</Link>
             </Button>
             <Button className="bg-primary hover:bg-primary/90" size="lg" asChild>
-              <Link to="/login?vendor=true">Vendors</Link>
+              <Link to={isLoggedIn ? "/vendor": "/login?vendor=true"}>Vendors</Link>
             </Button>
           </div>
 

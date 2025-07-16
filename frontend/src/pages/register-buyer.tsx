@@ -9,7 +9,7 @@ import React from "react";
 
 export default function RegisterBuyer() {
 
-  const { onSignUp, form } = useSignup();
+  const { onSignUp, form, isLoading } = useSignup();
 
   // Set the role to user automatically
   React.useEffect(() => {
@@ -146,7 +146,7 @@ export default function RegisterBuyer() {
               type="submit"
               className="w-full h-12 text-base font-semibold"
             >
-              Create account
+              {isLoading ? <div className="spinner"></div> : "Create Account"}
             </Button>
           </form>
         </Form>

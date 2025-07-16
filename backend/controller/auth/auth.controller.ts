@@ -23,7 +23,9 @@ const signupController = async ( req: Request, res: Response ) => {
       lastname: validated.lastname,
       email: validated.email,
       password: hashedPassword,
-      role: validated.role
+      role: validated.role,
+      email_verified: false,
+      kyc_verified: false,
     });
 
 
@@ -45,7 +47,7 @@ const loginController = async ( req: Request, res: Response ) => {
                     username: validated.email 
                 }
             ]},
-        attributes:  ['id', 'username', 'email', 'role', 'password']
+        attributes:  ['id', 'username', 'firstname', 'lastname', 'email_verified', 'kyc_verified', 'email', 'role', 'password']
         
     });
 

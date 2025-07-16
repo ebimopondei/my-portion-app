@@ -1,8 +1,8 @@
-import { X, Edit, Package, Heart, Bell, LogOut } from "lucide-react"
+import { X, Package, Heart, Bell, LogOut } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import useAuth from "@/hooks/auth-provider"
 import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 interface SlideMenuProps {
   isOpen: boolean
@@ -10,7 +10,7 @@ interface SlideMenuProps {
 }
 
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
-  const { logoutAuth, isLoggedIn } = useAuth();
+  const { logoutAuth, isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -28,8 +28,8 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
   };
 
   const menuItems = [
-    { icon: Package, label: "Orders", href: "#" },
-    { icon: Heart, label: "Wishlist", href: "#" },
+    { icon: Package, label: "Orders", href: "/dashboard/orders" },
+    // { icon: Heart, label: "Wishlist", href: "#" },
     { icon: Bell, label: "Notifications", href: "#" },
   ]
 
@@ -67,11 +67,11 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-medium text-gray-900">John Doe</h3>
-                  <p className="text-sm text-gray-500">john@example.com</p>
+                  <h3 className="font-medium text-gray-900">{user?.firstname} {user?.lastname}</h3>
+                  <p className="text-sm text-gray-500">{user?.email}</p>
                 </div>
                 <Button variant="ghost" size="sm" className="p-2">
-                  <Edit className="w-4 h-4" />
+                  {/* <Edit className="w-4 h-4" /> */}
                 </Button>
               </div>
             </div>
@@ -96,13 +96,15 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           <div className="flex-1 py-4">
             {isLoggedIn ? (
               menuItems.map((item) => (
+                <Link to={item.href}>
                 <button
                   key={item.label}
                   className="w-full flex items-center space-x-4 px-6 py-4 text-left hover:bg-gray-50 transition-colors"
                 >
-                  <item.icon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-900">{item.label}</span>
+                    <item.icon className="w-5 h-5 text-gray-600" />
+                    <span className="text-gray-900">{item.label}</span>
                 </button>
+                </Link>
               ))
             ) : (
               <div className="px-6 py-4">

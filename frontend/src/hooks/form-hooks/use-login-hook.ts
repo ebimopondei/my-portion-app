@@ -31,8 +31,16 @@ export default function useLogin() {
         if(response.success){
             toast.success(response.message)
             loginAuth(response.data);
+            // @ts-expect-error
             if(response.data.user.role == 'vendor'){
-                navigate('/vendor')
+                
+                if(response.data.user?.kyc_verified){
+                    console.log(response.data.user?.kyc_verified)
+                    navigate('/vendor')
+                }else {
+                    navigate('/vendor/kyc')
+                    
+                }
             }else{
                 navigate('/dashboard')
             }

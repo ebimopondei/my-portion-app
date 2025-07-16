@@ -20,5 +20,12 @@ router.post(
     controller.submitKyc 
 );
 
+router.get(
+    '/kyc', 
+    verifyJwt, 
+    authorizeRoles( Roles.VENDOR, Roles.ADMIN, Roles.SUBADMIN),
+    controller.getKycDetails
+)
+
 
 export const vendor = router;

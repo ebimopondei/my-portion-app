@@ -17,7 +17,7 @@ const AppRouter = () => (
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/dashboard/orders" element={<OrdersPage />} />
 
           <Route element={<ProtectedRoutes />}>
             <Route path="/vendor/kyc" element={<KYCPage />} />

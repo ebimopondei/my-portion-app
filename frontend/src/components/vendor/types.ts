@@ -1,7 +1,7 @@
 import type { ProductAttribute } from "@shared/types/product";
 import type { LucideIcon } from "lucide-react"
 
-export type TabId = 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
+export type TabId = 'logout' | 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
 export type ProductStatus = 'active' | 'pending_approval' | 'inactive';
 export type OrderStatus = 'pending' | 'processing' | 'delivered';
 

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { DollarSign, CreditCard, TrendingUp, Upload, CheckCircle, Clock, AlertTriangle } from "lucide-react"
+import { DollarSign, CreditCard, TrendingUp, Upload, CheckCircle, Clock } from "lucide-react"
 import { Button } from "../ui/button"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 
@@ -10,7 +10,7 @@ interface WalletContentProps {
     accountNumber: string
     accountName: string
   }
-  kycStatus: "verified" | "pending" | "rejected" | "unverified"
+  kycStatus: boolean
   onWithdrawFunds: (amount: number) => void
   onRedirectToBank?: () => void
 }
@@ -67,7 +67,7 @@ const WalletContent = ({
 
   const getKycStatusConfig = () => {
     switch(kycStatus) {
-      case 'verified':
+      case true:
         return {
           icon: CheckCircle,
           color: 'green',
@@ -77,7 +77,7 @@ const WalletContent = ({
           title: '✅ KYC Verified',
           description: 'You can withdraw funds to your bank account'
         }
-      case 'pending':
+      case false:
         return {
           icon: Clock,
           color: 'yellow',
@@ -86,16 +86,6 @@ const WalletContent = ({
           textColor: 'text-yellow-800',
           title: '⏳ KYC Pending',
           description: 'Verification in progress. You cannot withdraw funds yet.'
-        }
-      case 'rejected':
-        return {
-          icon: AlertTriangle,
-          color: 'red',
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
-          textColor: 'text-red-800',
-          title: '❗️ KYC Rejected',
-          description: 'Please update your documents to withdraw funds'
         }
       default:
         return {
@@ -160,7 +150,7 @@ const WalletContent = ({
             <div className="space-y-4">
               <Button
                 onClick={() => setShowWithdrawModal(true)}
-                disabled={kycStatus !== 'verified' || !bankDetails.accountName}
+                disabled={!kycStatus || !bankDetails.accountName}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-3"
               >
                 <DollarSign className="w-4 h-4 mr-2" />
@@ -193,7 +183,7 @@ const WalletContent = ({
               </div>
             </div>
             
-            {kycStatus !== 'verified' && (
+            {!kycStatus && (
               <Button
                 onClick={() => setActiveSection('kyc')}
                 variant="outline"
@@ -215,7 +205,7 @@ const WalletContent = ({
             </p>
           </div>
 
-          {bankDetails.accountName ? (
+          {bankDetails?.accountName ? (
             <div className="space-y-4">
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center space-x-2 mb-2">
@@ -284,7 +274,7 @@ const WalletContent = ({
             </div>
           </div>
 
-          {kycStatus !== 'verified' && (
+          {!kycStatus && (
             <div className="space-y-4">
               <div className="border border-gray-200 rounded-lg p-4">
                 <h4 className="font-medium text-gray-900 mb-3">Required Documents</h4>
