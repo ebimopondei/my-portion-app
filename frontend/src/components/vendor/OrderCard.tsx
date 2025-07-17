@@ -18,14 +18,14 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
     }
   }
 
-  // const totalCustomers = order.length
-  // const totalPortions = order.reduce((sum, customer) => sum + customer.portions, 0)
+  // const totalCustomers = order?.length
+  // const totalPortions = order?.reduce((sum, customer) => sum + customer.portions, 0)
 
   const handleMarkCustomerDelivered = (customerId: string) => {
     // In a real implementation, you would use the customerId to mark specific customer as delivered
     // For now, we'll use the productId as the identifier
     console.log(`Marking customer ${customerId} as delivered`)
-    onMarkDelivered(Number(order.id))
+    onMarkDelivered(Number(order?.id))
   }
 
   const openCustomerModal = (customer: OrderWithUser) => {
@@ -33,20 +33,20 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
     setShowCustomerModal(true)
   }
 
-  console.log(order.status)
+  console.log(order?.status)
   console.log(order)
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="font-semibold text-lg">{order.name}</h3>
-          <p className="text-gray-600 text-sm">Product ID: #{order.id}</p>
-          {/* <p className="text-gray-500 text-sm">{order.createdAt}</p> */}
-          <p className="text-gray-500 text-sm">{order.createdAt?.toString()}</p>
+          <h3 className="font-semibold text-lg">{order?.name}</h3>
+          <p className="text-gray-600 text-sm">Product ID: #{order?.id}</p>
+          {/* <p className="text-gray-500 text-sm">{order?.createdAt}</p> */}
+          <p className="text-gray-500 text-sm">{order?.createdAt?.toString()}</p>
         </div>
-        <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(order.status)}`}>
-          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+        <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(order?.status)}`}>
+          {order?.status.charAt(0).toUpperCase() + order?.status.slice(1)}
         </span>
       </div>
       
@@ -57,27 +57,27 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
             <Users className="w-4 h-4 text-blue-600" />
           </div>
           <p className="text-sm text-gray-600">Customers</p>
-          <p className="font-bold text-lg">{order.orders.length}</p>
+          <p className="font-bold text-lg">{order?.orders.length}</p>
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center mb-1">
             <Package className="w-4 h-4 text-green-600" />
           </div>
           <p className="text-sm text-gray-600">Total Portions</p>
-          <p className="font-bold text-lg">{order.total_quantity/ order.portion_size}</p>
+          <p className="font-bold text-lg">{order?.total_quantity/ order?.portion_size}</p>
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center mb-1">
             <Clock className="w-4 h-4 text-orange-600" />
           </div>
           <p className="text-sm text-gray-600">Total Amount</p>
-          <p className="font-bold text-lg text-green-600">₦{order.orders[0].amount.toLocaleString()}</p>
+          <p className="font-bold text-lg text-green-600">₦{order?.orders[0]?.amount.toLocaleString()}</p>
         </div>
       </div>
 
       {/* Customer Orders Table */}
       <div className="space-y-4">
-        <h4 className="font-medium text-gray-900">Customer Orders ({order.orders.length})</h4>
+        <h4 className="font-medium text-gray-900">Customer Orders ({order?.orders.length})</h4>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -90,7 +90,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
               </tr>
             </thead>
             <tbody>
-              {order.orders.map((customer) => (
+              {order?.orders.map((customer) => (
                 <tr 
                   key={customer.id} 
                   className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
@@ -178,7 +178,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
             {selectedCustomer.status === 'pending' && (
               <button 
                 onClick={() => {
-                  handleMarkCustomerDelivered(String(order.id))
+                  handleMarkCustomerDelivered(String(order?.id))
                   setShowCustomerModal(false)
                 }}
                 className="w-full bg-green-500 text-white py-2 rounded text-sm hover:bg-green-600"

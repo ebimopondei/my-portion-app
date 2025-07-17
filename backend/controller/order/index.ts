@@ -1,1 +1,1 @@
-export { addNewOrder, getOrderById } from './order.controller'
+export { addNewOrder, getOrderById, getAllOrders, getAllUserOrders } from './order.controller'
