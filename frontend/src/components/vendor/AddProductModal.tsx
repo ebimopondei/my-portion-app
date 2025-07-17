@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { X, Package, DollarSign, Users, Video, Upload, Star, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ProductCategory } from "@shared/enums"
+import { ProductCategory, ProductStockType } from "@shared/enums"
 import useCreateProduct from "@/hooks/form-hooks/use-create-product-hook"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
@@ -57,6 +57,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
 
   // Get categories from shared enum
   const categories = Object.values(ProductCategory)
+  const stockType = Object.values(ProductStockType)
 
   const handleDefaultImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -142,7 +143,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
   }
 
 
-  const { form, onCreateProduct } = useCreateProduct();
+  const { form, onCreateProduct, isLoading } = useCreateProduct();
 
 
   return (
@@ -222,7 +223,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                         <FormControl>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Select Category" />
+                              <SelectValue placeholder="" />
                             </SelectTrigger>
                             <SelectContent className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                               {categories.map((category) => (
@@ -592,6 +593,32 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                         />
                       
                     </div>
+
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="quantity_unit"
+                        render={({field}) => (
+                          <FormItem>
+                            <FormLabel className="block text-sm font-medium text-gray-700 mb-2">Type</FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="w-[180px]">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                  {stockType.map((type) => (
+                                      <SelectItem value={type}>{type}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                        />
+                    </div>
                     <div>
                       <FormField
                         control={form.control}
@@ -625,6 +652,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                                   className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                   placeholder="0" {...field} />
 
+                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"> {form.getValues('quantity_unit') ? `per ${form.getValues('quantity_unit')}`: ''}</span>
                               </div>
                             </FormControl>
                             <FormDescription />
@@ -700,10 +728,11 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
             {/* Footer Buttons */}
             <div className="flex justify-center p-6 border-t border-gray-200">
               <Button
+                disabled={isLoading}
                 type="submit"
                 className="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
               >
-                Submit Product
+                {isLoading ? <div className="spinner"></div> : "Submit Product"}
               </Button>
             </div>
               </form>

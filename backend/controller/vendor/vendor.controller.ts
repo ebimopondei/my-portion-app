@@ -8,10 +8,14 @@ import fs  from 'fs'
 import User from "../../database/models/User";
 import z from "zod";
 import { kycDetails } from "@shared/types/kyc";
+import OrderRecord from "../../database/models/order-record";
+import { user } from "routes/user";
+import Order from "../../database/models/Order";
+import Product from "../../database/models/Product";
 
 
 
-export const vendorKycSchemaBE = z.object( {
+const vendorKycSchemaBE = z.object( {
     firstname: z.string(),
     lastname: z.string(),
     date_of_birth: z.string(),
@@ -213,7 +217,45 @@ const getKycDetails = async (req: Request, res: Response ) =>{
 }
 
 
+const getOrderRecord = async (req: Request, res: Response ) => {
+
+     // @ts-expect-error
+     const user = req.parsedToken;
+
+     const products = await Product.findAll( {
+          where: {
+               seller_id: user.id
+               
+          }
+     })
+
+     const arr = []
+
+     for (const product of products ){
+
+          const productOrders = await Product.findOne( {
+               where: {
+                    id: product.id
+               },
+
+               include: [ { model: Order, include: [User]} ]
+          })
+
+          arr.push(productOrders)
+     }
+
+     res.status(200).json( {
+          success: true,
+          data: arr,
+          message: "Orders found"
+     })
+}
+
+
+
+
 export {
      submitKyc,
-     getKycDetails
+     getKycDetails,
+     getOrderRecord
 }

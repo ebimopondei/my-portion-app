@@ -1,4 +1,4 @@
-import type { ProductAttribute } from "@shared/types/product";
+import type { ProductAttribute, ProductWithOrders } from "@shared/types/product";
 import type { LucideIcon } from "lucide-react"
 
 export type TabId = 'logout' | 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
@@ -70,7 +70,7 @@ export interface ProductCardProps {
 }
 
 export interface OrderCardProps {
-  order: ProductOrder;
+  order: ProductWithOrders;
   onMarkDelivered: (productId: number) => void;
 }
 

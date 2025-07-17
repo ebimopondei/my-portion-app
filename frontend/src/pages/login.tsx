@@ -9,7 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 
 export default function LoginPage() {
 
-  const { form, onLogin } = useLogin()
+  const { form, onLogin, isLoading } = useLogin()
   const [searchParams] = useSearchParams()
   const isVendorFlow = searchParams.get('vendor') === 'true'
 
@@ -97,10 +97,12 @@ export default function LoginPage() {
             </div>
 
             <Button
+
               type="submit"
               className="w-full h-12 text-base font-semibold"
+              disabled={isLoading}
             >
-              Sign in
+              {isLoading ? <div className="spinner"></div> : "Sign In"}
             </Button>
           </form>
         </Form>

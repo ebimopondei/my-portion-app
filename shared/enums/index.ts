@@ -11,6 +11,17 @@ export const quantity_unit = {
     KG: 'kg'
 } as const;
 
+export const ProductStockType = {
+    Kg: "Kg",
+    Pack: "Pack",
+    Bunch: "Bunch",
+    Tubers: "Tubers",
+    Pieces: "Pieces",
+    Bag: "Bag",
+    Bucket: "Bucket",
+    Congo: "Congo"
+} as const;
+
 export const ProductCategory = {
     GrainsAndCereals: 'Grains & Cereals',
     TubersAndRootCrops: 'Tubers & Root Crops',

@@ -5,7 +5,7 @@ import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import useCartItem from "@/hooks/cart-provider"
 import useAuth from "@/hooks/auth-provider"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 
 interface CartSlideProps {
@@ -159,7 +159,9 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   onClick={handleCheckout}
                 >
+                  <Link to={`${isLoggedIn ? '/dashboard/checkout': '/login'}`}>
                   {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
+                  </Link>
                 </Button>
                 <Button variant="outline" className="w-full bg-transparent" onClick={onClose}>
                   Continue Shopping

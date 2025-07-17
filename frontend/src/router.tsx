@@ -8,6 +8,8 @@ import OrdersPage from "./pages/orders";
 import VendorPage from "./pages/vendor/vendor";
 import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
+import Checkout from "./pages/check-out";
+import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
 
 const AppRouter = () => (
   
@@ -18,6 +20,8 @@ const AppRouter = () => (
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/orders" element={<OrdersPage />} />
+          <Route path="/dashboard/checkout" element={<Checkout />} />
+          <Route path="/dashboard/checkout/complete-payment/:transaction_id" element={<CompleteCheckOutPayment />} />
 
           <Route element={<ProtectedRoutes />}>
             <Route path="/vendor/kyc" element={<KYCPage />} />

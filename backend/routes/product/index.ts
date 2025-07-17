@@ -33,6 +33,13 @@ router.post(
     controller.addNewProduct 
 );
 
+router.post(
+    '/check-out',
+    verifyJwt,
+    authorizeRoles( Roles.VENDOR, Roles.USER, Roles.ADMIN, Roles.SUBADMIN),
+    controller.checkOut 
+);
+
 router.put(
     '/:id', 
     verifyJwt,

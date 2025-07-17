@@ -1,7 +1,8 @@
 export interface CartItem {
   id: string
   name: string
-  vendor: string
+  vendor_id: string
+  vendor?: string
   price: number
   unit: string
   quantity: number

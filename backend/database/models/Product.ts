@@ -5,6 +5,7 @@ import { sequelize } from "../setup";
 
 import { ProductAttribute } from '@shared/types/product'
 import { Status } from "@shared/enums";
+import Order from "./Order";
 
 
 class Product extends Model<ProductAttribute> implements ProductAttribute{
@@ -81,7 +82,7 @@ Product.init({
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isIn: [['kg', 'bag', 'cup', 'rubber']]
+      isIn: [['Kg', 'Pack', 'Bunch', 'Tubers', 'Pieces', 'Bag', 'Bucket', 'Congo']]
     },
   },
 
@@ -121,3 +122,5 @@ Product.init({
 
 
 export default Product
+
+Product.hasMany(Order, { foreignKey: 'product_id' });

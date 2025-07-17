@@ -1,9 +1,49 @@
 import { Request, Response } from "express";
-import { productSchema } from '../../../shared/validation/product-schema'
+import { checkOutSchema } from '../../../shared/validation/check-out-schema'
 import Product from "../../database/models/Product";
 import { cloudinary, cloudinaryUploadFolder } from "../../config/cloudinary";
 import fs  from 'fs'
-import { Status } from "@shared/enums";
+import { Status } from "../../../shared/enums";
+import z from "zod";
+import OrderRecord from "../../database/models/order-record";
+import { sequelize } from "../../database/setup";
+import Order from "../../database/models/Order";
+
+const productSchema = z.object( {
+    seller_id: z.string().optional(),
+    name: z.string(),
+    category: z.string(),
+    status: z.enum([Status.Pending, Status.Delivered, Status.Cancelled]).optional(),
+    description: z.string().optional(),
+    image_url: z.file('Select Image file').optional(),
+    video_url: z.file('Select Video file').optional(),
+    total_quantity: z.string(),
+    quantity_unit: z.string(),
+    portion_size: z.string().min(1, 'Must be atleast 1').optional(),
+    price_per_portion: z.string().optional(),
+    available_portions: z.string().optional(),
+    location: z.string().optional()
+})
+
+
+const CartItemSchema = z.object({
+     id: z.string().uuid(),
+  name: z.string(),
+  image: z.string(),
+  price: z.number(),
+  unit: z.string(),
+  vendor_id: z.string(),
+  quantity: z.number(),
+});
+
+const AddressAndCartSchema = z.object({
+     street_address: z.string(),
+  city: z.string(),
+  state: z.string(),
+  zip: z.string(),
+  delivery_note: z.string().optional(),
+  cartItems: z.array(CartItemSchema),
+});
 
 
 const getProduct = async (req: Request, res: Response) => {
@@ -45,9 +85,6 @@ const getProductByFilter = async (req: Request, res: Response) => {
      const whereClause: Partial<Product> = {};
      
      const { state, limit=10, page=1 } = req.query;
-
-
-
 
      if (state) {
           whereClause.location = state.toString().toLocaleLowerCase();
@@ -114,7 +151,7 @@ const addNewProduct = async (req: Request, res: Response) => {
           video_url,
           category: validated.category,
           total_quantity: Number(validated.total_quantity),
-          quantity_unit: 'kg',
+          quantity_unit: validated.quantity_unit,
           portion_size: Number(validated.portion_size),
           price_per_portion: Number(validated.price_per_portion),
           available_portions: Number(validated.portion_size),
@@ -174,10 +211,48 @@ const updateProductById = async (req: Request, res: Response) => {
 
 }
 
+const checkOut = async (req: Request, res: Response ) => {
+
+     const validated = AddressAndCartSchema.parse(req.body)
+     // @ts-expect-error
+     const user = req.parsedToken;
+
+     const orders: Order[] = [];
+
+     const orderRecord = await OrderRecord.create( {
+          product_id: validated.cartItems.map( item => item.id),
+          status: "pending",
+          user_id: user.id
+     })
+
+     const tx = await sequelize.transaction( async ( t) => {
+          for ( const item of validated.cartItems ) {
+               const order = await Order.create( {
+                    amount: String(item.price),
+                    portion: item.quantity,
+                    product_id: item.id,
+                    status: 'pending',
+                    user_id: user.id,
+               })
+
+               orders.push(order)
+          }
+     })
+
+
+
+     res.status(201).json( {
+          success: true,
+          data: orders,
+          message: 'Order created!'
+     })
+}
+
 export {
      getProductById,
      getProductByFilter,
      addNewProduct,
      updateProductById,
-     getProduct
+     getProduct,
+     checkOut
 }

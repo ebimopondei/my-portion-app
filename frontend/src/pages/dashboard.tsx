@@ -141,8 +141,8 @@ export default function DashboardPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const handleAddToCart = ({ id, name, image_url, price_per_portion, quantity_unit}:Partial<ProductAttribute>) => {
-    const newCartItems = { id, name, image: image_url, price: price_per_portion, unit: quantity_unit } as  CartItem
+  const handleAddToCart = ({ id, name, image_url, price_per_portion, quantity_unit, seller_id}:Partial<ProductAttribute>) => {
+    const newCartItems = { id, name, image: image_url, price: price_per_portion, unit: quantity_unit, vendor_id: seller_id  } as  CartItem
 
     addToCart(newCartItems)
   }

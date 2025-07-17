@@ -10,15 +10,16 @@ import {
   AddProductModal,
   type TabId,  
   dashboardStats,
-  recentOrders,
+  // recentOrders,
   notifications,
 } from "../../components/vendor"
-import type { ProductAttribute } from "@shared/types/product";
+import type { ProductWithOrders,  ProductAttribute } from "@shared/types/product";
 import ProductApi from "@/api/products/products-api";
 import KycApi from "@/api/vendor/kyc";
 import useAuth from "@/hooks/auth-provider";
 import type { UserAttributes } from "@shared/types/user";
 import type { kycDetails } from "@shared/types/kyc";
+import OrderRecordApi from "@/api/vendor/orderRecord";
 
 // Mock vendor profile data
 // const vendorProfileData = {
@@ -51,6 +52,8 @@ export default function VendorDashboard() {
   const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
 
   const { getProducts } = ProductApi()
+
+  const [ recentOrders, setRecenOrders ] = useState<ProductWithOrders[]>([])
 
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
@@ -213,6 +216,8 @@ export default function VendorDashboard() {
 
   const { getKycDetails } = KycApi()
 
+  const { getOrderRecord } = OrderRecordApi()
+
   useEffect(()=>{
 
     async function handleGetVendorKycDetails() {
@@ -223,6 +228,17 @@ export default function VendorDashboard() {
     handleGetVendorKycDetails()
 
   }, [])
+
+  useEffect(()=>{
+
+    async function handleGetOrderRecord (){
+      const orderRecord = await getOrderRecord();
+      setRecenOrders(orderRecord.data)
+    }
+
+    handleGetOrderRecord()
+
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-50">

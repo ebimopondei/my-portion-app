@@ -8,6 +8,7 @@ import Logo from "../../components/shared/Logo"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import useCompleteKyc from "@/hooks/form-hooks/use-complete-kyc-hook"
 import toast from "react-hot-toast"
+import { Link } from "react-router-dom"
 
 interface KYCFormData {
   // Personal Information
@@ -1060,7 +1061,10 @@ export default function KYCPage() {
           {/* Navigation Buttons */}
           <div className="flex justify-between items-center p-8 border-t border-gray-200">
             {/* dont change to button */}
-            <div
+            { currentStep > 1 ? (
+              <div>
+                
+                <div
               onClick={() => {
                 if(!(currentStep < 2)) {
                   setCurrentStep(Math.max(1, currentStep - 1))
@@ -1071,18 +1075,33 @@ export default function KYCPage() {
             >
               Previous
             </div>
+                </div>
+            ): (
+              <div>
+                {/* <Link
+                  to="/vendor"
+                  className="bg-green-500 hover:bg-green-600 rounded-sm text-white text-sm py-2 px-3"
+                >
+                  Submit KYC
+                </Link> */}
+                <Link to='/vendor'>
+                  Skip
+                </Link>
+              </div>
+            )}
 
             <div className="flex space-x-3">
               {currentStep < 5 ? (
                 // dont change to button
                 <div
                   onClick={handleNextStep}
-                  className="bg-green-500 hover:bg-green-600"
+                  className="bg-green-500 hover:bg-green-600 py-1 px-3 text-white rounded-sm"
                 >
                   Next
                 </div>
               ) : (
-                <Button
+
+                  <Button
                   type="submit"
                   className="bg-green-500 hover:bg-green-600"
                 >

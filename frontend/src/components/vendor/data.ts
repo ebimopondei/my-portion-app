@@ -1,3 +1,4 @@
+import type { ProductWithOrders } from '@shared/types/product'
 import type { Product, ProductOrder } from './types'
 
 // Vendor profile data
@@ -60,8 +61,114 @@ export const vendorProducts: Product[] = [
 
 ]
 
+
+
+export const recentOrders: ProductWithOrders[] = [
+    {
+      "id": "c5b6cba1-85e8-4a61-b6f9-1334cc37e28c",
+      "seller_id": "6e809be8-ba03-4356-8770-034fca63167d",
+      "name": "Portion",
+      "description": "",
+      "category": "Tubers & Root Crops",
+      "image_url": "https://res.cloudinary.com/di1vgb850/image/upload/v1752710104/dev/u79dpsyconnm6dry4af3.jpg",
+      "video_url": "https://res.cloudinary.com/di1vgb850/image/upload/v1752710105/dev/v08lt3uzgqcsrw4auzso.jpg",
+      "total_quantity": 100,
+      "quantity_unit": "kg",
+      "status": "pending",
+      "portion_size": 20,
+      "price_per_portion": 4500,
+      "available_portions": 20,
+      "location": "",
+      
+      "orders": [
+        {
+          "id": "df4ea2ea-71c6-46d3-ba06-de720e8094db",
+          "user_id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+          "product_id": "c5b6cba1-85e8-4a61-b6f9-1334cc37e28c",
+          "status": "pending",
+          "amount": "4500",
+          "portion": 2,
+          
+          "User": {
+            "id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+            "username": "aria-3117",
+            "firstname": "Aria",
+            "lastname": "Brown",
+            "email": "ariabrownfx@gmail.com",
+            "password": "$2b$10$9vtTPh.Z0XESuVpNM.UEweJedNL1O3sP.PTEpMuhWrFrRzzuIzmGK",
+            "role": "user",
+            "email_verified": false,
+            "kyc_verified": false,
+            
+          }
+        }
+      ]
+    },
+    {
+      "id": "db7f3afe-c481-4844-b43c-a13219b785ef",
+      "seller_id": "6e809be8-ba03-4356-8770-034fca63167d",
+      "name": "Portion Touch",
+      "description": "",
+      "category": "Tubers & Root Crops",
+      "image_url": "https://res.cloudinary.com/di1vgb850/image/upload/v1752710123/dev/euncepyuw1elxzedvkae.jpg",
+      "video_url": "https://res.cloudinary.com/di1vgb850/image/upload/v1752710124/dev/g8rwnt34qve9meqyj1zy.jpg",
+      "total_quantity": 200,
+      "quantity_unit": "kg",
+      "status": "pending",
+      "portion_size": 50,
+      "price_per_portion": 9000,
+      "available_portions": 50,
+      "location": "",
+      
+      "orders": [
+        {
+          "id": "a54a26f2-653e-4c00-ac63-f489c3aaa11a",
+          "user_id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+          "product_id": "db7f3afe-c481-4844-b43c-a13219b785ef",
+          "status": "pending",
+          "amount": "9000",
+          "portion": 1,
+          
+          "User": {
+            "id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+            "username": "aria-3117",
+            "firstname": "Aria",
+            "lastname": "Brown",
+            "email": "ariabrownfx@gmail.com",
+            "password": "$2b$10$9vtTPh.Z0XESuVpNM.UEweJedNL1O3sP.PTEpMuhWrFrRzzuIzmGK",
+            "role": "user",
+            "email_verified": false,
+            "kyc_verified": false,
+            
+          }
+        },
+        {
+          "id": "c0a36afc-8a5c-40a7-be96-b88c73a88fae",
+          "user_id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+          "product_id": "db7f3afe-c481-4844-b43c-a13219b785ef",
+          "status": "pending",
+          "amount": "9000",
+          "portion": 1,
+          
+          "User": {
+            "id": "8c4452d4-7ce8-4544-9988-c1d9dbc642e3",
+            "username": "aria-3117",
+            "firstname": "Aria",
+            "lastname": "Brown",
+            "email": "ariabrownfx@gmail.com",
+            "password": "$2b$10$9vtTPh.Z0XESuVpNM.UEweJedNL1O3sP.PTEpMuhWrFrRzzuIzmGK",
+            "role": "user",
+            "email_verified": false,
+            "kyc_verified": false,
+            
+          }
+        }
+      ]
+    }
+  ]
+
 // Mock recent orders
-export const recentOrders: ProductOrder[] = [
+export const recentOrderss: ProductOrder[] = [
   {
     productId: 1,
     productName: "Premium Basmati Rice",

@@ -1,11 +1,9 @@
 import { Status } from "../enums";
 
-export interface OrderAttribute {
+export interface OrderRecordAttribute {
     id?: string;
     user_id: string;
-    portion: number,
-    amount: string,
-    product_id: string;
+    product_id: string[];
     status: Status;
     
     updatedAt?: Date;

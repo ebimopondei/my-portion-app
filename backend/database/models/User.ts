@@ -2,10 +2,12 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../setup'
 import { UserAttributes} from '@shared/types/user'
 import { Role } from '@shared/types/role'
+import Order from './Order';
+import Product from './Product';
 
 
 class User extends Model<UserAttributes> implements UserAttributes{
-    public id!: number;
+    public id!: string;
     public email!: string;
     public firstname!: string;
     public lastname!: string;
@@ -95,3 +97,8 @@ User.init({
   });
 
   export default User
+
+  User.hasMany(Order, { foreignKey: 'user_id'})
+
+  Order.belongsTo(Product, { foreignKey: 'product_id' });
+Order.belongsTo(User, { foreignKey: 'user_id' });

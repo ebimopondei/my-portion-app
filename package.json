@@ -22,7 +22,7 @@
     "build": "npm run build:backend && npm run build:frontend",
     "dev": "concurrently \"npm run dev:frontend \" \"npm run start:dev:backend\"",
     "dev:frontend": "npm run dev --workspace frontend",
-    "watch:backend": "concurrently \"npm run watch --workspace backend\" \"npm run watch:alias --workspace backend\" ",
+    "watch:backend": "concurrently \"npm run watch:alias --workspace backend\" \"npm run watch --workspace backend\" ",
     "dev:backend": "npm run dev --workspace backend",
     "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" ",
     "migrate": "npm run migrate --workspace backend",

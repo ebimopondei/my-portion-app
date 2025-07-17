@@ -27,5 +27,12 @@ router.get(
     controller.getKycDetails
 )
 
+router.get(
+    '/order-record', 
+    verifyJwt, 
+    authorizeRoles( Roles.VENDOR, Roles.ADMIN, Roles.SUBADMIN),
+    controller.getOrderRecord
+)
+
 
 export const vendor = router;

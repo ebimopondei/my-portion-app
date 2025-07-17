@@ -1,8 +1,8 @@
+import type { ProductWithOrders } from "@shared/types/product"
 import { OrderCard } from "./index"
-import type { ProductOrder } from "./types"
 
 interface OrdersContentProps {
-  recentOrders: ProductOrder[]
+  recentOrders: ProductWithOrders[]
   onMarkDelivered: (productId: number) => void
 }
 
@@ -26,7 +26,7 @@ const OrdersContent = ({ recentOrders, onMarkDelivered }: OrdersContentProps) =>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {recentOrders.map(order => (
           <OrderCard 
-            key={order.productId} 
+            key={order.id} 
             order={order}
             onMarkDelivered={onMarkDelivered}
           />

@@ -3,28 +3,24 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
+import { OrderRecordAttribute } from '@shared/types/order-record'
 import { Status } from "@shared/enums";
-import { OrderAttribute } from "@shared/types/order";
-import Product from "./Product";
-import User from "./User";
 
 
 
-class Order extends Model<OrderAttribute> implements OrderAttribute{
+class OrderRecord extends Model<OrderRecordAttribute> implements OrderRecordAttribute {
     public id!: string;
     public user_id!: string;
-    public portion!: number;
+    public product_id!: string[];
     public status!: Status;
-    public amount!: string;
-    public product_id!: string;
-
+    
 
     public readonly updatedAt?: Date;
     public readonly deletedAt?: Date;
     public readonly createdAt?: Date;
 }
 
-Order.init({
+OrderRecord.init({
   id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -43,14 +39,8 @@ Order.init({
   },
   
   product_id: {
-    type: DataTypes.UUID,
+    type: DataTypes.JSON,
     allowNull: false,
-    references: {
-      model: 'product',
-      key: 'id',
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
   },
 
   status: {
@@ -59,25 +49,13 @@ Order.init({
     validate: {
       isIn: [['pending', 'delivered', 'cancelled']]
     }
-  },
-
-  amount: {
-    type: DataTypes.NUMBER,
-    allowNull: false
-  },
-
-  portion: {
-    type: DataTypes.NUMBER,
-    allowNull: false
-  },
-
+  }
+  
 }, {
   sequelize,
-  modelName: 'order',
-  tableName: 'order'
+  modelName: 'order_record',
+  tableName: 'order_record'
 });
 
 
-export default Order
-
-// Order.belongsTo(User, { foreignKey: 'user_id' });
+export default OrderRecord

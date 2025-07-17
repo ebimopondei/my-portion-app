@@ -21,8 +21,14 @@ const ProtectedRoutes = () => {
             
             if (role ==  Roles.VENDOR && !pathName.includes('/vendor') ){
                 navigate('/vendor');
-
             }
+            
+            if(role != Roles.VENDOR && pathName.includes('/vendor')){
+
+                navigate('/')
+            }
+
+
             
         }
 

@@ -58,13 +58,9 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
             <div className="p-6 border-b border-gray-100">
               <div className="flex items-center space-x-4">
                 <div className="relative">
-                  <img
-                    src="/placeholder.svg?height=60&width=60"
-                    alt="Profile"
-                    width={60}
-                    height={60}
-                    className="rounded-full"
-                  />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-lg sm:text-xl">{user?.firstname.charAt(0)}</span>
+                  </div>
                 </div>
                 <div className="flex-1">
                   <h3 className="font-medium text-gray-900">{user?.firstname} {user?.lastname}</h3>

@@ -49,7 +49,7 @@ module.exports = {
         quantity_unit: {
           type: Sequelize.STRING,
           validate: {
-            isIn: [['kg', 'bag', 'cup', 'rubber']]
+            isIn: [['Kg', 'Pack', 'Bunch', 'Tubers', 'Pieces', 'Bag', 'Bucket', 'Congo']]
           },
           allowNull: false
         },

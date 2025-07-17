@@ -15,7 +15,7 @@ module.exports = {
           primaryKey: true
         },
   
-        buyer_id: {
+        user_id: {
           type: Sequelize.UUID,
             allowNull: false,
             references: {
@@ -26,6 +26,7 @@ module.exports = {
           onDelete: 'CASCADE',
         },
 
+        
         product_id: {
           type: Sequelize.UUID,
             allowNull: false,
@@ -37,6 +38,7 @@ module.exports = {
           onDelete: 'CASCADE',
         },
 
+
         status: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -45,23 +47,14 @@ module.exports = {
           }
         },
   
-        quantity: {
-          type: Sequelize.INTEGER,
-          allowNull: false
-        },
   
-        total_price: {
+        portion: {
           type: Sequelize.INTEGER,
           allowNull: false
         },
         
-        delivery_address: {
+        amount: {
           type: Sequelize.STRING,
-          allowNull: false
-        },
-
-        available_portions: {
-          type: Sequelize.INTEGER,
           allowNull: false
         },
   

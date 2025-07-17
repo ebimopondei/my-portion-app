@@ -23,6 +23,6 @@ router.use('/order', verifyJwt, order)
 
 router.use('/rating', verifyJwt, rating)
 
-router.use('/vendor/', verifyJwt, vendor)
+router.use('/vendor', verifyJwt, vendor)
 
 export const APPROUTER = router
