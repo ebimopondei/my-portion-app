@@ -6,6 +6,7 @@ export interface OrderAttribute {
     portion: number,
     amount: string,
     product_id: string;
+    order_record_id: string;
     status: Status;
     
     updatedAt?: Date;

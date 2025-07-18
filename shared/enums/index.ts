@@ -1,6 +1,7 @@
 export const Status = {
     Pending: 'pending',
     Delivered: 'delivered',
+    Completed: 'completed',
     Cancelled: 'cancelled'
 } as const;
 
@@ -47,3 +48,11 @@ export const Roles = {
 } as const;
 
 export type Roles = (typeof Roles)[keyof typeof Roles];
+
+enum MailEvent {
+    userSignup = 'user:send-welcome-email',
+    userLogin = 'user:send-login-email'
+}
+
+export { MailEvent }
+
