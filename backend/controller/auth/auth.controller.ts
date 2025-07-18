@@ -9,6 +9,7 @@ import { SECRET as secret, REFRESHSECRET as refreshSecret } from '../../config/s
 
 import bcrypt from 'bcryptjs'
 import { Op } from "sequelize";
+import Wallet from "../../database/models/Wallet";
 
 const jwt = require('jsonwebtoken')
 
@@ -27,6 +28,12 @@ const signupController = async ( req: Request, res: Response ) => {
       email_verified: false,
       kyc_verified: false,
     });
+
+    await Wallet.create( {
+        user_id: newUser.id,
+        main_balance: 0,
+        sub_balance: 0,
+    })
 
 
     res.json({success: true, data: newUser, message: "User Created Successfully!"});
