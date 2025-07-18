@@ -49,10 +49,10 @@ export const Roles = {
 
 export type Roles = (typeof Roles)[keyof typeof Roles];
 
-enum MailEvent {
-    userSignup = 'user:send-welcome-email',
-    userLogin = 'user:send-login-email'
-}
+export const MailEvent = {
+    userSignup : 'user:send-welcome-email',
+    userLogin : 'user:send-login-email'
+} as const;
 
-export { MailEvent }
+export type MailEvent = (typeof MailEvent)[keyof typeof MailEvent];
 
