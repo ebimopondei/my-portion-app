@@ -8,8 +8,6 @@ import fs  from 'fs'
 import User from "../../database/models/User";
 import z from "zod";
 import { kycDetails } from "@shared/types/kyc";
-import OrderRecord from "../../database/models/order-record";
-import { user } from "routes/user";
 import Order from "../../database/models/Order";
 import Product from "../../database/models/Product";
 
@@ -90,7 +88,7 @@ const submitKyc = async (req: Request, res: Response) => {
      const tax_certificate = cloudinary.url(result.secure_url)
 
 
-     const personal = await KycPersonal.create( {
+     await KycPersonal.create( {
           user_id: user.id,
           address: validated.address,
           bvn: validated.bvn,
@@ -106,7 +104,7 @@ const submitKyc = async (req: Request, res: Response) => {
           
      })
 
-     const business = await KycBusiness.create( {
+     await KycBusiness.create( {
           business_address: validated.business_address,
           business_email: validated.business_email,
           business_name: validated.business_name,
@@ -116,7 +114,7 @@ const submitKyc = async (req: Request, res: Response) => {
           user_id: user.id
      })
 
-     const id = await KycIdVerification.create( {
+     await KycIdVerification.create( {
           id_back,
           id_front,
           id_number: validated.id_number,
@@ -125,14 +123,14 @@ const submitKyc = async (req: Request, res: Response) => {
           user_id: user.id
      })
 
-     const businessDocs = await KycBusinessDocs.create( {
+     await KycBusinessDocs.create( {
           cac_certificate,
           tax_certificate,
           user_id: user.id,
           utility_bill
      })
 
-     const response = await User.update( {
+     await User.update( {
           kyc_verified: true,
      },
      {

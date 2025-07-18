@@ -23,7 +23,7 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
   const serviceCharge = 100;
   const deliveryFee = 1000;
   const shippingCost = cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
-  const total = subtotal + deliveryFee + serviceCharge + shippingCost
+  const total = subtotal + serviceCharge + shippingCost
 
   const handleCheckout = () => {
     if (!isLoggedIn) {

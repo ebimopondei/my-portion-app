@@ -39,7 +39,8 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         {/* Rating */}
         <div className="flex items-center space-x-2 mb-4">
           <div className="flex items-center">
-            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+            <span className="text-gray-500 text-sm">{product.portion_size} {product.quantity_unit} per portion</span>
+            {/* <Star className="w-4 h-4 text-yellow-400 fill-current" /> */}
             {/* <span className="text-sm font-medium ml-1">{product.rating}</span> */}
           </div>
           <span className="text-gray-300">•</span>
@@ -51,10 +52,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold text-gray-900">₦{product.price_per_portion.toLocaleString()}</span>
             {(
-              <span className="text-sm text-gray-400 line-through">₦{product.price_per_portion.toLocaleString()}</span>
+              <span className="text-sm text-gray-800 ">per portion</span>
             )}
           </div>
-          <span className="text-sm text-gray-500">per {product.quantity_unit}</span>
+          {/* <span className="text-sm text-gray-500">per p</span> */}
         </div>
 
         {/* Group Buying Progress */}
@@ -72,11 +73,6 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
                 style={{ width: `${Math.min(groupProgress, 100)}%` }}
               />
             </div>
-            <p className="text-xs text-emerald-600 mt-1">
-              {product.available_portions > 0
-                ? `more needed`
-                : "Ready to order!"}
-            </p>
           </div>
         )}
 

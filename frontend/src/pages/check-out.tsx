@@ -121,7 +121,7 @@ const Checkout: React.FC = () => {
                         <CardHeader>
                           <CardTitle className="flex items-center">
                             <Truck className="mr-2 h-5 w-5 text-primary" />
-                            Shipping Information
+                            Delivery details
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
