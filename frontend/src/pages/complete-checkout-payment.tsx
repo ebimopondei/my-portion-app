@@ -181,7 +181,7 @@ const CompleteCheckOutPayment: React.FC = () => {
                             
                             <div className="p-4 border rounded-lg bg-warning/10 border-warning">
                               <p className="text-sm text-warning-foreground">
-                                <strong>Transfer Amount:</strong> ${total.toFixed(2)}
+                                <strong>Transfer Amount:</strong>  ₦{total.toFixed(2)}
                               </p>
                               <p className="text-sm text-warning-foreground mt-1">
                                 Please include your order number in the transfer reference.
