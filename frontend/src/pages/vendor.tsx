@@ -312,7 +312,7 @@ const ProductCard = ({ product, onEdit, onShare, onView }: ProductCardProps) => 
         
         <div className="flex justify-between text-sm text-gray-500 mb-3">
           <span>Available: {product.availablePortions}/{product.totalPortions}</span>
-          <span>Booked: {product.bookedPortions}</span>
+          <span>Bookeds: {product.bookedPortions}</span>
         </div>
         
         <div className="flex items-center space-x-2 mb-4">

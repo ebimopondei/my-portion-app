@@ -6,16 +6,18 @@ import { SlideMenu } from "../components/home/slide-menu"
 
 
 import { ArrowLeft, CreditCard, CheckCircle, Copy } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useCartItem from '@/hooks/cart-provider';
 import toast from 'react-hot-toast';
 import { CartSlide } from "../components/home/cart-slide"
-import { Form } from '@/components/ui/form';
-import useCheckOut from '@/hooks/form-hooks/use-check-out-hook';
+import CheckOutApi from '@/api/checkout/check-out-api';
 
 
 const CompleteCheckOutPayment: React.FC = () => {
-  const { cartItems, cartCount } = useCartItem()
+  const { cartItems, cartCount, clearCart } = useCartItem()
+
+  const { order_record_id } = useParams();
+
     
   const navigate = useNavigate();
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -30,9 +32,9 @@ const CompleteCheckOutPayment: React.FC = () => {
   const total = subtotal + serviceCharge + shippingCost;
 
   const bankDetails = {
-    accountName: "Portion Limited",
-    accountNumber: "1234567890",
-    bankName: "Portion Bank"
+    accountName: "ISRAEL OLORUNTOBA AKANDE",
+    accountNumber: "8100510972",
+    bankName: "Moniepoint MFB"
   };
 
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -58,32 +60,32 @@ const CompleteCheckOutPayment: React.FC = () => {
   
 
   const [searchQuery, setSearchQuery] = useState("")
+  const { completeCheckOut } = CheckOutApi();
 
-  const { form, onCheckOut } = useCheckOut()
 
 
   
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="max-w-md w-full">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Cart is Empty</h2>
-            <p className="text-muted-foreground mb-6">
-              Add some fresh produce to your cart before checkout.
-            </p>
-            <Button onClick={() => navigate('/')} 
-            // variant="cart"
-                >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Continue Shopping
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // if (cartItems.length === 0) {
+  //   return (
+  //     <div className="min-h-screen bg-background flex items-center justify-center">
+  //       <Card className="max-w-md w-full">
+  //         <CardContent className="p-8 text-center">
+  //           <h2 className="text-2xl font-bold mb-4">Cart is Empty</h2>
+  //           <p className="text-muted-foreground mb-6">
+  //             Add some fresh produce to your cart before checkout.
+  //           </p>
+  //           <Button onClick={() => navigate('/')} 
+  //           // variant="cart"
+  //               >
+  //             <ArrowLeft className="mr-2 h-4 w-4" />
+  //             Continue Shopping
+  //           </Button>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   
   
@@ -113,13 +115,9 @@ const CompleteCheckOutPayment: React.FC = () => {
               </div>
 
               <div className="grid lg:grid-cols-2 gap-8">
-                {/* Left Column - Forms */}
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onCheckOut)}>
+                
                     <div className="space-y-6">
                       
-
-                      {/* Payment Information */}
                       <Card>
                         <CardHeader>
                           <CardTitle className="flex items-center">
@@ -193,7 +191,18 @@ const CompleteCheckOutPayment: React.FC = () => {
                             {!paymentConfirmed ? (
                               <Button
 
-                              onClick={()=>setPaymentConfirmed(true)}
+                              onClick={async()=>{
+                                const response = await completeCheckOut(String(order_record_id))
+
+                                if(response.success){
+
+                                  setPaymentConfirmed(true); 
+                                  clearCart()
+                                }else{
+                                  
+                                }
+                              }
+                            }
                                 
                                 // onClick={handlePaymentConfirmed}
                               //   variant="payment"
@@ -219,9 +228,6 @@ const CompleteCheckOutPayment: React.FC = () => {
                         </CardContent>
                       </Card>
                     </div>
-                  </form>
-                </Form>
-
               </div>
             </div>
           </div>

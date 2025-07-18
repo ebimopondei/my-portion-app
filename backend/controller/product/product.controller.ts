@@ -154,7 +154,7 @@ const addNewProduct = async (req: Request, res: Response) => {
           quantity_unit: validated.quantity_unit,
           portion_size: Number(validated.portion_size),
           price_per_portion: Number(validated.price_per_portion),
-          available_portions: Number(validated.portion_size),
+          available_portions: Number(validated.total_quantity)/Number(validated.portion_size),
           location: validated.location || ''
      })
 
@@ -219,31 +219,68 @@ const checkOut = async (req: Request, res: Response ) => {
 
      const orders: Order[] = [];
 
-     const orderRecord = await OrderRecord.create( {
-          product_id: validated.cartItems.map( item => item.id),
-          status: "pending",
-          user_id: user.id
-     })
+     // check if portion is available
+
+     for (const item of validated.cartItems ) {
+          const product = await Product.findOne( {
+               where: {
+                    id: item.id
+               }
+          })
+
+          if(Number(product?.available_portions) < item.quantity){
+
+               res.status(201).json( {
+                    message: `Insufficient portions. Available portions for ${product?.name} is ${product?.available_portions}. Please reduce portion amount from cart.`
+               })
+               return;
+          }
+     }
+
+     let orderRecord = {}
+
 
      const tx = await sequelize.transaction( async ( t) => {
+
+          const { dataValues} = await OrderRecord.create( {
+               product_id: validated.cartItems.map( item => item.id),
+               status: "pending",
+               order_ids: [],
+               user_id: user.id
+          }, { transaction: t })
+
           for ( const item of validated.cartItems ) {
                const order = await Order.create( {
                     amount: String(item.price),
                     portion: item.quantity,
+                    order_record_id: String(dataValues.id),
                     product_id: item.id,
                     status: 'pending',
                     user_id: user.id,
+               }, { transaction: t })
+
+               await OrderRecord.update( {
+                    order_ids: order.id,
+               },
+               { 
+                    where: {
+                         id: dataValues.id
+                    },
+                    transaction: t
                })
 
                orders.push(order)
           }
+
+          orderRecord = dataValues
+
      })
 
-
+     const orderDetails = {...orderRecord, orders}
 
      res.status(201).json( {
           success: true,
-          data: orders,
+          data: orderDetails,
           message: 'Order created!'
      })
 }

@@ -4,7 +4,7 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../setup";
 
 import { ProductAttribute } from '@shared/types/product'
-import { Status } from "@shared/enums";
+import { Status } from "../../../shared/enums";
 import Order from "./Order";
 
 

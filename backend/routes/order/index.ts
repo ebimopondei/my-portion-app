@@ -9,6 +9,8 @@ router.get('/all', controller.getAllOrders );
 
 router.get('/', controller.getAllUserOrders );
 
-router.post('/order', controller.addNewOrder );
+router.post('/', controller.addNewOrder );
+
+router.patch('/complete-check-out/:id', controller.markAsPaid );
 
 export const order = router;

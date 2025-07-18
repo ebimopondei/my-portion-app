@@ -226,27 +226,15 @@ const getOrderRecord = async (req: Request, res: Response ) => {
           where: {
                seller_id: user.id
                
-          }
+          },
+
+          include: [ { model: Order, include: [User]} ]
+
      })
-
-     const arr = []
-
-     for (const product of products ){
-
-          const productOrders = await Product.findOne( {
-               where: {
-                    id: product.id
-               },
-
-               include: [ { model: Order, include: [User]} ]
-          })
-
-          arr.push(productOrders)
-     }
 
      res.status(200).json( {
           success: true,
-          data: arr,
+          data: products,
           message: "Orders found"
      })
 }

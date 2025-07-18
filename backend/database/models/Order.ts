@@ -5,8 +5,6 @@ import { sequelize } from "../setup";
 
 import { Status } from "@shared/enums";
 import { OrderAttribute } from "@shared/types/order";
-import Product from "./Product";
-import User from "./User";
 
 
 
@@ -17,6 +15,7 @@ class Order extends Model<OrderAttribute> implements OrderAttribute{
     public status!: Status;
     public amount!: string;
     public product_id!: string;
+    public order_record_id!: string;
 
 
     public readonly updatedAt?: Date;
@@ -47,6 +46,17 @@ Order.init({
     allowNull: false,
     references: {
       model: 'product',
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  },
+
+  order_record_id: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'order_record',
       key: 'id',
     },
     onUpdate: 'CASCADE',

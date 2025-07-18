@@ -26,11 +26,11 @@ export default function useCheckOut(){
         setIsLoading(true)
 
         const response = await checkOut(value, cartItems)
-        navigate(`/dashboard/checkout/complete-payment/hash`);
         if(response.success){
+            navigate(`/dashboard/checkout/complete-payment/${response.data.id}`);
             toast.success(response.message)
         }else {
-            toast.error(response.message)
+            toast.error(response.message, { duration: 5000})
         }
 
         setIsLoading(false)

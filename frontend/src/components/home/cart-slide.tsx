@@ -20,8 +20,10 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
 
 // @ts-expect-error
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const deliveryFee = 5000
-  const total = subtotal + deliveryFee
+  const serviceCharge = 100;
+  const deliveryFee = 1000;
+  const shippingCost = cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
+  const total = subtotal + deliveryFee + serviceCharge + shippingCost
 
   const handleCheckout = () => {
     if (!isLoggedIn) {
@@ -143,8 +145,12 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
                   <span className="font-medium">₦{subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Service Charge:</span>
+                  <span>₦{serviceCharge.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Delivery Fee</span>
-                  <span className="font-medium">₦{deliveryFee.toLocaleString()}</span>
+                  <span className="font-medium">₦{shippingCost.toLocaleString()}</span>
                 </div>
                 <div className="border-t border-gray-200 pt-2">
                   <div className="flex justify-between">

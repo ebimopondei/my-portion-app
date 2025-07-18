@@ -66,20 +66,22 @@ export function AuthProvider({children}: Props){
         setCookie('refreshToken', JSON.stringify(refreshToken) );
         setCookie('isLoggedIn', JSON.stringify(true) );
         setCookie('role', JSON.stringify(user?.role) );
+        setRole(String(user?.role))
+        setUser(user)
 
     }
     
     const logoutAuth = ()=> {
-        setIsLoggedIn(false);
         setToken('');
-        setUser(null);
         setRefreshToken(''); 
+        setIsLoggedIn(false);
         resetItem("token");
         resetItem("user");
-        resetItem("role");
         resetItem("refreshToken");
         resetItem('isLoggedIn');
-
+        resetItem("role");
+        setRole('')
+        setUser(null);
     }
 
     

@@ -3,7 +3,6 @@ import type { Dispatch, SetStateAction } from "react";
 import type { Props } from "@/types";
 import useCookie from "./use-cookie";
 import type { CartItem } from "@/types/cart";
-// import type { ProductAttribute } from "@shared/types/product";
 
 
 type CartItemContextType = {
@@ -11,9 +10,9 @@ type CartItemContextType = {
     setCartItems: Dispatch<SetStateAction<Partial<CartItem>[]>>;
     addToCart: (item: Partial<CartItem> ) => void;
     removeFromCart: (id: string ) => void;
+    clearCart: ( ) => void;
     cartCount: number;
     updateCartItemQuantity: (id:string, quantity: number) => void;
-    // inventory: Partial<CartItem>[]; 
     cartTotal: number;
     ckStore: Partial<CartItem>[];
     setCkStore: Dispatch<SetStateAction<Array<Partial<CartItem>>>>;
@@ -23,12 +22,12 @@ type CartItemContextType = {
 const CartItemContext = createContext<CartItemContextType>({
 
     cartItems: [],
+    clearCart: () => {},
     setCartItems: ()=> {},
-        addToCart: () =>{},
+    addToCart: () =>{},
     removeFromCart: () =>{},
     cartCount: 0,
     updateCartItemQuantity: () => {},
-    // inventory: [],
     cartTotal: 0,
     ckStore: [],
     setCkStore: ()=>{},
@@ -58,6 +57,16 @@ export function CartProvider({children}: Props){
         ckStore.map((item, _)=> total += (item.price * item.quantity));
         return total
     }, [ckStore])
+
+    const clearCart = (): void => {
+        setCookie('store', JSON.stringify([]));
+        setCkStore([])
+        setCartItems([])
+
+        setCookie('storeCount', JSON.stringify(0))
+        setCkStoreCount(0)
+        setCartCount(0)
+    }
 
 
     const removeFromCart = (id:string):void =>{
@@ -148,7 +157,7 @@ export function CartProvider({children}: Props){
             
         },[])
     return(
-        <CartItemContext.Provider value={{ updateCartItemQuantity, cartItems, cartCount, addToCart, cartTotal, ckStore, ckStoreCount, removeFromCart, setCkStore, setCartItems}}>
+        <CartItemContext.Provider value={{ clearCart, updateCartItemQuantity, cartItems, cartCount, addToCart, cartTotal, ckStore, ckStoreCount, removeFromCart, setCkStore, setCartItems}}>
             {children}
         </CartItemContext.Provider>
     )

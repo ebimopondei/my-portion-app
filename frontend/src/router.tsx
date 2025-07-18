@@ -21,7 +21,7 @@ const AppRouter = () => (
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/orders" element={<OrdersPage />} />
           <Route path="/dashboard/checkout" element={<Checkout />} />
-          <Route path="/dashboard/checkout/complete-payment/:transaction_id" element={<CompleteCheckOutPayment />} />
+          <Route path="/dashboard/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
 
           <Route element={<ProtectedRoutes />}>
             <Route path="/vendor/kyc" element={<KYCPage />} />

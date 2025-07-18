@@ -27,7 +27,8 @@ const Checkout: React.FC = () => {
 // @ts-expect-error
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const serviceCharge = 100;
-  const shippingCost = cartItems.reduce((sum, _) => sum + 1000, 0) // Free shipping over $50
+  const deliveryFee = 1000
+  const shippingCost = cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
 //   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + serviceCharge + shippingCost;
 
@@ -248,12 +249,12 @@ const Checkout: React.FC = () => {
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium text-sm truncate">{item.name}</h4>
                               <p className="text-xs text-muted-foreground">
-                                {item.quantity} × #{item.price} per {item.unit}
+                                {item.quantity} × ₦{item.price} per {item.unit}
                               </p>
                             </div>
                             <div className="text-right">
                               {/* @ts-expect-error */}
-                              <p className="font-medium">${(item?.price * item?.quantity).toFixed(2)}</p>
+                              <p className="font-medium">₦{(item?.price * item?.quantity).toFixed(2)}</p>
                             </div>
                           </div>
                         ))}
@@ -265,26 +266,26 @@ const Checkout: React.FC = () => {
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Subtotal:</span>
-                          <span>${subtotal.toFixed(2)}</span>
+                          <span>₦{subtotal.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Service Charge (5%):</span>
-                          <span>${serviceCharge.toFixed(2)}</span>
+                          <span className="text-muted-foreground">Service Charge:</span>
+                          <span>₦{serviceCharge.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Shipping:</span>
+                          <span className="text-muted-foreground">Delivery Fee:</span>
                           <span>
                             {shippingCost === 0 ? (
                               <Badge variant="secondary" className="text-xs">FREE</Badge>
                             ) : (
-                              `$${shippingCost.toFixed(2)}`
+                              `₦${shippingCost.toFixed(2)}`
                             )}
                           </span>
                         </div>
                         <Separator />
                         <div className="flex justify-between text-lg font-semibold">
                           <span>Total:</span>
-                          <span className="text-primary">${total.toFixed(2)}</span>
+                          <span className="text-primary">₦{total.toFixed(2)}</span>
                         </div>
                       </div>
 

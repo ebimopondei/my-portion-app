@@ -12,7 +12,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   const discountPercentage = Math.round(((product.price_per_portion - product.price_per_portion) / product.price_per_portion) * 100)
   
-  const groupProgress = ((product.total_quantity/ product.portion_size) - product.available_portions)/product.total_quantity/product.portion_size  * 100;
+  const groupProgress = ((product.total_quantity/ product.portion_size) - product.available_portions)/(product.total_quantity / product.portion_size)  * 100;
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
