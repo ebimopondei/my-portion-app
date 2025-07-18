@@ -14,14 +14,14 @@ import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
 const AppRouter = () => (
   
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/dashboard/orders" element={<OrdersPage />} />
-          <Route path="/dashboard/checkout" element={<Checkout />} />
-          <Route path="/dashboard/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
 
           <Route element={<ProtectedRoutes />}>
             <Route path="/vendor/kyc" element={<KYCPage />} />

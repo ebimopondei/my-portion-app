@@ -107,7 +107,7 @@ const CompleteCheckOutPayment: React.FC = () => {
           <div className="min-h-screen bg-background py-8">
             <div className="container mx-auto px-4 max-w-6xl">
               <div className="flex items-center mb-8">
-                <Button variant="ghost" onClick={() => navigate('/dashboard')} className="mr-4">
+                <Button variant="ghost" onClick={() => navigate('/')} className="mr-4">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Shop
                 </Button>
@@ -219,7 +219,7 @@ const CompleteCheckOutPayment: React.FC = () => {
                                 <p className="text-sm text-muted-foreground">
                                   Your order will be processed within 24 hours.
                                 </p>
-                                <Link to='/dashboard'>
+                                <Link to='/'>
                                   <Button> Go to Market</Button>
                                 </Link>
                               </div>

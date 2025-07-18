@@ -165,7 +165,7 @@ export function CartSlide({ isOpen, onClose }: CartSlideProps) {
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   onClick={handleCheckout}
                 >
-                  <Link to={`${isLoggedIn ? '/dashboard/checkout': '/login'}`}>
+                  <Link to={`${isLoggedIn ? '/checkout': '/login'}`}>
                   {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
                   </Link>
                 </Button>

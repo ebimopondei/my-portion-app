@@ -28,7 +28,7 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
   };
 
   const menuItems = [
-    { icon: Package, label: "Orders", href: "/dashboard/orders" },
+    { icon: Package, label: "Orders", href: "/orders" },
     // { icon: Heart, label: "Wishlist", href: "#" },
     { icon: Bell, label: "Notifications", href: "#" },
   ]

@@ -27,7 +27,7 @@ export default function useCheckOut(){
 
         const response = await checkOut(value, cartItems)
         if(response.success){
-            navigate(`/dashboard/checkout/complete-payment/${response.data.id}`);
+            navigate(`/checkout/complete-payment/${response.data.id}`);
             toast.success(response.message)
         }else {
             toast.error(response.message, { duration: 5000})

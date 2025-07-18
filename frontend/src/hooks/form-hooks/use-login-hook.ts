@@ -42,7 +42,7 @@ export default function useLogin() {
                     
                 }
             }else{
-                navigate('/dashboard')
+                navigate('/')
             }
 
         }else{
