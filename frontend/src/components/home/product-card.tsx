@@ -1,4 +1,4 @@
-import { Star, ShoppingCart } from "lucide-react"
+import { ShoppingCart } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import type { ProductAttribute } from "@shared/types/product"
