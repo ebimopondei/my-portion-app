@@ -293,7 +293,8 @@ const Checkout: React.FC = () => {
                         <div className="p-3 bg-success/10 border border-success rounded-lg text-center">
 {/*                           <p className="text-success text-sm font-medium">
                             🎉 You qualify for free shipping!
-                          </p> */}
+                          </p> */
+                          }
                         </div>
                       )}
                     </CardContent>
