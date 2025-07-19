@@ -14,6 +14,7 @@ import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
 const AppRouter = () => (
   
         <Routes>
+          
           <Route path="/" element={<DashboardPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
