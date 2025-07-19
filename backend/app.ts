@@ -11,8 +11,6 @@ app.use(express.urlencoded( { extended: true, }))
 app.use(express.json())
 app.use("/v1/uploads", express.static(path.join(__dirname,'uploads')));
 
-
-
 app.use(cors(
     { 
         origin: ["http://localhost:5173", "https://my-portion-app.vercel.app", "portion.ng", "https://portion.ng", "https://www.portion.ng"], 

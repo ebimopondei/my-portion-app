@@ -19,6 +19,7 @@ class Product extends Model<ProductAttribute> implements ProductAttribute{
     public video_url!: string;
     public total_quantity!: number;
     public quantity_unit!: string;
+    public number_per_portion!: string;
     public portion_size!: number;
     public price_per_portion!: number;
     public available_portions!: number;
@@ -74,6 +75,11 @@ Product.init({
   },
 
   total_quantity: {
+    type: DataTypes.NUMBER,
+    allowNull: false
+  },
+  
+  number_per_portion: {
     type: DataTypes.NUMBER,
     allowNull: false
   },

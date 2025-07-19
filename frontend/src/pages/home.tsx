@@ -48,10 +48,10 @@ export default function LandingPage() {
 
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="lg" asChild>
+            <Button className="bg-primary hover:bg-primary/90 text-white" size="lg" asChild>
               <Link to="/">Marketplace</Link>
             </Button>
-            <Button className="bg-primary hover:bg-primary/90" size="lg" asChild>
+            <Button className="bg-transparent text-black" variant="outline" size="lg" asChild>
               <Link to={isLoggedIn ? "/vendor": "/login?vendor=true"}>Vendors</Link>
             </Button>
           </div>
@@ -95,11 +95,11 @@ export default function LandingPage() {
                   Reviews
                 </Link>
                 <div className="pt-4 space-y-3 border-t border-gray-100">
-                  <Button variant="outline" size="lg" asChild className="w-full bg-transparent">
+                  <Button variant="outline" size="lg" asChild className="w-full bg-primary hovoer:bg-primary/90 text-white">
                     <Link to="/">Marketplace</Link>
                   </Button>
-                  <Button className="bg-primary hover:bg-primary/90 w-full" size="lg" asChild>
-                    <Link to="/login?vendor=true">Vendors</Link>
+                  <Button className="bg-transparent text-black hover:bg-primary/90 w-full" variant="outline" size="lg" asChild>
+                    <Link to={isLoggedIn ? "/vendor": "/login?vendor=true"}>Vendors</Link>
                   </Button>
                 </div>
               </div>

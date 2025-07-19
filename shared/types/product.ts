@@ -12,6 +12,7 @@ export interface ProductAttribute {
     image_url: string;
     total_quantity: number;
     quantity_unit: string;
+    number_per_portion: string;
     portion_size: number;
     price_per_portion: number;
     available_portions: number;

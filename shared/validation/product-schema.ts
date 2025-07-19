@@ -10,6 +10,7 @@ export const productSchema = z.object( {
     image_url: z.file('Select Image file'),
     video_url: z.file('Select Video file'),
     total_quantity: z.string(),
+    number_per_portion: z.string(),
     quantity_unit: z.string().optional(),
     portion_size: z.string().min(1, 'Must be atleast 1'),
     price_per_portion: z.string(),

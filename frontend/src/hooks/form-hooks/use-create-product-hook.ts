@@ -22,10 +22,9 @@ export default function useCreateProduct(){
 
     async function onCreateProduct(value:ProductSchema) {
         setIsLoading(true)
-        console.log(value)
 
         const response = await createProduct(value)
-        toast.success(response.message);
+        toast.success(response?.message);
         setIsLoading(false)
     }
 

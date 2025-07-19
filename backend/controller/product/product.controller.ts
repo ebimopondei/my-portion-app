@@ -19,6 +19,7 @@ const productSchema = z.object( {
     video_url: z.file('Select Video file').optional(),
     total_quantity: z.string(),
     quantity_unit: z.string(),
+    number_per_portion: z.string(),
     portion_size: z.string().min(1, 'Must be atleast 1').optional(),
     price_per_portion: z.string().optional(),
     available_portions: z.string().optional(),
@@ -128,23 +129,28 @@ const addNewProduct = async (req: Request, res: Response) => {
      // @ts-expect-error
      const gallery_url_path = req?.files['gallery']
 
-     console.log(image_url_path)
 
      if(!image_url_path) {
           res.status(400).json( { success: false, message: 'No file uploaded'})
           return 
      }
 
+     if(!video_url_path) {
+          res.status(400).json( { success: false, message: 'No file uploaded'})
+          return 
+     }
+
      let result = await cloudinary.uploader.upload(image_url_path, { folder: cloudinaryUploadFolder })
-     const image_url = cloudinary.url(result.secure_url)
-     result = await cloudinary.uploader.upload(image_url_path, { folder: cloudinaryUploadFolder })
-     const video_url = cloudinary.url(result.secure_url)
+     const image_url = result.secure_url
+     const video_result = await cloudinary.uploader.upload(video_url_path, { resource_type: "video", folder: cloudinaryUploadFolder })
+     const video_url = video_result.secure_url
 
 
      const product = await Product.create( {
           seller_id: user.id,
           name: validated.name,
           status: Status.Pending,
+          number_per_portion: validated.number_per_portion,
      
           description: validated.description || '',
           image_url,
@@ -159,6 +165,9 @@ const addNewProduct = async (req: Request, res: Response) => {
      })
 
      if (fs.existsSync(image_url_path)) {
+          fs.unlinkSync(image_url_path);
+     }
+     if (fs.existsSync(video_url_path)) {
           fs.unlinkSync(image_url_path);
      }
 

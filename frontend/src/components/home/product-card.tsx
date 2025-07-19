@@ -39,7 +39,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         {/* Rating */}
         <div className="flex items-center space-x-2 mb-4">
           <div className="flex items-center">
-            <span className="text-gray-500 text-sm">{product.portion_size} {product.quantity_unit} per portion</span>
+            <span className="text-gray-500 text-sm">{product.number_per_portion} {product.quantity_unit} per portion</span>
             {/* <Star className="w-4 h-4 text-yellow-400 fill-current" /> */}
             {/* <span className="text-sm font-medium ml-1">{product.rating}</span> */}
           </div>
