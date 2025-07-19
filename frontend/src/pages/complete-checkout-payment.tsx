@@ -183,9 +183,6 @@ const CompleteCheckOutPayment: React.FC = () => {
                               <p className="text-sm text-warning-foreground">
                                 <strong>Transfer Amount:</strong>  ₦{total.toFixed(2)}
                               </p>
-                              <p className="text-sm text-warning-foreground mt-1">
-                                Please include your order number in the transfer reference.
-                              </p>
                             </div>
 
                             {!paymentConfirmed ? (
