@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const signupSchema = z.object({
+export const createUserSchema = z.object({
   firstname: z.string().min(3, 'Firstname too short!'),
   lastname: z.string().min(3, 'Lastname too short!'),
   email: z.string().email('Enter valid email'),
@@ -10,6 +10,7 @@ export const signupSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ['confirmPassword'],
-});
+}).required();
 
-export type SignUpFormData = z.infer<typeof signupSchema>;
+export type createUserDto = z.infer<typeof createUserSchema>;
+export type SignUpFormData = z.infer<typeof createUserSchema>;

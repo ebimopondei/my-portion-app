@@ -168,7 +168,7 @@ const addNewProduct = async (req: Request, res: Response) => {
           fs.unlinkSync(image_url_path);
      }
      if (fs.existsSync(video_url_path)) {
-          fs.unlinkSync(image_url_path);
+          fs.unlinkSync(video_url_path);
      }
 
      res.status(201).json({

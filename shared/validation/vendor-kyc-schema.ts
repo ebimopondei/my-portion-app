@@ -34,3 +34,4 @@ export const vendorKycSchema = z.object( {
 })
 
 export type VendorKycSchema = z.infer<typeof vendorKycSchema>
+export type VendorKycDTO = z.infer<typeof vendorKycSchema>

@@ -98,7 +98,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
                 >
                   <td className="py-2">
                     <div>
-                      <p className="font-medium text-gray-900">{customer.User.firstname}</p>
+                      <p className="font-medium text-gray-900">{customer.user.firstname}</p>
                       {/* <p className="text-xs text-gray-500">{customer.timeAgo}</p> */}
                     </div>
                   </td>
@@ -141,7 +141,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
         {selectedCustomer && (
           <div className="space-y-4">
             <div>
-              <h4 className="font-medium text-gray-900">{selectedCustomer.User.firstname}</h4>
+              <h4 className="font-medium text-gray-900">{selectedCustomer.user.firstname}</h4>
               {/* <p className="text-sm text-gray-500">{selectedCustomer.timeAgo}</p> */}
             </div>
             
