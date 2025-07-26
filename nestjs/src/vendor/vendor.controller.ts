@@ -8,7 +8,6 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 @Controller('v1/vendor')
 export class VendorController {
     constructor(private readonly vendorService: VendorService) {}
-    
 
     @Post('kyc')
     @UseInterceptors(FileFieldsInterceptor([

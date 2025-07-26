@@ -10,7 +10,6 @@ import { ProductController } from './product/product.controller';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
-import { OrderService } from './order/order.service';
 import { OrderController } from './order/order.controller';
 import { OrderModule } from './order/order.module';
 import { VendorModule } from './vendor/vendor.module';
@@ -19,27 +18,17 @@ import { VendorController } from './vendor/vendor.controller';
 @Module({
   imports: [
     AuthModule,
-    ConfigModule.forRoot({
-      isGlobal: true
-    }),
-    
-    SequelizeModule.forRootAsync( {
-      useFactory: getSequelizeConfig,
-      inject: [ConfigService],
-    }),
-    
+    ConfigModule.forRoot({ isGlobal: true }),
+    SequelizeModule.forRootAsync( 
+      { useFactory: getSequelizeConfig, inject: [ConfigService] }
+    ),
     ProductModule,
-    
     CloudinaryModule,
-    
     UserModule,
-    
     OrderModule,
-    
     VendorModule
   ],
-  providers: [LoggerService, OrderService],
-  controllers: [OrderController]
+  providers: [LoggerService]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

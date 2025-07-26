@@ -7,9 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
 
-    "declaration": false,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    // "declaration": false,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
     
-    "sourceMap": false,                                /* Create source map files for emitted JavaScript files. */
+    // "sourceMap": false,                                /* Create source map files for emitted JavaScript files. */
     "outDir": "./distStyle",                                   /* Specify an output folder for all emitted files. */
   },
 
