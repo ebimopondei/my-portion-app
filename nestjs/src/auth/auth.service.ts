@@ -9,6 +9,7 @@ import { createUserDto } from '../../../shared/validation/createUserDTO';
 import { loginResponse, registerResponse } from '../../../shared/types';
 import { refreshTokenResponse } from '../../../shared/types/services';
 import { MailerService } from 'src/mailer/mailer.service';
+import { ConfigService } from '@nestjs/config';
 
 
 @Injectable()
@@ -17,19 +18,17 @@ export class AuthService {
     @InjectModel(User)
     private userModel: typeof User,
     private readonly mailerService: MailerService,
+    private readonly configService: ConfigService
   ) {}
 
-  private readonly jwtSecret = 'jwt_secret'; // Use env var in production
-  private readonly jwtSecretRefresh = 'jwt_secret_refresh'; // Use env var in production
-
+  
   async register(createUserDto: createUserDto): Promise<registerResponse> {
     
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
     const user = await this.userModel.create({ 
       firstname: createUserDto.firstname, 
       lastname: createUserDto.lastname, 
-      email: createUserDto.email, 
-      // username: createUserDto.firstname,
+      email: createUserDto.email,
       password: passwordHash,
       role: createUserDto.role,
       email_verified: false,
@@ -52,6 +51,7 @@ export class AuthService {
   
 
   async login(loginDto: loginUserDto): Promise<loginResponse> {
+
     const user = await this.userModel.findOne({ where: { email: loginDto.email } });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -71,6 +71,9 @@ export class AuthService {
   }
 
   async refreshToken(token: string): Promise<refreshTokenResponse> {
+    const jwtSecret = this.configService.get('ACCESSTOKENSECRET'); // Use env var in production
+    const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET'); // Use env var in production
+    
     console.log('Refresh token:', token);
     if (!token) {
       throw new UnauthorizedException('Refresh token is required');
@@ -78,12 +81,12 @@ export class AuthService {
 
     try { 
 
-      const decoded = verify(token, this.jwtSecretRefresh) as JwtPayload;
+      const decoded = verify(token, jwtSecretRefresh) as JwtPayload;
       console.log('Decoded token:', decoded); 
       delete decoded?.iat; 
       delete decoded?.exp;
-      const newToken = sign(decoded, this.jwtSecret, { expiresIn: '1h' });
-      const newRefreshToken = sign(decoded, this.jwtSecretRefresh, { expiresIn: '1d' });
+      const newToken = sign(decoded, jwtSecret, { expiresIn: '1h' });
+      const newRefreshToken = sign(decoded, jwtSecretRefresh, { expiresIn: '1d' });
       return { success: true, data: { token: newToken, refreshToken: newRefreshToken }, message: 'Tokens refreshed successfully'  };
     } catch (error:any) {
       console.log(error)
