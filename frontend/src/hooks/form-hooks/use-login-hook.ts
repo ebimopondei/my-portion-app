@@ -1,8 +1,8 @@
 import APICalls from "@/api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema } from '@shared/validation/login-schema'
-import type { LoginSchema } from '@shared/validation/login-schema'
+import { loginUserSchema } from '@shared/validation/loginUserDTO.ts'
+import type { LoginSchema } from '@shared/validation/loginUserDTO.ts'
 import useAuth from "../auth-provider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function useLogin() {
     
     
     const form  = useForm<LoginSchema>({ 
-        resolver: zodResolver(loginSchema),
+        resolver: zodResolver(loginUserSchema),
         defaultValues: {
             email: '',
             password: ''

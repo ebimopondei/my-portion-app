@@ -27,7 +27,7 @@ export interface ProductAttribute {
 
 
 export type OrderWithUser = OrderAttribute & {
-    User: UserAttributes;
+    user: UserAttributes;
 };
 
 export type ProductWithOrders = ProductAttribute & {

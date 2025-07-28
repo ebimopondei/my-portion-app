@@ -17,24 +17,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:backend": "npm run build --workspace backend",
+    "build:backend": "npm run build --workspace nestjs",
     "build:frontend": "npm run build --workspace frontend",
     "build": "npm run build:backend && npm run build:frontend",
-    "dev": "concurrently \"npm run dev:frontend \" \"npm run start:dev:backend\"",
+    "dev": "concurrently \"npm run dev:frontend \" \"npm run dev:backend\"",
     "dev:frontend": "npm run dev --workspace frontend",
-    "watch:backend": "concurrently \"npm run watch:alias --workspace backend\" \"npm run watch --workspace backend\" ",
-    "dev:backend": "npm run dev --workspace backend",
-    "start:dev:backend": "concurrently \"npm run watch:backend\"  \"npm run dev:backend\" ",
-    "migrate": "npm run migrate --workspace backend",
-    "migrate:undo": "npm run migrate:undo --workspace backend",
-    "migrate:undo:all": "npm run migrate:undo:all --workspace backend",
-    "migrate:skeleton": "npm run migrate:skeleton --workspace backend"
+    "dev:backend": "npm run start:dev --workspace nestjs",
+    "migrate": "npm run migrate --workspace nestjs",
+    "migrate:undo": "npm run migrate:undo --workspace nestjs",
+    "migrate:undo:all": "npm run migrate:undo:all --workspace nestjs",
+    "migrate:skeleton": "npm run migrate:skeleton --workspace nestjs"
   },
   "workspaces": [
     "backend",
-    "frontend"
+    "frontend",
+    "nestjs"
   ],
   "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "concurrently": "^9.2.0",
     "typescript": "^5.8.3"
   }

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { loginSchema } from '@shared/validation/login-schema'
-import { signupSchema } from '@shared/validation/signup-schema'
+import { loginUserSchema } from '@shared/validation/loginUserDTO'
+import { createUserSchema } from '@shared/validation/createUserDTO'
 
 import User from "../../database/models/User";
 
@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken')
 
 const signupController = async ( req: Request, res: Response ) => {
 
-    const validated = signupSchema.parse(req.body);
+    const validated = createUserSchema.parse(req.body);
 
     const hashedPassword = await bcrypt.hash(validated.password, 10);
 
@@ -42,7 +42,7 @@ const signupController = async ( req: Request, res: Response ) => {
 
 const loginController = async ( req: Request, res: Response ) => {
 
-    const validated = loginSchema.parse(req.body);
+    const validated = loginUserSchema.parse(req.body);
 
     const user = await User.findOne( { 
         where: { 

@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-import { signupSchema } from '@shared/validation/signup-schema'
-import type { SignUpFormData } from '@shared/validation/signup-schema'
+import { createUserSchema } from '@shared/validation/createUserDTO.ts'
+import type { SignUpFormData } from '@shared/validation/createUserDTO.ts'
 import { useState } from "react";
 export default function useSignup(){
 
@@ -15,7 +15,7 @@ export default function useSignup(){
 
 
     const form = useForm<SignUpFormData>({
-        resolver: zodResolver(signupSchema),
+        resolver: zodResolver(createUserSchema),
         defaultValues: {
             confirmPassword: '',
             email: '',

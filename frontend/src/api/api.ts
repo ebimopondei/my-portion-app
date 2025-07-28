@@ -1,7 +1,7 @@
 import type { LoginResponse, RefreshTokenResponse, SignupResponse } from "@/types/api-response-type";
 import API from "./api-config";
-import type { SignUpFormData } from '@shared/validation/signup-schema'
-import type { LoginSchema } from '@shared/validation/login-schema'
+import type { SignUpFormData } from '@shared/validation/createUserDTO'
+import type { LoginSchema } from '@shared/validation/loginUserDTO'
 
 export default function APICalls (){
 

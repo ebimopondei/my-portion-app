@@ -9,9 +9,6 @@ const development= {
   dialect: process.env.DB_DIALECT
 }
 
-
-
-
 const test = {
     username: process.env.USERNAME,
     password: process.env.PASSWORD,
@@ -35,16 +32,6 @@ const production = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT
 }
-
-
-// if (process.env.NODE_ENV === 'production') {
-// production.dialectOptions = {
-//   ssl: {
-//     require: true, // Enforce SSL connection
-//     rejectUnauthorized: true, 
-//   }
-// };
-// }
 
 module.exports = {
     
