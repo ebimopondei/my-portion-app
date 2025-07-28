@@ -14,6 +14,7 @@ import { OrderController } from './order/order.controller';
 import { OrderModule } from './order/order.module';
 import { VendorModule } from './vendor/vendor.module';
 import { VendorController } from './vendor/vendor.controller';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { VendorController } from './vendor/vendor.controller';
     CloudinaryModule,
     UserModule,
     OrderModule,
-    VendorModule
+    VendorModule,
+    MailerModule
   ],
   providers: [LoggerService]
 })

@@ -8,6 +8,7 @@ import { loginUserDto } from '@shared/validation/loginUserDTO';
 import { createUserDto } from '../../../shared/validation/createUserDTO';
 import { loginResponse, registerResponse } from '../../../shared/types';
 import { refreshTokenResponse } from '../../../shared/types/services';
+import { MailerService } from 'src/mailer/mailer.service';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
+    private readonly mailerService: MailerService,
   ) {}
 
   private readonly jwtSecret = 'jwt_secret'; // Use env var in production
@@ -33,6 +35,12 @@ export class AuthService {
       email_verified: false,
       kyc_verified: false,
     });
+
+    this.mailerService.loginMail( user, {
+      ip: '127.0.0.1',
+      useragent: { os: 'Windowns', browser: 'Unknown', version: 'Unknown', platform: 'Unknown' } 
+    });
+    
     return {
       success: true,
       data: user,
@@ -52,6 +60,11 @@ export class AuthService {
     if (!valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    this.mailerService.loginMail( user, {
+      ip: '127.0.0.1',
+      useragent: { os: 'Windowns', browser: 'Unknown', version: 'Unknown', platform: 'Unknown' } 
+    });
     const token = sign(user.toJSON(), 'jwt_secret', { expiresIn: '1h' });
     const refreshToken = sign(user.toJSON(), "jwt_secret_refresh", { expiresIn: '1d' });
     return { success: true, data: { token, refreshToken, user }, message: "Login Successful" };

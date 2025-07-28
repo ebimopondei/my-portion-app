@@ -1,0 +1,44 @@
+<!DOCTYPE html> 
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Login Notification - StashFlow</title>
+      <style> body { margin: 0; padding: 0; background-color: #f6f8fb; } table { border-collapse: collapse; } @media only screen and (max-width: 600px) { .container { width: 100% !important; padding: 20px !important; } .content { padding: 20px !important; } .heading { font-size: 22px !important; } } </style>
+   </head>
+   <body style="margin:0; padding:0; background-color:#f6f8fb;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f6f8fb;">
+         <tr>
+            <td align="center">
+               <table class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:8px; overflow:hidden; margin: 20px auto; padding: 30px;">
+                  <tr>
+                     <td class="heading" style="font-size:24px; font-weight:bold; color:#333333; text-align:center;"> Hello {{name}}, your account was just accessed 👋 </td>
+                  </tr>
+                  <tr>
+                     <td class="content" style="padding-top:20px; font-size:16px; color:#555555; line-height:1.6;">
+                        We noticed a successful login to your StashFlow account. <br><br> Here are the details: 
+                        <ul style="padding-left:20px;">
+                           <li><strong>Time:</strong> {{login_time}}</li>
+                           <li><strong>IP Address:</strong> {{ip_address}}</li>
+                           <li><strong>Device/Browser:</strong> {{device_info}}</li>
+                        </ul>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td style="padding-top:20px; font-size:15px; color:#555555;"> If this was you, there’s nothing to worry about. You’re good to go! </td>
+                  </tr>
+                  <tr>
+                     <td style="padding-top:10px; font-size:15px; color:#d9534f;"> If this wasn’t you, please secure your account immediately by resetting your password and contacting our support team. </td>
+                  </tr>
+                  <tr>
+                     <td style="padding-top:30px; font-size:15px; color:#888888;"> Stay safe,<br> The StashFlow Team </td>
+                  </tr>
+                  <tr>
+                     <td style="padding-top:30px; font-size:14px; color:#999999; border-top:1px solid #eee; padding-top:20px;"> Need help? Reach us at <a href="mailto:{{support_email}}" style="color:#2f7cf3;">{{support_email}}</a>.<br><br> You're receiving this email because you signed in to your StashFlow account.<br><br> <a href="https://www.mailersend.com/?utm_source=newsletter&utm_medium=email&utm_campaign=login-notification" style="color:#2f7cf3;">Delivered by MailerSend</a> </td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
+      </table>
+   </body>
+</html>

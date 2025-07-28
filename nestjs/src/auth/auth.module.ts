@@ -14,9 +14,10 @@ import { KycPersonal } from 'src/database/models/KycPersonal';
 import { OrderRecord } from 'src/database/models/order-record';
 import { Rating } from 'src/database/models/Rating';
 import { SellerKyc } from 'src/database/models/SellerKYC';
+import { MailerModule } from 'src/mailer/mailer.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet  ])],
+  imports: [MailerModule, SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet  ])],
   controllers: [AuthController],
   providers: [AuthService]
 })

@@ -34,6 +34,8 @@
     "nestjs"
   ],
   "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "concurrently": "^9.2.0",
     "typescript": "^5.8.3"
   }
