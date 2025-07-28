@@ -22,8 +22,7 @@ const handlebarOptions:NodemailerExpressHandlebarsOptions = {
 let transporter: Transporter;
 const rejectUnauthorized= false;
 
-// const HOST_MAIL = "info@preskeyshop.com";
-const HOST_MAIL = "admin@bminingpool.com";
+const HOST_MAIL = "info@portion.ng";
 
 
 @Injectable()
