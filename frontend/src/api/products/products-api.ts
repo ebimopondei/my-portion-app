@@ -18,6 +18,19 @@ export default function ProductApi (){
         }
     }
     
+    const getProductsById= async (id:string) =>{
+        try {
+            const res = await api.get( `/product/${id}`, );
+            return res.data;
+
+        }catch(err:any){
+            if (err.response) {
+                return { success: false, message: err.response.data.message, data: { token: "", refreshToken: "", roles: [''] } };
+            } else {
+                return {success: false, message: err.message, data: {token: "", refreshToken: "", roles: ['']}}
+            }
+        }
+    }
     const getAllProducts= async (page:number=1, limit:number=10) =>{
         try {
             const res = await api.get( `/product/all`, { params: { page, limit}} );
@@ -48,8 +61,9 @@ export default function ProductApi (){
             }
         }
     }
+
     
-    return  { getAllProducts, getProducts, createProduct }
+    return  { getAllProducts, getProducts, createProduct, getProductsById }
 
 }
 

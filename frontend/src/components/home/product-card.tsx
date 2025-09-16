@@ -2,6 +2,7 @@ import { ShoppingCart } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import type { ProductAttribute } from "@shared/types/product"
+import { Link } from "react-router-dom"
 
 interface ProductCardProps {
   product: ProductAttribute
@@ -16,20 +17,23 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {/* Image */}
-      <div className="relative">
-        <img
-          src={ `${product.image_url}`}
-          alt={product.name}
-          width={300}
-          height={200}
-          className="w-full h-48 object-cover"
-        />
-    
-        {discountPercentage > 0 && (
-          <Badge className="absolute top-3 right-3 bg-red-500 text-white">-{discountPercentage}%</Badge>
-        )}
-      </div>
+      <Link to={`/product/${product.id}`}>
+        {/* Image */}
+        <div className="relative">
+          <img
+            src={ `${product.image_url}`}
+            alt={product.name}
+            width={300}
+            height={200}
+            className="w-full h-48 object-cover"
+          />
+      
+          {discountPercentage > 0 && (
+            <Badge className="absolute top-3 right-3 bg-red-500 text-white">-{discountPercentage}%</Badge>
+          )}
+        </div>
+
+      </Link>
 
       {/* Content */}
       <div className="p-5">

@@ -10,12 +10,14 @@ import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
 import Checkout from "./pages/check-out";
 import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
+import ProductDetailPage from "./pages/product-details";
 
 const AppRouter = () => (
   
         <Routes>
           
           <Route path="/" element={<DashboardPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterBuyer />} />

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ParsedToken } from 'decorators';
@@ -55,9 +55,9 @@ export class ProductController {
     }
 
     @Get(":id")
-    getProductById() {
+    getProductById(@Param("id") id) {
         
-        return this.productService.getProductById('');
+        return this.productService.getProductById(id);
         
     }
     

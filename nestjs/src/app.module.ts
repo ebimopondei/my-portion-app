@@ -36,7 +36,8 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(VerifyJwtMiddleware)
-      .exclude( { path: 'v1/product/all', method: RequestMethod.GET }) // Exclude specific route from VerifyJwtMiddleware
+      .exclude( { path: 'v1/product/all', method: RequestMethod.GET })
+      .exclude( { path: 'v1/product/:id', method: RequestMethod.GET })
       .forRoutes(ProductController, VendorController, OrderController, UserController);
     consumer
     .apply(LoggerMiddleware)
