@@ -1,8 +1,9 @@
 import type { ProductAttribute } from "@shared/types/product"
 import { Status } from "@shared/enums"
 import { Package, Plus, Share2, Edit3 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import WithdrawFundsModal from "./WithdrawFundsModal"
+import WalletApi from "@/api/wallet/wallet-api"
 
 interface DashboardContentProps {
   vendorProducts: ProductAttribute[]
@@ -38,13 +39,32 @@ const DashboardContent = ({
   const hasProducts = vendorProducts.length > 0
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
 
+  const [walletBalance, setWalletBalance] = useState<{main_balance:number, sub_balance:number}>({main_balance: 0, sub_balance: 0});
+
+    const { getWalletBalance } = WalletApi()
+  
+
   const handleWithdrawClick = () => {
     setShowWithdrawModal(true)
   }
 
   const handleWithdraw = async (amount: number) => {
     await onWithdrawFunds(amount)
+
   }
+
+  useEffect(()=>{
+  
+    async function fetchWalletBalance(){
+      const response = await getWalletBalance();
+      setWalletBalance(response.data);
+      console.log(response)
+
+    }
+
+    fetchWalletBalance();
+
+  }, [])
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -163,7 +183,7 @@ const DashboardContent = ({
         <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold mb-4">Your Wallet</h3>
           <div className="text-center mb-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">₦{dashboardStats.walletBalance}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">₦{walletBalance.main_balance}</h1>
             <p className="text-sm text-gray-600">Available for withdrawal</p>
           </div>
           <button 
@@ -175,7 +195,7 @@ const DashboardContent = ({
         </div>
 
         {/* Performance */}
-        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+        {/* <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold mb-4">Performance This Week</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
@@ -187,7 +207,7 @@ const DashboardContent = ({
               <span className="font-semibold">{dashboardStats.productViews}</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
       </div>
 

@@ -1,35 +1,22 @@
 import { useState, useEffect } from "react"
-import { 
+import {  
   VendorHeader, 
-  DashboardContent, 
+  ProductsContent,
   AddProductModal,
-  type TabId,  
-  dashboardStats,
 } from "../../components/vendor"
-import type { ProductAttribute } from "@shared/types/product";
+import type {  ProductAttribute } from "@shared/types/product";
 import ProductApi from "@/api/products/products-api";
 import useAuth from "@/hooks/auth-provider";
-import type { UserAttributes } from "@shared/types/user";
 
 
-export default function DashboardPage() {
+export default function VendorProductsPage() {
 
   const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
 
   const { getProducts } = ProductApi()
 
-  const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
-  const [profileData] = useState<UserAttributes | null>(null)
-  const [redirectToBankSection, setRedirectToBankSection] = useState(false)
 
-
-  // Reset redirect flag when wallet tab is accessed normally
-  useEffect(() => {
-    if (activeTab === 'wallet' && !redirectToBankSection) {
-      setRedirectToBankSection(false)
-    }
-  }, [activeTab, redirectToBankSection])
 
   // Event handlers
   const handleEditProduct = (product: ProductAttribute) => {
@@ -40,22 +27,12 @@ export default function DashboardPage() {
     console.log('Share product:', product)
   }
 
-
   const handleAddProduct = () => {
     setIsAddProductModalOpen(true)
   }
 
   const handleSaveDraft = (productData: any) => {
     console.log('Save draft:', productData)
-  }
-
-  const handleWithdrawFunds = (amount: number) => {
-    console.log('Withdraw funds:', amount)
-  }
-
-  const handleRedirectToBank = () => {
-    setActiveTab('wallet')
-    // The WalletContent component will handle showing the bank account section
   }
 
   useEffect(()=>{
@@ -70,23 +47,16 @@ export default function DashboardPage() {
 
   const { user } = useAuth();
 
-
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
         <VendorHeader vendorData={user} />
-        <DashboardContent
-          vendorProducts={vendorProducts}
-          dashboardStats={dashboardStats}
-          // @ts-expect-error
-          bankDetails={profileData?.bankDetails}
-          kycStatus={Boolean(profileData?.kyc_verified)}
-          onAddProduct={handleAddProduct}
-          onEditProduct={handleEditProduct}
-          onShareProduct={handleShareProduct}
-          onWithdrawFunds={handleWithdrawFunds}
-          onRedirectToBank={handleRedirectToBank}
-        />
+        <ProductsContent
+            vendorProducts={vendorProducts}
+            onAddProduct={handleAddProduct}
+            onEditProduct={handleEditProduct}
+            onShareProduct={handleShareProduct}
+          />
       </main>
 
       <AddProductModal

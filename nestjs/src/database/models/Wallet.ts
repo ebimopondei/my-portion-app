@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { WalletAttributes} from '@shared/types/wallet'
-import { Column, Table, Model } from 'sequelize-typescript';
+import { Column, Table, Model, PrimaryKey, Default } from 'sequelize-typescript';
 import { User } from './User';
 
 
@@ -11,13 +11,12 @@ import { User } from './User';
   paranoid: true,
 })
 
-export class Wallet extends Model<WalletAttributes> implements WalletAttributes {
+export class Wallet extends Model<WalletAttributes> implements WalletAttributes { 
 
-  @Column({ 
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
-  }) 
+  @PrimaryKey
+  @Default(DataTypes.UUIDV4)
+  @Column(DataTypes.UUID)
+  declare id: string;
 
   @Column({ 
     type: DataTypes.UUID,

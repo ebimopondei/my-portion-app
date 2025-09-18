@@ -76,11 +76,41 @@ export class ProductService {
         };
     }
     // Example method
-    getAllProducts() {
-        // Logic to retrieve all products
+    async getAllProducts( state: string, limit: number, page: number) {
+        const whereClause: Partial<Product> = {};
+
+
+        if (state) {
+            whereClause.location = state.toString().toLocaleLowerCase();
+        }
+
+        const productCount = await Product.count({ paranoid: true });
+        const start = (Number(page) - 1) * Number(limit);
+
+        const product = await Product.findAll({
+            where: whereClause,
+            order: [["createdAt", "DESC"]],
+            offset: Number(start),
+            limit: Number(limit)
+        });
+
+        const totalPages = Math.ceil(productCount / Number(limit));
+
+        return {
+            success: true,
+            data: { totalPages, productCount, product },
+            message: "Products found!"
+        };
     }
     
-    getProductById(id: string) {
+    async getProductById(id: string) {
+        const product = await Product.findOne({ where: { id } });
+
+        return {
+            success: true,
+            data: product,
+            message: `Product id: ${product?.id}`
+        };
         
     }
     

@@ -1084,7 +1084,7 @@ export default function KYCPage() {
                 >
                   Submit KYC
                 </Link> */}
-                <Link to='/vendor'>
+                <Link to='/dashboard'>
                   Skip
                 </Link>
               </div>

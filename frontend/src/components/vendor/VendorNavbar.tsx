@@ -3,23 +3,24 @@ import type { VendorNavbarProps, NavItem } from "./types"
 import Logo from "../shared/Logo"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Link, useLocation } from "react-router-dom"
 
 const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const location = useLocation()
   
   const navItems: NavItem[] = [
-    { id: 'dashboard', label: 'Overview', icon: TrendingUp },
-    { id: 'products', label: 'Products', icon: Package },
-    { id: 'orders', label: 'Orders', icon: ShoppingCart },
-    { id: 'wallet', label: 'Wallet', icon: DollarSign },
-    { id: 'profile', label: 'Profile', icon: Users },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'logout', label: 'Logout', icon: LogOut }
+    { id: 'dashboard', url: "", label: 'Overview', icon: TrendingUp },
+    { id: 'products', url: "products", label: 'Products', icon: Package },
+    { id: 'orders', url: "orders", label: 'Orders', icon: ShoppingCart },
+    { id: 'wallet', url: "wallet", label: 'Wallet', icon: DollarSign },
+    { id: 'profile', url: "profile", label: 'Profile', icon: Users },
+    { id: 'notifications', url: "notification", label: 'Notifications', icon: Bell },
   ]
 
   const handleNavItemClick = (tabId: string) => {
     setActiveTab(tabId as any)
-    setIsMobileMenuOpen(false) // Close mobile menu when item is clicked
+    setIsMobileMenuOpen(false)
   }
 
   return (
@@ -35,11 +36,11 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
             {navItems.map(item => {
               const Icon = item.icon
               return (
-                <button
+                <Link 
+                  to={item.url ? `/dashboard/${item.url}` : `/dashboard`}
                   key={item.id}
-                  onClick={() => handleNavItemClick(item.id)}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === item.id
+                    location.pathname === (item.url ? `/dashboard/${item.url}` : `/dashboard`)
                       ? 'bg-green-100 text-green-700'
                       : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                   }`}
@@ -51,9 +52,16 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
                       {notificationCount}
                     </span>
                   )}
-                </button>
+                </Link>
               )
             })}
+            <button 
+              onClick={() =>{}}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
 

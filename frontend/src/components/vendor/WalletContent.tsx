@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DollarSign, CreditCard, TrendingUp, Upload, CheckCircle, Clock } from "lucide-react"
 import { Button } from "../ui/button"
 import WithdrawFundsModal from "./WithdrawFundsModal"
+import WalletApi from "@/api/wallet/wallet-api"
 
 interface WalletContentProps {
-  walletBalance: number
   bankDetails: {
     bankName: string
     accountNumber: string
@@ -46,8 +46,7 @@ const mockTransactions = [
   }
 ]
 
-const WalletContent = ({ 
-  walletBalance, 
+const WalletContent = ({  
   bankDetails, 
   kycStatus, 
   onWithdrawFunds,
@@ -55,6 +54,9 @@ const WalletContent = ({
 }: WalletContentProps) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'bank' | 'kyc' | 'transactions'>('overview')
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
+  const [ walletBalance, setWalletBalance ] = useState<{main_balance: number}>({ main_balance: 10})
+  const { getWalletBalance } = WalletApi()
+  
 
   const handleWithdraw = async (amount: number) => {
     try {
@@ -103,6 +105,19 @@ const WalletContent = ({
   const kycConfig = getKycStatusConfig()
   const KYCIcon = kycConfig.icon
 
+  useEffect(()=>{
+    
+      async function fetchWalletBalance(){
+        const response = await getWalletBalance();
+        setWalletBalance(response.data);
+        console.log(response)
+  
+      }
+  
+      fetchWalletBalance();
+  
+    }, [])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -144,7 +159,7 @@ const WalletContent = ({
           {/* Wallet Balance */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">₦{walletBalance.toLocaleString()}</h3>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">₦{walletBalance?.main_balance}</h3>
               <p className="text-gray-600">Available Balance</p>
             </div>
             <div className="space-y-4">
@@ -350,7 +365,7 @@ const WalletContent = ({
         isOpen={showWithdrawModal}
         onClose={() => setShowWithdrawModal(false)}
         onWithdraw={handleWithdraw}
-        walletBalance={walletBalance}
+        walletBalance={0}
         bankDetails={bankDetails}
         kycStatus={kycStatus}
         onRedirectToBank={onRedirectToBank}
