@@ -104,7 +104,7 @@ export default function ProductDetailsModal({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Total Portions:</span>
-                <span className="font-medium text-sm">{product.total_quantity}</span>
+                <span className="font-medium text-sm">{product.portion_size}</span>
               </div>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function ProductDetailsModal({
               <div className="text-xs text-gray-600">Available</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-blue-600">{product.total_quantity - product.available_portions}</div>
+              <div className="text-lg font-bold text-blue-600">{product.portion_size - product.available_portions}</div>
               <div className="text-xs text-gray-600">Booked</div>
             </div>
             <div className="text-center">
@@ -133,7 +133,7 @@ export default function ProductDetailsModal({
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-purple-600">
-                {product.available_portions }/{(product.total_quantity / product.portion_size)}%
+                {(product.portion_size - product.available_portions) / (product.total_quantity / product.portion_size) * 100 }%
               </div>
               <div className="text-xs text-gray-600">Sold</div>
             </div>

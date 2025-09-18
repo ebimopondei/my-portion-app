@@ -19,11 +19,11 @@ const ProtectedRoutes = () => {
                 navigate('/admin');
             }
             
-            if (role ==  Roles.VENDOR && !pathName.includes('/vendor') ){
-                navigate('/vendor');
+            if (role ==  Roles.VENDOR && !pathName.includes('/dashboard') ){
+                navigate('/dashboard');
             }
             
-            if(role != Roles.VENDOR && pathName.includes('/vendor')){
+            if(role != Roles.VENDOR && pathName.includes('/dashboard')){
 
                 navigate('/')
             }

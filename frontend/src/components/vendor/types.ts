@@ -9,6 +9,7 @@ export interface NavItem {
   id: TabId;
   label: string;
   icon: LucideIcon;
+  url: string;
 }
 
 export interface Product {

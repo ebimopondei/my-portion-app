@@ -2,7 +2,7 @@ import APICalls from "@/api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginUserSchema } from '@shared/validation/loginUserDTO.ts'
-import type { LoginSchema } from '@shared/validation/loginUserDTO.ts'
+import type { LoginSchema } from '@shared/validation/loginUserDTO'
 import useAuth from "../auth-provider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -36,9 +36,9 @@ export default function useLogin() {
                 
                 if(response.data.user?.kyc_verified){
                     console.log(response.data.user?.kyc_verified)
-                    navigate('/vendor')
+                    navigate('/dashboard')
                 }else {
-                    navigate('/vendor/kyc')
+                    navigate('/dashboard/kyc')
                     
                 }
             }else{

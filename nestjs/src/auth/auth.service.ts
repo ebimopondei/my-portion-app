@@ -10,6 +10,7 @@ import { loginResponse, registerResponse } from '../../../shared/types';
 import { refreshTokenResponse } from '../../../shared/types/services';
 import { MailerService } from 'src/mailer/mailer.service';
 import { ConfigService } from '@nestjs/config';
+import { Wallet } from 'src/database/models/Wallet';
 
 
 @Injectable()
@@ -34,6 +35,8 @@ export class AuthService {
       email_verified: false,
       kyc_verified: false,
     });
+
+    const wallet = await Wallet.create({ user_id: user.id, id: user.id, main_balance: 0, sub_balance: 0 });
 
     this.mailerService.loginMail( user, {
       ip: '127.0.0.1',

@@ -15,6 +15,8 @@ import { OrderModule } from './order/order.module';
 import { VendorModule } from './vendor/vendor.module';
 import { VendorController } from './vendor/vendor.controller';
 import { MailerModule } from './mailer/mailer.module';
+import { WalletModule } from './wallet/wallet.module';
+import { WalletController } from './wallet/wallet.controller';
 
 @Module({
   imports: [
@@ -28,7 +30,8 @@ import { MailerModule } from './mailer/mailer.module';
     UserModule,
     OrderModule,
     VendorModule,
-    MailerModule
+    MailerModule,
+    WalletModule
   ],
   providers: [LoggerService]
 })
@@ -38,7 +41,7 @@ export class AppModule implements NestModule {
       .apply(VerifyJwtMiddleware)
       .exclude( { path: 'v1/product/all', method: RequestMethod.GET })
       .exclude( { path: 'v1/product/:id', method: RequestMethod.GET })
-      .forRoutes(ProductController, VendorController, OrderController, UserController);
+      .forRoutes(ProductController, VendorController, OrderController, WalletController, UserController);
     consumer
     .apply(LoggerMiddleware)
     .forRoutes(UserController, VendorController, OrderController, ProductController);
