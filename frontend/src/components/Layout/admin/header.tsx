@@ -1,4 +1,3 @@
-import { Logo } from '@/components/shared';
 import { Menu, Bell, Download, Plus, Settings, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

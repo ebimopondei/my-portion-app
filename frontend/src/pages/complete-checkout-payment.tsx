@@ -7,14 +7,14 @@ import { SlideMenu } from "../components/home/slide-menu"
 
 import { ArrowLeft, CreditCard, CheckCircle, Copy } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import useCartItem from '@/hooks/cart-provider';
 import toast from 'react-hot-toast';
 import { CartSlide } from "../components/home/cart-slide"
 import CheckOutApi from '@/api/checkout/check-out-api';
+import { useCart } from '@/zustand/hooks';
 
 
 const CompleteCheckOutPayment: React.FC = () => {
-  const { cartItems, cartCount, clearCart } = useCartItem()
+  const { cartItems, cartCount, clearCart} = useCart()
 
   const { order_record_id } = useParams();
 

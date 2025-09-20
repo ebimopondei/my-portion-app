@@ -6,9 +6,9 @@ import Footer from "@/components/Layout/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import useCartItem from "@/hooks/cart-provider"
 import { formatDate } from "@/lib/utils"
 import type { CartItem } from "@/types/cart"
+import { useCart } from "@/zustand/hooks"
 import { ArrowLeft, MapPin, Package, Scale, ShoppingCart } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
@@ -17,7 +17,7 @@ export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const [product, setProduct] = useState<any>(null)
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const { addToCart, cartTotal, cartCount } = useCartItem()
+  const { addToCart, cartTotal, cartCount } = useCart()
   const { getProductsById } = ProductApi()
 
   useEffect(() => {

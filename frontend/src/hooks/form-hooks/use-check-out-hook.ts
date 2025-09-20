@@ -7,11 +7,12 @@ import { checkOutSchema } from '@shared/validation/check-out-schema'
 import type { CheckOutSchema } from '@shared/validation/check-out-schema'
 import { useState } from "react";
 import CheckOutApi from "@/api/checkout/check-out-api";
-import useCartItem from "../cart-provider";
+import { useCart } from "@/zustand/hooks";
 
 export default function useCheckOut(){
 
-    const { cartItems } = useCartItem();
+    const { cartItems } = useCart()
+
 
     const { checkOut } = CheckOutApi();
     const navigate = useNavigate()

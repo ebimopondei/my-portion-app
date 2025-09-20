@@ -12,11 +12,11 @@ import ProductApi from "@/api/products/products-api"
 // import type { ProductSchema } from '@shared/validation/product-schema'
 
 import type { ProductAttribute } from '@shared/types/product'
-import useCartItem from "@/hooks/cart-provider"
 import type { CartItem } from "@/types/cart"
 import API from "@/api/api-config"
 import useAuth from "@/hooks/auth-provider"
 import Footer from "@/components/Layout/footer"
+import { useCart } from "@/zustand/hooks"
 
 
 
@@ -31,7 +31,7 @@ export default function DashboardPage() {
   const { getAllProducts } = ProductApi()
 
   const [searchQuery, setSearchQuery] = useState("")
-  const { addToCart, cartCount } = useCartItem()
+  const { addToCart, cartCount } = useCart()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   // Add cart state
   const [isCartOpen, setIsCartOpen] = useState(false)

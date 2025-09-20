@@ -3,13 +3,13 @@
 import { Plus, Minus, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
-import useCartItem from "@/hooks/cart-provider"
 import useAuth from "@/hooks/auth-provider"
 import { Link } from "react-router-dom"
+import { useCart } from "@/zustand/hooks"
 
 
 export function CartContent() {
-  const { cartItems, updateCartItemQuantity, removeFromCart } = useCartItem()
+  const { cartItems, updateCartItemQuantity, removeFromCart } = useCart()
   const { isLoggedIn } = useAuth()
 
 // @ts-expect-error
