@@ -6,7 +6,8 @@ import {
   Default,
   AllowNull,
   ForeignKey,
-  HasMany // Import HasMany for defining one-to-many relationships
+  HasMany, // Import HasMany for defining one-to-many relationships
+  BelongsTo
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
@@ -20,34 +21,6 @@ import { Status } from "../../../../shared/enums"; // Adjust path as necessary, 
 import { User } from './User'; // Assuming your User model is in './User.ts'
 import { Order } from './Order'; // Assuming your Order model is in './Order.ts'
 
-// Define an enum for QuantityUnit if you haven't already, for better type safety
-// If it's already in @shared/enums, then simply import it.
-// For demonstration, let's define it here if it's not yet an enum.
-// If it's a simple string literal type, you can use that directly too.
-/*
-export enum QuantityUnit {
-  Kg = 'Kg',
-  Pack = 'Pack',
-  Bunch = 'Bunch',
-  Tubers = 'Tubers',
-  Pieces = 'Pieces',
-  Bag = 'Bag',
-  Bucket = 'Bucket',
-  Congo = 'Congo',
-}
-*/
-// Assuming `QuantityUnit` is defined similar to `Status` in @shared/enums
-// For example:
-// export enum QuantityUnit {
-//   KG = 'Kg',
-//   PACK = 'Pack',
-//   BUNCH = 'Bunch',
-//   TUBERS = 'Tubers',
-//   PIECES = 'Pieces',
-//   BAG = 'Bag',
-//   BUCKET = 'Bucket',
-//   CONGO = 'Congo',
-// }
 
 
 @Table({
@@ -130,6 +103,9 @@ export class Product extends Model<ProductAttribute> implements ProductAttribute
   @AllowNull(false)
   @Column(DataTypes.STRING)
   declare location: string;
+
+  @BelongsTo(() => User, { foreignKey: 'seller_id', as: 'user' })
+  declare user?: User;
 
   // Define the one-to-many relationship using @HasMany
   // This replaces Product.hasMany(Order, { foreignKey: 'product_id' });

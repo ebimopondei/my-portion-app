@@ -16,94 +16,8 @@ import useCartItem from "@/hooks/cart-provider"
 import type { CartItem } from "@/types/cart"
 import API from "@/api/api-config"
 import useAuth from "@/hooks/auth-provider"
+import Footer from "@/components/Layout/footer"
 
-
-// const products = [
-//   {
-//     id: 1,
-//     name: "Premium Basmati Rice",
-//     vendor: "Lagos Wholesale Hub",
-//     price: 45000,
-//     originalPrice: 52000,
-//     unit: "50kg bag",
-//     rating: 4.8,
-//     reviews: 124,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: true,
-//     minOrder: 10,
-//     currentOrders: 7,
-//   },
-//   {
-//     id: 2,
-//     name: "Brown Beans (Oloyin)",
-//     vendor: "Kano Agro Supplies",
-//     price: 38000,
-//     originalPrice: 44000,
-//     unit: "50kg bag",
-//     rating: 4.6,
-//     reviews: 89,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: true,
-//     minOrder: 8,
-//     currentOrders: 8,
-//   },
-//   {
-//     id: 3,
-//     name: "Fresh Yam Tubers",
-//     vendor: "Benue Farm Direct",
-//     price: 25000,
-//     originalPrice: 30000,
-//     unit: "100kg",
-//     rating: 4.9,
-//     reviews: 156,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: false,
-//     minOrder: 5,
-//     currentOrders: 0,
-//   },
-//   {
-//     id: 4,
-//     name: "Sweet Plantain",
-//     vendor: "Cross River Farms",
-//     price: 15000,
-//     originalPrice: 18000,
-//     unit: "100 fingers",
-//     rating: 4.7,
-//     reviews: 92,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: true,
-//     minOrder: 6,
-//     currentOrders: 4,
-//   },
-//   {
-//     id: 5,
-//     name: "Fresh Tomatoes",
-//     vendor: "Kaduna Fresh Produce",
-//     price: 12000,
-//     originalPrice: 15000,
-//     unit: "50kg basket",
-//     rating: 4.5,
-//     reviews: 67,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: false,
-//     minOrder: 0,
-//     currentOrders: 0,
-//   },
-//   {
-//     id: 6,
-//     name: "Red Onions",
-//     vendor: "Sokoto Agro Hub",
-//     price: 20000,
-//     originalPrice: 24000,
-//     unit: "100kg bag",
-//     rating: 4.6,
-//     reviews: 78,
-//     image: "/placeholder.svg?height=200&width=300",
-//     groupBuying: true,
-//     minOrder: 12,
-//     currentOrders: 9,
-//   },
-// ]
 
 
 export default function DashboardPage() {
@@ -267,6 +181,8 @@ export default function DashboardPage() {
           </CustomTabsContent>
         </CustomTabs>
       </main>
+
+      <Footer />
 
       {/* City Selection Modal */}
       <CitySelectionModal
