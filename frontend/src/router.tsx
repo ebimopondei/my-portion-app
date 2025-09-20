@@ -17,6 +17,8 @@ import DashboardNotificationPage from "./pages/vendor/notification";
 import DashboardProfilePage from "./pages/vendor/profile-view";
 import DashboardWalletPage from "./pages/vendor/wallet";
 import DashboardOrdersPage from "./pages/vendor/orders";
+import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
+import AdminDashboardPage from "./pages/admin";
 
 const AppRouter = () => (
   
@@ -43,6 +45,12 @@ const AppRouter = () => (
                 <Route path="wallet" element={<DashboardWalletPage />} />
                 <Route path="profile" element={<DashboardProfilePage />} />
                 <Route path="notification" element={<DashboardNotificationPage />} />
+              </Route>
+            </Route>
+
+            <Route path="/admin">
+              <Route element={<AdminDashboardLayout></AdminDashboardLayout>}>
+                <Route path="" element={<AdminDashboardPage />} />
               </Route>
             </Route>
           </Route>
