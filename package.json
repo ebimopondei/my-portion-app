@@ -40,7 +40,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "dayjs": "^1.11.18",
-    "react-chartjs-2": "^5.3.0"
+    
   }
 }

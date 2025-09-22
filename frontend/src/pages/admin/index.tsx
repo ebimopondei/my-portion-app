@@ -33,7 +33,7 @@ const gmvOptions: ChartOptions<'line'> = {
       ticks: {
         color: '#475569',
         font: { size: 11 },
-        callback: (value) => '₦' + Intl.NumberFormat('en-NG', { notation: 'compact' }).format(Number(value)),
+        callback: (value: string | number) => '₦' + Intl.NumberFormat('en-NG', { notation: 'compact' }).format(Number(value)),
       },
     },
   },
