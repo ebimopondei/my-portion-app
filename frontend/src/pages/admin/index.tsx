@@ -1,7 +1,9 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, type ChartData, type ChartOptions } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
 import KpiCard from '@/components/cards/kpi-card';
+import { useCartStore } from '@/zustand/store';
+
 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
@@ -64,11 +66,40 @@ const categoryOptions: ChartOptions<'doughnut'> = {
 
 export default function AdminDashboardPage() {
   const [dateRange, setDateRange] = useState<string>('monthly');
+  const { stats, fetchDashboardStats } = useCartStore()
+  console.log(stats)
+
+  useEffect(()=>{
+    fetchDashboardStats()
+  }, [])
 
   const handleDateRangeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setDateRange(e.target.value);
     // In a real application, you would fetch new data here based on the selected range.
   };
+
+  const KpiStats = [
+    {
+      title: "Total Product",
+      amount: stats.total_product_count,
+      descriptpion: ""
+    },
+    {
+      title: "Total Order",
+      amount: stats.total_order_count,
+      descriptpion: ""
+    },
+    {
+      title: "Active Users",
+      amount: stats.total_user_count,
+      descriptpion: ""
+    },
+    {
+      title: "Total Users",
+      amount: stats.total_user_count,
+      descriptpion: ""
+    },
+  ]
 
   return (
     <main className="lg:pl-72">
@@ -90,10 +121,13 @@ export default function AdminDashboardPage() {
           </select>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
-          <KpiCard title="Total GMV" value="₦4.5M" description="3.4% vs last month" />
-          <KpiCard title="Total Orders" value="1,245" description="0.6% vs last month" />
-          <KpiCard title="Active Users" value="230" description="12.1% vs last month" />
-          <KpiCard title="Average Order Value" value="₦4,500" description="0.1% vs last month" />
+          {
+            KpiStats.map((item, idx)=>{
+              return(
+                <KpiCard key={idx} title={item.title} value={item.amount} description={item.descriptpion} />
+              )
+            })
+          }
         </div>
         <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
           <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">

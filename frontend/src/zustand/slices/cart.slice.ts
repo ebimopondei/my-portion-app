@@ -31,7 +31,7 @@ export const createCartSlice: StateCreator<
             const updated = state.cartItems.filter((item) => item.id !== id);
             return {
               cartItems: updated,
-              cartCount: updated.reduce((acc, cur) => acc + (cur.quantity ?? 0), 0),
+              cartCount: updated.length,
               cartTotal: updated.reduce(
                 (acc, cur) => acc + (cur.price ?? 0) * (cur.quantity ?? 0),
                 0
@@ -45,7 +45,7 @@ export const createCartSlice: StateCreator<
 
           return {
             cartItems: updated,
-            cartCount: updated.reduce((acc, cur) => acc + (cur.quantity ?? 0), 0),
+            cartCount: updated.length,
             cartTotal: updated.reduce(
               (acc, cur) => acc + (cur.price ?? 0) * (cur.quantity ?? 0),
               0
@@ -67,7 +67,7 @@ export const createCartSlice: StateCreator<
 
       return {
         cartItems: filtered,
-        cartCount: filtered.reduce((acc, cur) => acc + (cur.quantity ?? 0), 0),
+        cartCount: filtered.length,
         cartTotal: filtered.reduce(
           (acc, cur) => acc + (cur.price ?? 0) * (cur.quantity ?? 0),
           0
@@ -98,7 +98,7 @@ export const createCartSlice: StateCreator<
 
       return {
         cartItems: updated,
-        cartCount: updated.reduce((acc, cur) => acc + (cur.quantity ?? 0), 0),
+        cartCount: updated.length,
         cartTotal: updated.reduce(
           (acc, cur) => acc + (cur.price ?? 0) * (cur.quantity ?? 0),
           0

@@ -1,10 +1,7 @@
-import API from "../../api-config";
+import { apiPrivate } from "@/api/temp-config";
 import type { VendorKycSchema } from '@shared/validation/vendor-kyc-schema'
 
 export default function KycApi (){
-
-    const { apiPrivate } = API();
-
 
     
     const getKycDetails= async ( ) =>{

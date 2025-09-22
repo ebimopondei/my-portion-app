@@ -2,14 +2,13 @@ import { Roles } from '@shared/enums/index';
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import useAuth from './auth-provider';
-import API from '@/api/api-config';
+import { apiPrivate } from '@/api/temp-config';
 
 
 const ProtectedRoutes = () => {
     const navigate  = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const { apiPrivate } = API();
     const {token, isLoading, role, setUser, refreshUser } = useAuth();
     
     useEffect(()=>{

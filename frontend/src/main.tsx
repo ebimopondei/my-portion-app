@@ -4,7 +4,6 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './router.tsx'
 import { AuthProvider } from './hooks/auth-provider.tsx'
-import { CartProvider } from './hooks/cart-provider.tsx'
 import { Toaster } from 'react-hot-toast'
 
 
@@ -13,9 +12,7 @@ createRoot(document.getElementById('root')!).render(
     <Toaster />
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <AppRouter />
-        </CartProvider>
+        <AppRouter />
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

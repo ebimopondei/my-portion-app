@@ -1,9 +1,6 @@
-import API from "../../api-config";
+import { apiPrivate } from "@/api/temp-config";
 
 export default function OrderRecordApi (){
-
-    const { apiPrivate } = API();
-
 
     
     const getOrderRecord= async ( ) =>{

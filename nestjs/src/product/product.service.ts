@@ -13,6 +13,7 @@ import { User } from 'src/database/models/User';
 @Injectable()
 export class ProductService {
 
+    
     constructor ( private readonly cloudinary: CloudinaryService, private readonly sequelize: Sequelize ) {}
 
     async getProductByFilter( state: string, limit: number, page: number) {
@@ -29,7 +30,8 @@ export class ProductService {
             where: whereClause,
             order: [["createdAt", "DESC"]],
             offset: Number(start),
-            limit: Number(limit)
+            limit: Number(limit),
+            include:[User]
         });
 
         const totalPages = Math.ceil(productCount / Number(limit));

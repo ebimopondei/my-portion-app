@@ -9,15 +9,13 @@ import { CartSlide } from "../components/home/cart-slide"
 import CitySelectionModal from "../components/home/city-selection-modal"
 import ProductApi from "@/api/products/products-api"
 
-// import type { ProductSchema } from '@shared/validation/product-schema'
 
 import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
-import API from "@/api/api-config"
 import useAuth from "@/hooks/auth-provider"
 import Footer from "@/components/Layout/footer"
 import { useCart } from "@/zustand/hooks"
-
+import { apiPrivate } from "@/api/temp-config"
 
 
 export default function DashboardPage() {
@@ -87,17 +85,13 @@ export default function DashboardPage() {
 
   }, [])
 
-  const { apiPrivate } = API();
   const { setUser, refreshUser, isLoggedIn } = useAuth()
 
   useEffect( ()=>{
 
-        
-
         const handleGetUser = async () => {
             const user = await apiPrivate.get('/user')
             setUser(user.data.data)
-            console.log(user.data)
 
         }
 

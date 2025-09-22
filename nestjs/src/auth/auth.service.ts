@@ -55,6 +55,9 @@ export class AuthService {
 
   async login(loginDto: loginUserDto): Promise<loginResponse> {
 
+    const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
+    const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
+
     const user = await this.userModel.findOne({ where: { email: loginDto.email } });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -68,14 +71,14 @@ export class AuthService {
       ip: '127.0.0.1',
       useragent: { os: 'Windowns', browser: 'Unknown', version: 'Unknown', platform: 'Unknown' } 
     });
-    const token = sign(user.toJSON(), 'jwt_secret', { expiresIn: '1h' });
-    const refreshToken = sign(user.toJSON(), "jwt_secret_refresh", { expiresIn: '1d' });
+    const token = sign(user.toJSON(), jwtSecret, { expiresIn: '1h' });
+    const refreshToken = sign(user.toJSON(), jwtSecretRefresh, { expiresIn: '1d' });
     return { success: true, data: { token, refreshToken, user }, message: "Login Successful" };
   }
 
   async refreshToken(token: string): Promise<refreshTokenResponse> {
-    const jwtSecret = this.configService.get('ACCESSTOKENSECRET'); // Use env var in production
-    const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET'); // Use env var in production
+    const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
+    const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
     
     console.log('Refresh token:', token);
     if (!token) {

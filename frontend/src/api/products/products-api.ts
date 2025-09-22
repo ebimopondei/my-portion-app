@@ -1,9 +1,8 @@
-import API from "../api-config";
 import type { ProductSchema } from '@shared/validation/product-schema'
+import { api, apiPrivate } from "../temp-config";
 
 export default function ProductApi (){
 
-    const { api, apiPrivate } = API();  
     const getProducts= async (page:number=1, limit:number=10) =>{
         try {
             const res = await apiPrivate.get( `/product`, { params: { page, limit}} );

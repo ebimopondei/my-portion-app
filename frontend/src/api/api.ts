@@ -1,11 +1,10 @@
 import type { LoginResponse, RefreshTokenResponse, SignupResponse } from "@/types/api-response-type";
-import API from "./api-config";
 import type { SignUpFormData } from '@shared/validation/createUserDTO'
 import type { LoginSchema } from '@shared/validation/loginUserDTO'
+import { api } from "./temp-config";
 
 export default function APICalls (){
 
-    const { api } = API();
 
     const login= async ({ email, password}: Partial<LoginSchema>):Promise<LoginResponse> =>{
         try {

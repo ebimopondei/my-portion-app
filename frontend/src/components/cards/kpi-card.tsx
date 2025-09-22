@@ -1,6 +1,6 @@
 interface KpiCardProps {
   title: string;
-  value: string;
+  value: number;
   description: string;
 }
 

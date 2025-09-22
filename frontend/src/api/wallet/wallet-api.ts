@@ -1,8 +1,7 @@
-import API from "../api-config";
+import { apiPrivate } from "../temp-config";
 
 export default function WalletApi (){
 
-    const { apiPrivate } = API();  
 
     const getWalletBalance = async () =>{
         try {
