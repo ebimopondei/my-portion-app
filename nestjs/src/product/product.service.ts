@@ -4,25 +4,20 @@ import { CreateProductDTO } from '@shared/validation/product-schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { Product } from 'src/database/models/Product';
 import fs  from 'fs'
-import { success } from 'zod';
-import { getSequelizeConfig } from 'src/database/setup';
 import { Sequelize } from 'sequelize-typescript';
 import { OrderRecord } from 'src/database/models/order-record';
 import { Order } from 'src/database/models/Order';
+import { User } from 'src/database/models/User';
 
 
 @Injectable()
 export class ProductService {
 
+    
     constructor ( private readonly cloudinary: CloudinaryService, private readonly sequelize: Sequelize ) {}
 
-    // Define methods for product-related operations here
-    // For example:
-    // getAllProducts(), getProductById(id: string), addProduct(productDto: CreateProductDto), etc.
-    
     async getProductByFilter( state: string, limit: number, page: number) {
         const whereClause: Partial<Product> = {};
-
 
         if (state) {
             whereClause.location = state.toString().toLocaleLowerCase();
@@ -35,7 +30,8 @@ export class ProductService {
             where: whereClause,
             order: [["createdAt", "DESC"]],
             offset: Number(start),
-            limit: Number(limit)
+            limit: Number(limit),
+            include:[User]
         });
 
         const totalPages = Math.ceil(productCount / Number(limit));
@@ -104,7 +100,7 @@ export class ProductService {
     }
     
     async getProductById(id: string) {
-        const product = await Product.findOne({ where: { id } });
+        const product = await Product.findOne({ where: { id }, include: [User] });
 
         return {
             success: true,

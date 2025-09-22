@@ -1,6 +1,5 @@
 import {  createContext, useContext, useEffect, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
-import useCookie from "./use-cookie";
 import type { Props } from "@/types";
 import type { loginProps } from "@/types/api-response-type";
 import type { UserAttributes } from '@shared/types/user'
@@ -48,7 +47,6 @@ export default function useAuth(){
 
 export function AuthProvider({children}: Props){
     
-    const { getCookie, setCookie, resetItem} = useCookie();
     const [ refreshUser, setRefreshUser ] = useState<UserAttributes | null >(null);
     const [ role, setRole] = useState<string>('');
     const [ user, setUser ] = useState<UserAttributes | null>(null);
@@ -61,11 +59,8 @@ export function AuthProvider({children}: Props){
         setToken(token);
         setRefreshToken(refreshToken);
         setIsLoggedIn(true);
-        setCookie('token', JSON.stringify(token) );
-        setCookie('user', JSON.stringify(user) );
-        setCookie('refreshToken', JSON.stringify(refreshToken) );
-        setCookie('isLoggedIn', JSON.stringify(true) );
-        setCookie('role', JSON.stringify(user?.role) );
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", refreshToken);
         setRole(String(user?.role))
         setUser(user)
 
@@ -75,69 +70,22 @@ export function AuthProvider({children}: Props){
         setToken('');
         setRefreshToken(''); 
         setIsLoggedIn(false);
-        resetItem("token");
-        resetItem("user");
-        resetItem("refreshToken");
-        resetItem('isLoggedIn');
-        resetItem("role");
         setRole('')
         setUser(null);
     }
-
-    
-
-    useEffect( ()=>{
-
-        // if(isLoading) return; 
-
-        // Comment out the auth-check since the endpoint doesn't exist yet
-        // async function checkAuth(){
-        //     await apiPrivate.post('/auth/auth-check', { token })
-        //     .then((res)=>{
-        //         setIsLoggedIn(res.data.isAuthenticated);
-        //     })
-        //     .finally( ()=> setIsLoading(false))
-        // }
-        // checkAuth();
-        
-        // For now, just set loading to false
-        // setIsLoading(false);
-
-    },[isLoading])
 
 
     useEffect(()=>{
         setIsLoading(true)
 
-        if(getCookie('token')){
-            const temp = getCookie('token');
-            setToken(JSON.parse(temp));
-        }
-        
-        // if(getCookie('user')){
-        //     const temp = getCookie('user');
-        //     setUser(JSON.parse(temp));
-        // }
-        
-        if(getCookie('isLoggedIn')){
-            const temp =  String(getCookie('isLoggedIn'));
-            const token  = JSON.parse(temp);
-            setIsLoggedIn(Boolean(token));
-        }
+        const token = localStorage.getItem('token') || ''
 
-        if(getCookie('refreshToken')){
-            const temp =  getCookie('refreshToken');
-            setRefreshToken(JSON.parse(temp));
+        if(token){
+            setToken(token)
         }
-        
-        if(getCookie('role')){
-            const temp =  getCookie('role');
-            setRole(JSON.parse(temp));
-        }
-
         setIsLoading(false)
-    },[])
 
+    },[])
     //return early if auth provider not fully loaded.
     if(isLoading) return; 
 

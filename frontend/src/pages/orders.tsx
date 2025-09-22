@@ -2,11 +2,11 @@ import { useState } from "react"
 import { Navbar } from "../components/home/navbar"
 import { SlideMenu } from "../components/home/slide-menu"
 import { CartSlide } from "../components/home/cart-slide"
-import useCartItem from "@/hooks/cart-provider"
+import { useCart } from "@/zustand/hooks"
 
 export default function OrdersPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const { cartCount } = useCartItem()
+  const { cartCount } = useCart()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 

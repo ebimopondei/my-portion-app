@@ -17,6 +17,8 @@ import DashboardNotificationPage from "./pages/vendor/notification";
 import DashboardProfilePage from "./pages/vendor/profile-view";
 import DashboardWalletPage from "./pages/vendor/wallet";
 import DashboardOrdersPage from "./pages/vendor/orders";
+import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
+import AdminDashboardPage from "./pages/admin";
 
 const AppRouter = () => (
   
@@ -33,15 +35,23 @@ const AppRouter = () => (
           <Route path="/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
 
           <Route element={<ProtectedRoutes />}>
-            <Route path="/dashboard/kyc" element={<KYCPage />} />
-            <Route path="/dashboard" element={<VendorDashboardLayout></VendorDashboardLayout>}>
-              <Route path="" element={<DashboardPage />} />
-              <Route path="overview" element={<DashboardPage />} />
-              <Route path="products" element={<VendorProductsPage />} />
-              <Route path="orders" element={<DashboardOrdersPage />} />
-              <Route path="wallet" element={<DashboardWalletPage />} />
-              <Route path="profile" element={<DashboardProfilePage />} />
-              <Route path="notification" element={<DashboardNotificationPage />} />
+            <Route path="/dashboard" >
+              <Route path="kyc" element={<KYCPage />} />
+              <Route element={<VendorDashboardLayout></VendorDashboardLayout>}>
+                <Route path="" element={<DashboardPage />} />
+                <Route path="overview" element={<DashboardPage />} />
+                <Route path="products" element={<VendorProductsPage />} />
+                <Route path="orders" element={<DashboardOrdersPage />} />
+                <Route path="wallet" element={<DashboardWalletPage />} />
+                <Route path="profile" element={<DashboardProfilePage />} />
+                <Route path="notification" element={<DashboardNotificationPage />} />
+              </Route>
+            </Route>
+
+            <Route path="/admin">
+              <Route element={<AdminDashboardLayout></AdminDashboardLayout>}>
+                <Route path="" element={<AdminDashboardPage />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

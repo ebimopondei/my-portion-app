@@ -4,10 +4,13 @@ import Logo from "../shared/Logo"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
+import useAuth from "@/hooks/auth-provider"
 
 const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
+
+  const { logoutAuth } = useAuth()
   
   const navItems: NavItem[] = [
     { id: 'dashboard', url: "", label: 'Overview', icon: TrendingUp },
@@ -56,7 +59,7 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
               )
             })}
             <button 
-              onClick={() =>{}}
+              onClick={()=>logoutAuth()}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors`}
             >
               <LogOut size={18} />
@@ -112,7 +115,7 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
                   {navItems.map(item => {
                     const Icon = item.icon
                     return (
-                      <button
+                      <Link to={item.url}
                         key={item.id}
                         onClick={() => handleNavItemClick(item.id)}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
@@ -130,9 +133,16 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
                             {notificationCount}
                           </span>
                         )}
-                      </button>
+                      </Link>
                     )
                   })}
+                  <button 
+                    onClick={()=>logoutAuth()}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
                 </div>
               </motion.div>
             )}

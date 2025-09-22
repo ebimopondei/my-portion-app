@@ -1,10 +1,8 @@
 import type { CheckOutSchema } from "@shared/validation/check-out-schema";
-import API from "../api-config";
 import type { CartItem } from "@/types/cart";
+import { apiPrivate } from "../temp-config";
 
 export default function CheckOutApi (){
-
-    const { apiPrivate } = API();
 
 
     const completeCheckOut= async ( id:string ) =>{

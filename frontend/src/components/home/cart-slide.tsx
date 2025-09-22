@@ -3,8 +3,8 @@
 import { X, ShoppingBag } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
-import useCartItem from "@/hooks/cart-provider"
 import { CartContent } from "./cart-content"
+import { useCart } from "@/zustand/hooks"
 
 
 interface CartSlideProps {
@@ -13,7 +13,7 @@ interface CartSlideProps {
 }
 
 export function CartSlide({ isOpen, onClose }: CartSlideProps) {
-  const { cartItems } = useCartItem()
+  const { cartItems } = useCart()
 
 // @ts-expect-error
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)

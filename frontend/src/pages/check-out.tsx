@@ -10,15 +10,15 @@ import { SlideMenu } from "../components/home/slide-menu"
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Truck, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import useCartItem from '@/hooks/cart-provider';
 import { CartSlide } from "../components/home/cart-slide"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import useCheckOut from '@/hooks/form-hooks/use-check-out-hook';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useCart } from '@/zustand/hooks';
 
 
 const Checkout: React.FC = () => {
-  const { cartItems, cartCount } = useCartItem()
+  const { cartItems, cartCount} = useCart()
     
   const navigate = useNavigate();
   

@@ -17,6 +17,9 @@ import { VendorController } from './vendor/vendor.controller';
 import { MailerModule } from './mailer/mailer.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WalletController } from './wallet/wallet.controller';
+import { AdminDashboardService } from './admin-dashboard/admin-dashboard.service';
+import { AdminDashboardController } from './admin-dashboard/admin-dashboard.controller';
+import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
 
 @Module({
   imports: [
@@ -31,9 +34,11 @@ import { WalletController } from './wallet/wallet.controller';
     OrderModule,
     VendorModule,
     MailerModule,
-    WalletModule
+    WalletModule,
+    AdminDashboardModule
   ],
-  providers: [LoggerService]
+  providers: [LoggerService, AdminDashboardService],
+  controllers: [AdminDashboardController]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -41,7 +46,7 @@ export class AppModule implements NestModule {
       .apply(VerifyJwtMiddleware)
       .exclude( { path: 'v1/product/all', method: RequestMethod.GET })
       .exclude( { path: 'v1/product/:id', method: RequestMethod.GET })
-      .forRoutes(ProductController, VendorController, OrderController, WalletController, UserController);
+      .forRoutes(ProductController, AdminDashboardController, VendorController, OrderController, WalletController, UserController);
     consumer
     .apply(LoggerMiddleware)
     .forRoutes(UserController, VendorController, OrderController, ProductController);
