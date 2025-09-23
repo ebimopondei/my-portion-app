@@ -1,1 +1,0 @@
-export { authCheck, loginController, refreshTokenController, signupController} from './auth.controller'

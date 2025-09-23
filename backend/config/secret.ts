@@ -1,7 +1,0 @@
-const SECRET = process.env.ACCESSTOKENSECRET;
-const REFRESHSECRET = process.env.REFRESHTOKENSECRET;
-
-export {
-    SECRET,
-    REFRESHSECRET
-}
