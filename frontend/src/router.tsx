@@ -19,6 +19,7 @@ import DashboardWalletPage from "./pages/vendor/wallet";
 import DashboardOrdersPage from "./pages/vendor/orders";
 import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
 import AdminDashboardPage from "./pages/admin";
+import AdminOrdersPage from "./pages/admin/orders";
 
 const AppRouter = () => (
   
@@ -51,6 +52,7 @@ const AppRouter = () => (
             <Route path="/admin">
               <Route element={<AdminDashboardLayout></AdminDashboardLayout>}>
                 <Route path="" element={<AdminDashboardPage />} />
+                <Route path="orders" element={<AdminOrdersPage />} />
               </Route>
             </Route>
           </Route>
