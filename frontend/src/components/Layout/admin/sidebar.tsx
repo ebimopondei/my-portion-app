@@ -1,4 +1,4 @@
-import { X, LayoutDashboard, ShoppingBag,LineChart, Store, Boxes, Users, Wallet, ShieldCheck, Settings2 } from 'lucide-react';
+import { X, LayoutDashboard, ShoppingBag,LineChart, Store, Boxes, Wallet, Settings2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface SidebarProps {

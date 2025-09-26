@@ -3,12 +3,14 @@ import type { StateCreator } from "zustand";
 
 
 export interface Stats {
-    user_count: number,
+    active_user_count: number,
     total_user_count: number,
-    vendor_count: number,
+    active_vendor_count: number,
     total_vendor_count: number,
     total_product_count: number,
-    total_order_count: number
+    total_order_count: number,
+    all_users_count: number,
+    all_vendors_count: number
 }
 export interface dashboardState {
     loading: boolean,
@@ -27,12 +29,14 @@ dashboardState
     return (
         {
     stats: {
-        total_order_count: 0,
-        total_product_count: 0,
+        active_user_count: 0,
         total_user_count: 0,
+        active_vendor_count: 0,
         total_vendor_count: 0,
-        user_count: 0,
-        vendor_count: 0
+        total_product_count: 0,
+        total_order_count: 0,
+        all_users_count: 0,
+        all_vendors_count: 0,
     },
     loading: false,
     error: null,

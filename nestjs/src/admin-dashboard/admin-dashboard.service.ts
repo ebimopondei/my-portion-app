@@ -7,26 +7,39 @@ import { User } from 'src/database/models/User';
 export class AdminDashboardService {
 
     async getDashboardStats() {
-        const user_count = await User.count( { where: { role: 'user' }, paranoid: true})
-        const total_user_count = await User.count( { where: { role: 'user' }, paranoid: false})
-        const vendor_count = await User.count( { where: { role: 'vendor' }, paranoid: true})
-        const total_vendor_count = await User.count( { where: { role: 'vendor' }, paranoid: false})
-        const total_product_count = await Product.count( )
-        const total_order_count = await Order.count( )
-
-        const data = {
-            user_count,
+        const [
+            active_user_count,
             total_user_count,
-            vendor_count,
+            active_vendor_count,
             total_vendor_count,
             total_product_count,
             total_order_count,
-        }
-
+            all_users_count, 
+            all_vendors_count
+        ] = await Promise.all([
+            User.count({ where: { role: 'user', email_verified: true }, paranoid: true }),
+            User.count({ where: { role: 'user' }, paranoid: false }),
+            User.count({ where: { role: 'vendor', kyc_verified: true }, paranoid: true }),
+            User.count({ where: { role: 'vendor' }, paranoid: false }),
+            Product.count(),
+            Order.count(),
+            User.count({ where: { role: "user"}}),
+            User.count({ where: { role: "vendor"}})
+        ]);
+        
         return {
             success: true,
-            data,
-            message: "Products found!"
+            data: {
+                active_user_count,
+                total_user_count,
+                active_vendor_count,
+                total_vendor_count,
+                total_product_count,
+                total_order_count,
+                all_users_count, 
+                all_vendors_count
+            },
+            message: "Stats found!"
         };
     
     }

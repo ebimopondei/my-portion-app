@@ -91,12 +91,22 @@ export default function AdminDashboardPage() {
     },
     {
       title: "Active Users",
-      amount: stats.total_user_count,
+      amount: stats.active_user_count,
       descriptpion: ""
     },
     {
       title: "Total Users",
       amount: stats.total_user_count,
+      descriptpion: ""
+    },
+    {
+      title: "Verified Vendors",
+      amount: stats.active_vendor_count,
+      descriptpion: ""
+    },
+    {
+      title: "Total Vendors",
+      amount: stats.total_vendor_count,
       descriptpion: ""
     },
   ]
