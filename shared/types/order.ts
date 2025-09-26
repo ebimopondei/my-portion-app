@@ -1,4 +1,6 @@
 import { Status } from "../enums";
+import { type ProductAttribute } from "./product";
+import { type UserAttributes } from "./user";
 
 export interface OrderAttribute {
     id?: string;
@@ -12,4 +14,12 @@ export interface OrderAttribute {
     updatedAt?: Date;
     deletedAt?: Date,
     createdAt?: Date,
+}
+
+export type OrderwithProduct = OrderAttribute & {
+    product: ProductAttribute
+}
+
+export type OrderWithProductAndUser = OrderwithProduct & {
+    user: UserAttributes
 }

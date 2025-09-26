@@ -1,4 +1,5 @@
-import { X, LayoutDashboard, ShoppingBag,LineChart, Store, Boxes, Users, Wallet, ShieldCheck, Settings2 } from 'lucide-react';
+import { X, LayoutDashboard, ShoppingBag,LineChart, Store, Boxes, Wallet, Settings2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -12,46 +13,36 @@ const overview = [
         icon: <LayoutDashboard className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
     {
-        url: "",
+        url: "orders",
         title: "Orders",
         icon: <ShoppingBag className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
     {
-        url: "",
-        title: "Merchants",
+        url: "vendors",
+        title: "Vendors",
         icon: <Store className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
     {
-        url: "",
+        url: "products",
         title: "Products",
         icon: <Boxes className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
-    {
-        url: "",
-        title: "Customers",
-        icon: <Users className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
-    }
 ]
 
 const finance = [
     
     {
-        url: "",
+        url: "payouts",
         title: "Payouts",
         icon: <Wallet className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
     {
-        url: "",
+        url: "reports",
         title: "Reports",
         icon: <LineChart className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
     {
-        url: "",
-        title: "Moderation",
-        icon: <ShieldCheck className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
-    },
-    {
-        url: "",
+        url: "finance-settings",
         title: "Settings",
         icon: <Settings2 className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
@@ -59,12 +50,7 @@ const finance = [
 
 const system = [
     {
-        url: "",
-        title: "Moderation",
-        icon: <ShieldCheck className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
-    },
-    {
-        url: "",
+        url: "settings",
         title: "Settings",
         icon: <Settings2 className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" />
     },
@@ -100,8 +86,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {overview.map( (item, id)=>{
                     return (
                         <li key={id}>
-                            <a
-                                href={item.url}
+                            <Link
+                                to={`${item.url}`}
+                                onClick={onClose}
                                 className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100/60"
                             >
                                 <div className="rounded-md p-1.5 group-hover:bg-slate-100">
@@ -109,7 +96,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 {/* <FileText className="h-5 w-5 stroke-2 text-slate-400 group-hover:text-slate-500" /> */}
                                 </div>
                                 <span className="text-slate-700 group-hover:text-slate-900">{item.title}</span>
-                            </a>
+                            </Link>
                         </li>
                     )
                 })}

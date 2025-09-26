@@ -8,13 +8,12 @@ const ProtectedRoutes = () => {
     const navigate  = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const { isLoading, role } = useAuthStore();
-    const { token } = useAuthStore()
+    const { isLoading, role, token } = useAuthStore();
     
     useEffect(()=>{
 
         if(!isLoading && token !== "" && role !== ''){
-            if (role ==  Roles.ADMIN || role == Roles.SUBADMIN && !pathName.includes('/admin')){
+            if ((role ==  Roles.ADMIN || role == Roles.SUBADMIN) && !pathName.includes('/admin')){
                 navigate('/admin');
             }
             
