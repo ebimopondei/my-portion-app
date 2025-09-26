@@ -11,10 +11,8 @@ import CitySelectionModal from "../components/home/city-selection-modal"
 
 import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
-import useAuth from "@/hooks/auth-provider"
 import Footer from "@/components/Layout/footer"
 import { useCart } from "@/zustand/hooks"
-import { apiPrivate } from "@/api/temp-config"
 import { useProduct } from "@/zustand/hooks/products"
 
 export default function DashboardPage() {
@@ -70,22 +68,6 @@ export default function DashboardPage() {
     }
   }, [])
 
-  const { setUser, refreshUser, isLoggedIn } = useAuth()
-
-  useEffect( ()=>{
-
-        const handleGetUser = async () => {
-            const user = await apiPrivate.get('/user')
-            setUser(user.data.data)
-
-        }
-
-        if(isLoggedIn){
-          handleGetUser()
-        }
-
-
-    },[refreshUser])
 
   return (
     <div className="min-h-screen bg-gray-50">

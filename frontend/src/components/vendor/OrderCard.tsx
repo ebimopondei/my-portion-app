@@ -19,6 +19,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
   }
 
   const handleMarkCustomerDelivered = (customerId: string) => {
+    console.log(customerId)
     
     onMarkDelivered(Number(order?.id))
   }

@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {  
   VendorHeader, 
   ProductsContent,
   AddProductModal,
 } from "../../components/vendor"
 import type {  ProductAttribute } from "@shared/types/product";
-import ProductApi from "@/api/products/products-api";
-import useAuth from "@/hooks/auth-provider";
+import { useProduct } from "@/zustand/hooks/products";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function VendorProductsPage() {
 
-  const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
+  const { data } = useProduct()
 
-  const { getProducts } = ProductApi()
+  const vendorProducts = data.products
 
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
 
@@ -35,17 +35,8 @@ export default function VendorProductsPage() {
     console.log('Save draft:', productData)
   }
 
-  useEffect(()=>{
-    async function handleFetchProducts(){
-      const response = await getProducts();
-      setVendorProducts(response.data.product)
 
-    }
-
-    handleFetchProducts()
-  }, [])
-
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50">

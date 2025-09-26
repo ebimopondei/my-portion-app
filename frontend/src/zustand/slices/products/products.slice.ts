@@ -1,12 +1,14 @@
 import { api, apiPrivate } from "@/api/temp-config";
 import type { ProductWithuser } from "@shared/types/product";
 import type { ProductSchema } from "@shared/validation/product-schema";
+import toast from "react-hot-toast";
 import type { StateCreator } from "zustand";
 
 export interface ProductState {
     loading: boolean,
     error: string | null,
     products: ProductWithuser[],
+    vendor_products: ProductWithuser[],
     selectedProduct: ProductWithuser | null,
 
     clearSelectedProduct: () => void,
@@ -28,13 +30,14 @@ return{
         loading: true,
         error: null,
         products: [],
+        vendor_products: [],
         selectedProduct: null,
 
         getProducts: async (page:number=1, limit:number=10) =>{
             set({ loading: true, error: null})
             try {
                 const res = await apiPrivate.get( `/product`, { params: { page, limit}} );
-                set({ products: res.data.data.product, loading: false })
+                set({ vendor_products: res.data.data.product, loading: false })
 
             }catch(err:any){
                 if (err.response) {
@@ -50,7 +53,6 @@ return{
             try {
                 const res = await api.get( `/product/${id}`, );
                 set({ selectedProduct: res.data.data, loading: false })
-    console.log(res)
             }catch(err:any){
                if (err.response) {
                     set({ error: err.response.data.message, loading: false })
@@ -84,9 +86,10 @@ return{
         createProduct: async (product: ProductSchema) =>{
             set({ loading: true, error: null})
             try {
-                const res = await api.postForm( `/product/`, {
+                const res = await apiPrivate.postForm( `/product/`, {
                     ...product
                 } );
+                toast.success(res?.data.message);
                 set((state) => ({ products: [...state.products, res.data.data.product], loading: false }))
 
             }catch(err:any){

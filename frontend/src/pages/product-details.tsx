@@ -1,6 +1,7 @@
 import { CartContent } from "@/components/home/cart-content"
 import { CartSlide } from "@/components/home/cart-slide"
 import { Navbar } from "@/components/home/navbar"
+import { SlideMenu } from "@/components/home/slide-menu"
 import Footer from "@/components/Layout/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,6 +19,7 @@ export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { getProductsById, clearSelectedProduct } = useProductStore()
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { addToCart, cartTotal, cartCount } = useCart()
   const { data } = useProduct()
 
@@ -59,9 +61,10 @@ export default function ProductDetailPage() {
         searchQuery=""
         setSearchQuery={() => {}}
         cartItems={cartCount}
-        onMenuClick={() => {}}
+        onMenuClick={() => { setIsMenuOpen(true)}}
         onCartClick={() => setIsCartOpen(true)}
       />
+      <SlideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />   
       <CartSlide isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     
       <div className="min-h-screen bg-background  md:px-10">

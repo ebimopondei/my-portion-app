@@ -7,22 +7,23 @@ import {
   dashboardStats,
 } from "../../components/vendor"
 import type { ProductAttribute } from "@shared/types/product";
-import ProductApi from "@/api/products/products-api";
-import useAuth from "@/hooks/auth-provider";
 import type { UserAttributes } from "@shared/types/user";
+import { useProduct } from "@/zustand/hooks/products";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardPage() {
 
-  const [ vendorProducts, setVendorProducts ] = useState<ProductAttribute[]>([]);
 
-  const { getProducts } = ProductApi()
+
+  const {  data } = useProduct()
 
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
   const [profileData] = useState<UserAttributes | null>(null)
   const [redirectToBankSection, setRedirectToBankSection] = useState(false)
 
+  const vendorProducts = data.products
 
   // Reset redirect flag when wallet tab is accessed normally
   useEffect(() => {
@@ -58,17 +59,8 @@ export default function DashboardPage() {
     // The WalletContent component will handle showing the bank account section
   }
 
-  useEffect(()=>{
-    async function handleFetchProducts(){
-      const response = await getProducts();
-      setVendorProducts(response.data.product)
 
-    }
-
-    handleFetchProducts()
-  }, [])
-
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
 
   return (

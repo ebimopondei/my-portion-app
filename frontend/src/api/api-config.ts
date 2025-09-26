@@ -1,4 +1,4 @@
-import useAuth from '@/hooks/auth-provider';
+import { useAuthStore } from '@/zustand/store';
 
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -9,7 +9,8 @@ const API = () => {
 
     const backendHost = import.meta.env.VITE_APIENDPOINT;
 
-    const { setToken, token, refreshToken, logoutAuth } = useAuth();
+    const { token, refreshToken, logoutAuth, setToken } = useAuthStore()
+
     const api = axios.create({ baseURL: backendHost });
     const apiPrivate = axios.create({ baseURL: backendHost, withCredentials: true });
     

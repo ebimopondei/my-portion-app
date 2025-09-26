@@ -3,14 +3,14 @@
 import { Plus, Minus, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
-import useAuth from "@/hooks/auth-provider"
 import { Link } from "react-router-dom"
 import { useCart } from "@/zustand/hooks"
+import { useAuthStore } from "@/zustand/store"
 
 
 export function CartContent() {
   const { cartItems, updateCartItemQuantity, removeFromCart } = useCart()
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn } = useAuthStore()
 
 // @ts-expect-error
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)

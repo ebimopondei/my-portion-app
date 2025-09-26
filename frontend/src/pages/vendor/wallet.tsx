@@ -4,8 +4,8 @@ import {
   WalletContent,
   AddProductModal,
 } from "../../components/vendor"
-import useAuth from "@/hooks/auth-provider";
 import type { UserAttributes } from "@shared/types/user";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardWalletPage() {
@@ -21,7 +21,7 @@ export default function DashboardWalletPage() {
     console.log('Withdraw funds:', amount)
   }
 
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50">

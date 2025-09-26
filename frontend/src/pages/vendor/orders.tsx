@@ -5,8 +5,8 @@ import {
   AddProductModal,
 } from "../../components/vendor"
 import type { ProductWithOrders } from "@shared/types/product";
-import useAuth from "@/hooks/auth-provider";
 import OrderRecordApi from "@/api/vendor/orderRecord";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardOrdersPage() {
@@ -23,7 +23,7 @@ export default function DashboardOrdersPage() {
     console.log('Save draft:', productData)
   }
   
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const { getOrderRecord } = OrderRecordApi()
   

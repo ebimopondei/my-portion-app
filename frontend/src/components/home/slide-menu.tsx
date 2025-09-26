@@ -1,8 +1,8 @@
 import { X, Package, Heart, Bell, LogOut } from "lucide-react"
 import { Button } from "../../components/ui/button"
-import useAuth from "@/hooks/auth-provider"
 import toast from "react-hot-toast"
 import { useNavigate, Link } from "react-router-dom"
+import { useAuthStore } from "@/zustand/store"
 
 interface SlideMenuProps {
   isOpen: boolean
@@ -10,7 +10,7 @@ interface SlideMenuProps {
 }
 
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
-  const { logoutAuth, isLoggedIn, user } = useAuth();
+  const { logoutAuth, isLoggedIn, user } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
