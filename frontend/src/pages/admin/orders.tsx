@@ -1,5 +1,9 @@
+import { formatDate } from "@/lib/utils";
+import { useAdminHook } from "@/zustand/hooks/admin";
 
 const AdminOrdersPage= () => {
+    const { data } = useAdminHook();
+    
   return (
     <main className="lg:pl-72">
       {/* Page title and filters */}
@@ -155,7 +159,9 @@ const AdminOrdersPage= () => {
                 </thead>
                 <tbody id="ordersTbody" className="align-middle">
                 {/* Static rows (can be replaced with dynamic data later) */}
-                <tr className="hover:bg-slate-50">
+                { data.orders.orders.map( (order, idx) => {
+                    return(
+                        <tr key={idx} className="hover:bg-slate-50">
                     <td className="py-3 border-b border-slate-100">
                     <div className="flex items-center">
                         <input type="checkbox" className="peer rowSelect sr-only" />
@@ -170,22 +176,24 @@ const AdminOrdersPage= () => {
                     <td className="py-3 border-b border-slate-100 font-medium">
                     #ORD-20983
                     </td>
-                    <td className="py-3 border-b border-slate-100">Adaeze U.</td>
-                    <td className="py-3 border-b border-slate-100">Rice (5kg)</td>
-                    <td className="py-3 border-b border-slate-100">3</td>
-                    <td className="py-3 border-b border-slate-100 font-medium">₦8,200</td>
+                    <td className="py-3 border-b border-slate-100">{order.user.firstname}</td>
+                    <td className="py-3 border-b border-slate-100">{order.product.name} ({order.product.portion_size}{order.product.quantity_unit})</td>
+                    <td className="py-3 border-b border-slate-100">{order.portion}</td>
+                    <td className="py-3 border-b border-slate-100 font-medium">₦{order.amount}</td>
                     <td className="py-3 border-b border-slate-100">
-                    <span className="px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 border border-green-300">
-                        Fulfilled
+                    <span className="px-2 py-1 capitalize rounded-md text-xs font-medium bg-green-100 text-green-700 border border-green-300">
+                        {order.status}
                     </span>
                     </td>
-                    <td className="py-3 border-b border-slate-100">Sep 21, 2025</td>
+                    <td className="py-3 border-b border-slate-100">{formatDate(String(order.createdAt), "DD MMM, YY hh:mm A")}</td>
                     <td className="py-3 border-b border-slate-100 text-right">
                     <button className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-200 hover:bg-slate-50 text-xs">
                         Details
                     </button>
                     </td>
                 </tr>
+                    )
+                })}
                 </tbody>
             </table>
             </div>

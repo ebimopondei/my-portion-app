@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Post, UploadedFiles, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UploadedFiles, UseInterceptors, UsePipes } from '@nestjs/common';
 import { VendorService } from './vendor.service';
 import { ParsedToken } from 'decorators';
 import { VendorKycDTO, vendorKycSchema } from '@shared/validation/vendor-kyc-schema';
 import { ZodValidationPipe } from 'pipes/zod-validation-pipe';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { OrderService } from 'src/order/order.service';
 
 @Controller('v1/vendor')
 export class VendorController {
-    constructor(private readonly vendorService: VendorService) {}
+    constructor(private readonly vendorService: VendorService, private readonly orderService: OrderService ) {}
 
     @Post('kyc')
     @UseInterceptors(FileFieldsInterceptor([
@@ -46,13 +47,11 @@ export class VendorController {
 
     @Get('order-record')
     getOrderRecord(
-        @ParsedToken() user: { id: string }
+        @ParsedToken() user: { id: string },
+        @Query('limit') limit: string,
+        @Query('page') page: string
     ) {
-        return this.vendorService.getOrderRecord(user.id);
+        return this.orderService.getProductOrderRecord(user.id, page, limit);
     }
-
-
-
-
 
 }

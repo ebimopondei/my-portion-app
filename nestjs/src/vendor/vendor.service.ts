@@ -3,8 +3,6 @@ import { KycBusiness } from 'src/database/models/KycBusiness';
 import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
 import { KycIdVerification } from 'src/database/models/KycIdVerification';
 import { KycPersonal } from 'src/database/models/KycPersonal';
-import { Order } from 'src/database/models/Order';
-import { Product } from 'src/database/models/Product';
 import { User } from 'src/database/models/User';
 
 import { kycDetails } from '@shared/types/kyc';
@@ -170,28 +168,6 @@ export class VendorService {
      kyc.business = business
      kyc.docs = docs
      kyc.id = id
-
-        
-    }
-
-    async getOrderRecord(seller_id: string) {
-        // Logic to retrieve order records for a vendor
-
-        console.log('Retrieving order records for seller:', seller_id);
-
-        const products = await Product.findAll({
-            where: {
-                seller_id
-            },
-            include: [{ model: Order, include: [User] }]
-        });
-
-        console.log('Products with orders:', products);
-
-
-        return { message: 'Order records retrieved', data: products };
-        
-
     }
 
 }

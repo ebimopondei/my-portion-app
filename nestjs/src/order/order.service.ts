@@ -2,23 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { Order } from 'src/database/models/Order';
 import { OrderRecord } from 'src/database/models/order-record';
 import { Product } from 'src/database/models/Product';
+import { User } from 'src/database/models/User';
 
 @Injectable()
 export class OrderService {
-    async getAllOrders( user_id:string, page: string, limit: string ) {
+    async getAllOrders( page: string, limit: string ) {
 
         const orderCount = await Order.count()
         const start = ( Number(page) -1 ) * Number(limit);
 
         const orders = await Order.findAll( {
-
-            where: {
-                user_id
-            },
             order: [ ["createdAt", "DESC"]],
-            offset: Number(start), limit: Number(limit)
+            offset: Number(start), limit: Number(limit),
+            include: [Product, User]
         })
-
 
         const totalPages = Math.ceil(orderCount/Number(limit));
 
@@ -117,6 +114,42 @@ export class OrderService {
             },
             message: "Order updated"
         }
+
+    }
+
+    async getOrderRecord(seller_id: string, page: string, limit: string) {
+
+        const start = ( Number(page) -1 ) * Number(limit);
+        
+        const products = await Product.findAll({
+            where: {
+                seller_id
+            },
+            include: [{ model: Order, include: [User] }],
+            order: [ ["createdAt", "DESC"]],
+            offset: Number(start), limit: Number(limit)
+        });
+
+        return { message: 'Order records retrieved', data: products };
+        
+
+    }
+
+    async getProductOrderRecord(seller_id: string, page: string, limit: string) {
+
+        const start = ( Number(page) -1 ) * Number(limit);
+        
+        const products = await Product.findAll({
+            where: {
+                seller_id
+            },
+            include: [{ model: Order, include: [User] }],
+            order: [ ["createdAt", "DESC"]],
+            offset: Number(start), limit: Number(limit)
+        });
+
+        return { message: 'Order records retrieved', data: products };
+        
 
     }
 
