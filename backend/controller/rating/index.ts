@@ -1,1 +1,0 @@
-export { giveRating } from './rating.controller'

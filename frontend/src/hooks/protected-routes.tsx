@@ -1,15 +1,15 @@
 import { Roles } from '@shared/enums/index';
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import useAuth from './auth-provider';
-import { apiPrivate } from '@/api/temp-config';
+import { useAuthStore } from '@/zustand/store';
 
 
 const ProtectedRoutes = () => {
     const navigate  = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const {token, isLoading, role, setUser, refreshUser } = useAuth();
+    const { isLoading, role } = useAuthStore();
+    const { token } = useAuthStore()
     
     useEffect(()=>{
 
@@ -36,20 +36,6 @@ const ProtectedRoutes = () => {
         }
     }, [isLoading, token, role])
 
-    useEffect( ()=>{
-
-        
-
-        const handleGetUser = async () => {
-            const user = await apiPrivate.get('/user')
-            setUser(user.data.data)
-            console.log(user.data)
-
-        }
-
-        handleGetUser()
-
-    },[refreshUser])
 
      if(isLoading || token =="") {
         return null

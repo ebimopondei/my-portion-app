@@ -1,1 +1,0 @@
-export { submitKyc, getKycDetails, getOrderRecord } from './vendor.controller'

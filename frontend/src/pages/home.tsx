@@ -15,13 +15,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../components/shared/Logo";
-import useAuth from "@/hooks/auth-provider";
 import Footer from "@/components/Layout/footer";
+import { useAuthStore } from "@/zustand/store";
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuthStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 

@@ -5,9 +5,9 @@ import {
   AddProductModal
 } from "../../components/vendor"
 import KycApi from "@/api/vendor/kyc";
-import useAuth from "@/hooks/auth-provider";
 import type { UserAttributes } from "@shared/types/user";
 import type { kycDetails } from "@shared/types/kyc";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardProfilePage() {
@@ -19,7 +19,7 @@ export default function DashboardProfilePage() {
     console.log('Save draft:', productData)
   }
   
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
 

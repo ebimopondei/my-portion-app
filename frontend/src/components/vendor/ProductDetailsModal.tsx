@@ -127,13 +127,13 @@ export default function ProductDetailsModal({
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-green-600">
-                ₦{((product.total_quantity - product.available_portions) * product.price_per_portion)}
+                ₦{((product.portion_size - product.available_portions) * product.price_per_portion)}
               </div>
               <div className="text-xs text-gray-600">Revenue</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-purple-600">
-                {(product.portion_size - product.available_portions) / (product.total_quantity / product.portion_size) * 100 }%
+                {(((product.portion_size - product.available_portions) / product.portion_size)  * 100).toFixed(1) }%
               </div>
               <div className="text-xs text-gray-600">Sold</div>
             </div>

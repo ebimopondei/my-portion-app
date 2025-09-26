@@ -4,7 +4,7 @@ import {
   AddProductModal,
   notifications,
 } from "../../components/vendor"
-import useAuth from "@/hooks/auth-provider";
+import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardNotificationPage() {
@@ -15,7 +15,7 @@ export default function DashboardNotificationPage() {
     console.log('Save draft:', productData)
   }
 
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50">

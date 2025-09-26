@@ -1,16 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 import { productSchema } from '@shared/validation/product-schema'
 
 import type { ProductSchema } from '@shared/validation/product-schema'
 import { useState } from "react";
-import ProductApi from "@/api/products/products-api";
+import { useProductStore } from "@/zustand/store";
 
 export default function useCreateProduct(){
 
-    const { createProduct } = ProductApi();
+    const { createProduct } = useProductStore()
+
     const [ isLoading, setIsLoading ] = useState<boolean>(false)
 
 
@@ -23,8 +23,7 @@ export default function useCreateProduct(){
     async function onCreateProduct(value:ProductSchema) {
         setIsLoading(true)
 
-        const response = await createProduct(value)
-        toast.success(response?.message);
+        await createProduct(value)
         setIsLoading(false)
     }
 

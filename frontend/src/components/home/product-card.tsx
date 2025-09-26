@@ -13,7 +13,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   const discountPercentage = Math.round(((product.price_per_portion - product.price_per_portion) / product.price_per_portion) * 100)
   
-  const groupProgress = ((product.total_quantity/ product.portion_size) - product.available_portions)/(product.total_quantity / product.portion_size)  * 100;
+  const groupProgress = ((product.portion_size) - product.available_portions)/( product.portion_size)  * 100;
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -68,7 +68,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-emerald-700 font-medium">Group Progress</span>
               <span className="text-emerald-600 font-semibold">
-                {(product.total_quantity/ product.portion_size) - product.available_portions }/{(product.total_quantity / product.portion_size)}
+                {(product.portion_size) - product.available_portions }/{(product.portion_size)}
               </span>
             </div>
             <div className="w-full bg-emerald-200 rounded-full h-2">

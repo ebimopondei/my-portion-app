@@ -4,13 +4,13 @@ import Logo from "../shared/Logo"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
-import useAuth from "@/hooks/auth-provider"
+import { useAuthStore } from "@/zustand/store"
 
 const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
 
-  const { logoutAuth } = useAuth()
+  const { logoutAuth } = useAuthStore()
   
   const navItems: NavItem[] = [
     { id: 'dashboard', url: "", label: 'Overview', icon: TrendingUp },

@@ -3,15 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginUserSchema } from '@shared/validation/loginUserDTO.ts'
 import type { LoginSchema } from '@shared/validation/loginUserDTO'
-import useAuth from "../auth-provider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuthStore } from "@/zustand/store";
 
 export default function useLogin() {
 
     const { login } = APICalls();
-    const { loginAuth } = useAuth();
+    const { loginAuth } = useAuthStore()
     const [ isLoading, setIsLoading ] = useState<boolean>(false)
 
     const navigate = useNavigate();
@@ -30,6 +30,7 @@ export default function useLogin() {
         const response = await login(value)
         if(response.success){
             toast.success(response.message)
+
             loginAuth(response.data);
             // @ts-expect-error
             if(response.data.user.role == 'vendor'){
