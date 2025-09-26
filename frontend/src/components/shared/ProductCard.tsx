@@ -157,7 +157,7 @@ export function VendorProductCard({ product, onEdit, onShare, onView }: VendorPr
         
         <div className="flex justify-between text-sm text-gray-500 mb-3">
           <span>Available: {product.available_portions}</span>
-          <span>Booked: {((product.total_quantity/ product.portion_size) - product.available_portions)}</span>
+          <span>Booked: {((product.portion_size) - product.available_portions)}</span>
         </div>
         
         {/* <div className="flex items-center space-x-2 mb-4">

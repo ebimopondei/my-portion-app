@@ -7,7 +7,6 @@ import { CustomTabs, CustomTabsList, CustomTabsTrigger, CustomTabsContent } from
 import { ProductCard } from "../components/home/product-card"
 import { CartSlide } from "../components/home/cart-slide"
 import CitySelectionModal from "../components/home/city-selection-modal"
-import ProductApi from "@/api/products/products-api"
 
 
 import type { ProductAttribute } from '@shared/types/product'
@@ -16,26 +15,23 @@ import useAuth from "@/hooks/auth-provider"
 import Footer from "@/components/Layout/footer"
 import { useCart } from "@/zustand/hooks"
 import { apiPrivate } from "@/api/temp-config"
-
+import { useProduct } from "@/zustand/hooks/products"
 
 export default function DashboardPage() {
   
-  const [ products, setProducts ] = useState<ProductAttribute[]>([]);
+  const { data } = useProduct()
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [showCityModal, setShowCityModal] = useState(false);
-  const activeDeals = products?.filter((product) => product.available_portions >= product.portion_size )
+  const activeDeals = data.products?.filter((product) => product.available_portions >= product.portion_size )
 
-  const { getAllProducts } = ProductApi()
 
   const [searchQuery, setSearchQuery] = useState("")
   const { addToCart, cartCount } = useCart()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  // Add cart state
   const [isCartOpen, setIsCartOpen] = useState(false)
 
-  // Filter products by category and search
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = data.products?.filter((product) => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description?.toLowerCase().includes(searchQuery.toLowerCase());
     
@@ -44,7 +40,7 @@ export default function DashboardPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const filteredActiveDeals = activeDeals.filter((product) => {
+  const filteredActiveDeals = activeDeals?.filter((product) => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description?.toLowerCase().includes(searchQuery.toLowerCase());
     
@@ -72,17 +68,6 @@ export default function DashboardPage() {
     } else {
       setSelectedCity(savedCity);
     }
-  }, [])
-
-  useEffect(()=>{
-    async function handleGetAllProducts(){
-      const products = await getAllProducts();
-      setProducts(products.data.product)
-
-    }
-
-    handleGetAllProducts();
-
   }, [])
 
   const { setUser, refreshUser, isLoggedIn } = useAuth()
@@ -146,8 +131,8 @@ export default function DashboardPage() {
 
           <CustomTabsContent value="browse">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
+              {filteredProducts?.length > 0 ? (
+                filteredProducts?.map((product) => (
                   <ProductCard key={product.id} product={product} onAddToCart={()=>handleAddToCart(product)} />
                 ))
               ) : (
@@ -161,8 +146,8 @@ export default function DashboardPage() {
 
           <CustomTabsContent value="deals">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredActiveDeals.length > 0 ? (
-                filteredActiveDeals.map((product) => (
+              {filteredActiveDeals?.length > 0 ? (
+                filteredActiveDeals?.map((product) => (
                   <ProductCard key={product.id} product={product} onAddToCart={()=> handleAddToCart(product)} />
                 ))
               ) : (

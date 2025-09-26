@@ -126,7 +126,7 @@ const DashboardContent = ({
                       
                       {product.status === Status.Pending && (
                         <p className="text-sm text-gray-600 mb-3">
-                          { (product.total_quantity/ product.portion_size) - product.available_portions } of {(product.total_quantity / product.portion_size)} portions booked
+                          { (product.portion_size) - product.available_portions } of {(product.portion_size)} portions booked
                         </p>
                       )}
                       

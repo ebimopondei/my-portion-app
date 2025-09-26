@@ -145,7 +145,7 @@ export class ProductService {
           quantity_unit: productDto.quantity_unit,
           portion_size: Number(productDto.portion_size),
           price_per_portion: Number(productDto.price_per_portion),
-          available_portions: Number(productDto.total_quantity)/Number(productDto.portion_size),
+          available_portions: Number(productDto.portion_size),
           location: productDto.location || ''
      })
 

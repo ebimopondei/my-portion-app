@@ -18,13 +18,8 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
     }
   }
 
-  // const totalCustomers = order?.length
-  // const totalPortions = order?.reduce((sum, customer) => sum + customer.portions, 0)
-
   const handleMarkCustomerDelivered = (customerId: string) => {
-    // In a real implementation, you would use the customerId to mark specific customer as delivered
-    // For now, we'll use the productId as the identifier
-    console.log(`Marking customer ${customerId} as delivered`)
+    
     onMarkDelivered(Number(order?.id))
   }
 
@@ -71,7 +66,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
             <Clock className="w-4 h-4 text-orange-600" />
           </div>
           <p className="text-sm text-gray-600">Total Amount</p>
-          <p className="font-bold text-lg text-green-600">₦{order?.orders[0]?.amount.toLocaleString()}</p>
+          <p className="font-bold text-lg text-green-600">₦{order?.orders[0]?.amount.toLocaleString() || 0}</p>
         </div>
       </div>
 

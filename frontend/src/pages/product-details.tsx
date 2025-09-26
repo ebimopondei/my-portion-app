@@ -1,4 +1,3 @@
-import ProductApi from "@/api/products/products-api"
 import { CartContent } from "@/components/home/cart-content"
 import { CartSlide } from "@/components/home/cart-slide"
 import { Navbar } from "@/components/home/navbar"
@@ -9,26 +8,29 @@ import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/lib/utils"
 import type { CartItem } from "@/types/cart"
 import { useCart } from "@/zustand/hooks"
+import { useProduct } from "@/zustand/hooks/products"
+import { useProductStore } from "@/zustand/store"
 import { ArrowLeft, MapPin, Package, Scale, ShoppingCart } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const [product, setProduct] = useState<any>(null)
+  const { getProductsById, clearSelectedProduct } = useProductStore()
   const [isCartOpen, setIsCartOpen] = useState(false)
   const { addToCart, cartTotal, cartCount } = useCart()
-  const { getProductsById } = ProductApi()
+  const { data } = useProduct()
 
   useEffect(() => {
-    async function fetchProduct() {
-      if (id) {
-        const res = await getProductsById(id)
-        setProduct(res.data)
-      }
+    getProductsById(String(id));
+
+    return () => {
+      clearSelectedProduct()
     }
-    fetchProduct()
-  }, [id])
+    
+  }, [id, getProductsById])
+
+  const product = data.selectedProduct
 
   const handleAddToCart = () => {
     if (!product) return
@@ -175,14 +177,14 @@ export default function ProductDetailPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Listed on</span>
                     <span className="font-medium">
-                      {formatDate(product.createdAt, "DD MMM, YYYY hh:mm A")}
+                      {formatDate(String(product.createdAt), "DD MMM, YYYY hh:mm A")}
                     </span>
                   </div>
                   <Separator />
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Last updated</span>
                     <span className="font-medium">
-                      {formatDate(product.updatedAt, "DD MMM, YYYY hh:mm A")}
+                      {formatDate(String(product.updatedAt), "DD MMM, YYYY hh:mm A")}
                     </span>
                   </div>
                 </CardContent>

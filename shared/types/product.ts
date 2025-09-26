@@ -30,6 +30,10 @@ export type OrderWithUser = OrderAttribute & {
     user: UserAttributes;
 };
 
+export type ProductWithuser = ProductAttribute & {
+    user: UserAttributes;
+}
+
 export type ProductWithOrders = ProductAttribute & {
     orders: OrderWithUser[];
 };
