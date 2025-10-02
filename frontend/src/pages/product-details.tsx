@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/lib/utils"
 import type { CartItem } from "@/types/cart"
 import { useCart } from "@/zustand/hooks"
-import { useProduct } from "@/zustand/hooks/products"
+import { useProductState } from "@/zustand/hooks/product/product.hook"
 import { useProductStore } from "@/zustand/store"
 import { ArrowLeft, MapPin, Package, Scale, ShoppingCart } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { addToCart, cartTotal, cartCount } = useCart()
-  const { data } = useProduct()
+  const { data } = useProductState()
 
   useEffect(() => {
     getProductsById(String(id));

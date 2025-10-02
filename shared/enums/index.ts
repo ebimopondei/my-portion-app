@@ -5,8 +5,16 @@ export const Status = {
     Cancelled: 'cancelled'
 } as const;
 
+export const TransactionTypes = {
+    Payment: "payment",
+    Payout: "payout",
+    Refund: "refund",
+    Deposit: "Deposit"
+} as const 
+
 
 export type Status = (typeof Status)[keyof typeof Status];
+export type TransactionTypes = (typeof TransactionTypes)[keyof typeof TransactionTypes];
 
 export const quantity_unit = {
     KG: 'kg'

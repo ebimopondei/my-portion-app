@@ -28,6 +28,7 @@ apiPrivate.interceptors.response.use(
         const prevRequest = error?.config;
         if (error?.response?.status === 401) {
             setTimeout( ()=>window.location.href = '/login', 1000);
+            useAuthStore((state) => state.logoutAuth)()
             toast.error('Unauthorized access! Login.')
         }
           
@@ -35,12 +36,26 @@ apiPrivate.interceptors.response.use(
             prevRequest.sent = true;
             const res = await api.post(`/auth/refresh`, { refreshToken });
             const newToken = res.data.data.token;
-            useAuthStore.setState({ token: newToken})
             prevRequest.headers['Authorization'] = `Bearer ${newToken}`;
             return api(prevRequest);
         }
         
         return error.response.data;
+    }
+);
+
+// unprotected route interceptor
+api.interceptors.response.use(
+    response => response,
+    async (error) => {
+
+        if (error?.response?.status === 401 && error.config.url != "/auth/login") {
+            setTimeout( ()=>window.location.href = '/login', 3000);
+            useAuthStore((state) => state.logoutAuth)()
+            toast.error('Unauthorized access! Login.')
+        }
+        
+        return Promise.reject(error)
     }
 );
 

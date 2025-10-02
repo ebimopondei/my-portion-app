@@ -13,7 +13,7 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
   })
-  app.useGlobalFilters(new SequelizeExceptionFilter(new LoggerService(), app.get(HttpAdapterHost)));
+  app.useGlobalFilters(new SequelizeExceptionFilter(new LoggerService()));
   await app.listen(process.env.PORT || 3001);
 }
 bootstrap();

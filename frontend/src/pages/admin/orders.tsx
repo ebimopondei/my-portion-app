@@ -1,4 +1,3 @@
-import { formatDate } from "@/lib/utils";
 import { useAdminHook } from "@/zustand/hooks/admin";
 
 const AdminOrdersPage= () => {
@@ -129,7 +128,45 @@ const AdminOrdersPage= () => {
             </div>
             </div>
 
-            <div className="mt-3 overflow-x-auto">
+            <div className="overflow-x-auto">
+                <table className="w-full table overflow-x-auto">
+                    <thead className="w-full">
+                        <tr className="grid grid-cols-12">
+                            <th className="col-span-2">SN</th>
+                            <th className="col-span-2">Order</th>
+                            <th className="col-span-2">Customer</th>
+                            <th className="col-span-2">Product</th>
+                            <th className="col-span-2">Portions</th>
+                            <th className="col-span-2">Amount</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {
+                            data.orders.orders.map( (order, idx) => {
+                                return (
+                                    <tr key={idx} className="grid grid-cols-12">
+                                        <td className="col-span-2">{++idx}</td>
+                                        <td className="col-span-2">ORDER-{--idx}</td>
+                                        <td className="col-span-2">{order.user.firstname}</td>
+                                        <td className="col-span-2">{order.product.name}</td>
+                                        <td className="col-span-2">{order.product.portion_size}</td>
+                                        <td className="col-span-2">{order.amount}</td>
+
+                                    </tr>
+                                )
+                            })
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            
+
+            {/* dd */}
+            {/* <div className="mt-3 overflow-x-auto">
             <table className="min-w-full text-sm">
                 <thead>
                 <tr className="text-left text-[11px] uppercase tracking-wide text-slate-500">
@@ -158,7 +195,6 @@ const AdminOrdersPage= () => {
                 </tr>
                 </thead>
                 <tbody id="ordersTbody" className="align-middle">
-                {/* Static rows (can be replaced with dynamic data later) */}
                 { data.orders.orders.map( (order, idx) => {
                     return(
                         <tr key={idx} className="hover:bg-slate-50">
@@ -196,7 +232,7 @@ const AdminOrdersPage= () => {
                 })}
                 </tbody>
             </table>
-            </div>
+            </div> */}
         </section>
       </section>
     </main>

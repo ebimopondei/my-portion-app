@@ -16,7 +16,7 @@ export class ProductService {
     
     constructor ( private readonly cloudinary: CloudinaryService, private readonly sequelize: Sequelize ) {}
 
-    async getProductByFilter( state: string, limit: number, page: number) {
+    async getProducts( state: string, limit: number, page: number) {
         const whereClause: Partial<Product> = {};
 
         if (state) {
@@ -43,19 +43,13 @@ export class ProductService {
         };
     }
 
-    async getProduct ( user: UserAttributes, state: string, limit: number, page: number) {
-        
-        const whereClause: Partial<Product> = {};
-        if (state) {
-            whereClause.location = state.toString().toLocaleLowerCase();
-        }
+    async getUserProducts ( user: UserAttributes, limit: number, page: number) {
 
         const productCount = await Product.count({ paranoid: true });
         const start = (Number(page) - 1) * Number(limit);
 
         const product = await Product.findAll({
             where: {
-                ...whereClause, 
                 seller_id: user.id
             },
             order: [["createdAt", "DESC"]],
@@ -68,34 +62,7 @@ export class ProductService {
         return {
             success: true,
             data: { totalPages, productCount, product },
-            message: "Products found!"
-        };
-    }
-    // Example method
-    async getAllProducts( state: string, limit: number, page: number) {
-        const whereClause: Partial<Product> = {};
-
-
-        if (state) {
-            whereClause.location = state.toString().toLocaleLowerCase();
-        }
-
-        const productCount = await Product.count({ paranoid: true });
-        const start = (Number(page) - 1) * Number(limit);
-
-        const product = await Product.findAll({
-            where: whereClause,
-            order: [["createdAt", "DESC"]],
-            offset: Number(start),
-            limit: Number(limit)
-        });
-
-        const totalPages = Math.ceil(productCount / Number(limit));
-
-        return {
-            success: true,
-            data: { totalPages, productCount, product },
-            message: "Products found!"
+            message: "User Products found!"
         };
     }
     

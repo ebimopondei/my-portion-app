@@ -4,7 +4,6 @@ import {
   AddProductModal,
   notifications,
 } from "../../components/vendor"
-import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardNotificationPage() {
@@ -15,12 +14,11 @@ export default function DashboardNotificationPage() {
     console.log('Save draft:', productData)
   }
 
-  const { user } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
-        <VendorHeader vendorData={user} />
+        <VendorHeader  />
         <div className="space-y-6">
             <h2 className="text-xl sm:text-2xl font-semibold">Notifications</h2>
             <div className="space-y-4">

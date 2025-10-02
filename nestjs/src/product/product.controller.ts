@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ParsedToken } from 'decorators';
@@ -6,6 +6,7 @@ import { User } from 'src/database/models/User';
 import { ZodValidationPipe } from 'pipes/zod-validation-pipe';
 import { CreateProductDTO, createProductSchema, productSchema } from '@shared/validation/product-schema';
 import z from 'zod';
+import { Public } from 'src/auth/decorators/public.decorators';
 
 
 const CartItemSchema = z.object({
@@ -31,30 +32,31 @@ const AddressAndCartSchema = z.object({
 @Controller('/v1/product')
 export class ProductController {
 
-    constructor(private readonly productService: ProductService) {}
+    constructor(private readonly productService: ProductService) { }
 
-    @Get("all")
+    @Get()
+    @Public()
     getProductByFilter(
         @Query('state') state: string, 
         @Query('limit') limit: number = 10, 
         @Query('page') page: number = 1
     ) {
-        return this.productService.getProductByFilter( state, limit, page);
-
+        return this.productService.getProducts( state, limit, page);
     }
 
-    @Get()
-    getProduct(
+
+    @Get("me")
+    getUserProductByFilter(
         @ParsedToken() user: User, 
-        @Query('state') state: string, 
         @Query('limit') limit: number = 10, 
         @Query('page') page: number = 1) 
     {
-        return this.productService.getProduct(user, state, limit, page);
+        return this.productService.getUserProducts(user, limit, page);
     
     }
 
     @Get(":id")
+    @Public()
     getProductById(@Param("id") id) {
         
         return this.productService.getProductById(id);
@@ -77,13 +79,16 @@ export class ProductController {
     checkOut(
         @ParsedToken() user: User, 
         @Body(new ZodValidationPipe(AddressAndCartSchema)) checkoutDTO: any) {
-        return this.productService.checkOut( user.id, checkoutDTO);
+        return this.productService.checkOut( user.id, checkoutDTO);    
+    }
 
+    @Put(":id")
+    updateProductById() {
     
     }
 
-    @Post(":id")
-    updateProductById() {
+    @Delete(":id")
+    deleteProductById() {
     
     }
 }

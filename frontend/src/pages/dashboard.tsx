@@ -13,11 +13,13 @@ import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
 import Footer from "@/components/Layout/footer"
 import { useCart } from "@/zustand/hooks"
-import { useProduct } from "@/zustand/hooks/products"
+import { useFetchProduct, useProductState } from "@/zustand/hooks/product/product.hook"
 
 export default function DashboardPage() {
   
-  const { data } = useProduct()
+  useFetchProduct();
+  const { data } = useProductState();
+  
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [showCityModal, setShowCityModal] = useState(false);

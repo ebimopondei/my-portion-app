@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react"
-import { DollarSign, CreditCard, TrendingUp, Upload, CheckCircle, Clock } from "lucide-react"
+import { useState } from "react"
+import { DollarSign, CreditCard, TrendingUp, CheckCircle, Clock } from "lucide-react"
 import { Button } from "../ui/button"
 import WithdrawFundsModal from "./WithdrawFundsModal"
-import WalletApi from "@/api/wallet/wallet-api"
+import { useFetchWallet, useWalletState } from "@/zustand/hooks/wallet/wallet.hook"
+import { useAuthStore } from "@/zustand/store"
+import { Link } from "react-router-dom"
+import { useFetchTransactions, useTransactionState } from "@/zustand/hooks/transaction/transaction.hook"
+import { formatDate } from "@/lib/utils"
 
 interface WalletContentProps {
   bankDetails: {
@@ -10,53 +14,23 @@ interface WalletContentProps {
     accountNumber: string
     accountName: string
   }
-  kycStatus: boolean
   onWithdrawFunds: (amount: number) => void
   onRedirectToBank?: () => void
 }
 
-// Mock transaction history
-const mockTransactions = [
-  {
-    id: 1,
-    type: "credit",
-    amount: 45000,
-    description: "Payment from Premium Basmati Rice order",
-    date: "2024-01-21",
-    time: "14:30",
-    status: "completed"
-  },
-  {
-    id: 2,
-    type: "debit",
-    amount: 25000,
-    description: "Withdrawal to First Bank",
-    date: "2024-01-20",
-    time: "09:15",
-    status: "completed"
-  },
-  {
-    id: 3,
-    type: "credit",
-    amount: 38000,
-    description: "Payment from Brown Beans order",
-    date: "2024-01-19",
-    time: "16:45",
-    status: "completed"
-  }
-]
 
 const WalletContent = ({  
   bankDetails, 
-  kycStatus, 
   onWithdrawFunds,
   onRedirectToBank
 }: WalletContentProps) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'bank' | 'kyc' | 'transactions'>('overview')
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const [ walletBalance, setWalletBalance ] = useState<{main_balance: number}>({ main_balance: 10})
-  const { getWalletBalance } = WalletApi()
   
+  
+  const { data: { main_balance } } = useWalletState()
+  const  { user } = useAuthStore()
+  useFetchWallet();
 
   const handleWithdraw = async (amount: number) => {
     try {
@@ -68,7 +42,7 @@ const WalletContent = ({
   }
 
   const getKycStatusConfig = () => {
-    switch(kycStatus) {
+    switch(user?.kyc_verified) {
       case true:
         return {
           icon: CheckCircle,
@@ -105,18 +79,9 @@ const WalletContent = ({
   const kycConfig = getKycStatusConfig()
   const KYCIcon = kycConfig.icon
 
-  useEffect(()=>{
-    
-      async function fetchWalletBalance(){
-        const response = await getWalletBalance();
-        setWalletBalance(response.data);
-        console.log(response)
-  
-      }
-  
-      fetchWalletBalance();
-  
-    }, [])
+  const {  data:{ transactions }} = useTransactionState()
+
+  useFetchTransactions()
 
   return (
     <div className="space-y-6">
@@ -159,13 +124,13 @@ const WalletContent = ({
           {/* Wallet Balance */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">₦{walletBalance?.main_balance}</h3>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">₦{main_balance}</h3>
               <p className="text-gray-600">Available Balance</p>
             </div>
             <div className="space-y-4">
               <Button
                 onClick={() => setShowWithdrawModal(true)}
-                disabled={!kycStatus || !bankDetails.accountName}
+                disabled={!user?.kyc_verified || !bankDetails.accountName}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-3"
               >
                 <DollarSign className="w-4 h-4 mr-2" />
@@ -198,7 +163,7 @@ const WalletContent = ({
               </div>
             </div>
             
-            {!kycStatus && (
+            {!user?.kyc_verified && (
               <Button
                 onClick={() => setActiveSection('kyc')}
                 variant="outline"
@@ -256,7 +221,6 @@ const WalletContent = ({
               <h4 className="text-lg font-medium text-gray-900 mb-2">No Bank Account Linked</h4>
               <p className="text-gray-600 mb-4">Add your bank account to receive withdrawals</p>
               <Button
-                onClick={() => setActiveSection('kyc')}
                 className="bg-green-500 hover:bg-green-600 text-white"
               >
                 Add Bank Account
@@ -289,31 +253,12 @@ const WalletContent = ({
             </div>
           </div>
 
-          {!kycStatus && (
+          {!user?.kyc_verified && (
             <div className="space-y-4">
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-gray-900 mb-3">Required Documents</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Government ID</span>
-                    <Button variant="outline" size="sm">
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Proof of Address</span>
-                    <Button variant="outline" size="sm">
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload
-                    </Button>
-                  </div>
-                </div>
-              </div>
               
-              <Button className="w-full bg-green-500 hover:bg-green-600 text-white">
-                Submit for Verification
-              </Button>
+              <Link to={"/dashboard/kyc"} className="w-full block py-2 px-4  bg-green-500 hover:bg-green-600 text-white">
+                Complete Verification
+              </Link>
             </div>
           )}
         </div>
@@ -329,28 +274,28 @@ const WalletContent = ({
           </div>
 
           <div className="space-y-4">
-            {mockTransactions.map(transaction => (
+            {transactions.map(transaction => (
               <div key={transaction.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    transaction.type === 'credit' ? 'bg-green-100' : 'bg-red-100'
+                    transaction.type === 'payment' ? 'bg-green-100' : 'bg-red-100'
                   }`}>
-                    {transaction.type === 'credit' ? (
+                    {transaction.type === 'payment' ? (
                       <TrendingUp className="w-5 h-5 text-green-600" />
                     ) : (
                       <DollarSign className="w-5 h-5 text-red-600" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{transaction.description}</p>
-                    <p className="text-sm text-gray-600">{transaction.date} at {transaction.time}</p>
+                    <p className="font-medium text-gray-900">{transaction.reference}</p>
+                    <p className="text-sm text-gray-600">{formatDate(String(transaction.createdAt) )} </p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className={`font-bold ${
-                    transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'
+                    transaction.type === 'payment' ? 'text-green-600' : 'text-red-600'
                   }`}>
-                    {transaction.type === 'credit' ? '+' : '-'}₦{transaction.amount.toLocaleString()}
+                    {transaction.type === 'payment' ? '+' : '-'}₦{transaction.amount.toLocaleString()}
                   </p>
                   <p className="text-xs text-gray-500 capitalize">{transaction.status}</p>
                 </div>
@@ -367,7 +312,7 @@ const WalletContent = ({
         onWithdraw={handleWithdraw}
         walletBalance={0}
         bankDetails={bankDetails}
-        kycStatus={kycStatus}
+        kycStatus={Boolean(user?.kyc_verified)}
         onRedirectToBank={onRedirectToBank}
       />
     </div>

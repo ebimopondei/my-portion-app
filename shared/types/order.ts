@@ -23,3 +23,7 @@ export type OrderwithProduct = OrderAttribute & {
 export type OrderWithProductAndUser = OrderwithProduct & {
     user: UserAttributes
 }
+
+export type OrderWithUser = OrderAttribute & {
+    user: UserAttributes;
+};

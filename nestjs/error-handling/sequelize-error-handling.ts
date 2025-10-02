@@ -1,18 +1,27 @@
-import { ExceptionFilter, Catch, ArgumentsHost } from "@nestjs/common";
-import { HttpAdapterHost } from "@nestjs/core";
+import { ExceptionFilter, Catch, ArgumentsHost, Next } from "@nestjs/common";
 import { Response } from 'express'
 import { LoggerService } from "src/logger/logger.service";
 import { DatabaseError, BaseError, UniqueConstraintError, ValidationError, ForeignKeyConstraintError, TimeoutError, ConnectionError, HostNotFoundError, HostNotReachableError, AssociationError, InstanceError } from 'sequelize'
 
-@Catch(Error)
+@Catch(
+  UniqueConstraintError,
+  ForeignKeyConstraintError,
+  TimeoutError,
+  ValidationError,
+  DatabaseError,
+  ConnectionError,
+  HostNotFoundError,
+  HostNotReachableError,
+  AssociationError,
+  InstanceError,
+  BaseError
+)
 export class SequelizeExceptionFilter implements ExceptionFilter {
     
-    constructor(private readonly loggerService: LoggerService, private readonly httpAdapterHost: HttpAdapterHost) {}
+    constructor(private readonly loggerService: LoggerService) {}
 
     catch(exception: Error, host: ArgumentsHost):void {
         
-        const { httpAdapter } = this.httpAdapterHost
-
         const ctx = host.switchToHttp();
         const res = ctx.getResponse<Response>();
 
@@ -58,8 +67,6 @@ export class SequelizeExceptionFilter implements ExceptionFilter {
       return;
     }
 
-
-    res.status(400).json( { message: exception.message})
-        return 
+    Next()
     }
 }
