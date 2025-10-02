@@ -3,7 +3,7 @@ import { DollarSign, CreditCard, TrendingUp, CheckCircle, Clock } from "lucide-r
 import { Button } from "../ui/button"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 import { useFetchWallet, useWalletState } from "@/zustand/hooks/wallet/wallet.hook"
-import { useAuthStore, useTransactionStore } from "@/zustand/store"
+import { useAuthStore } from "@/zustand/store"
 import { Link } from "react-router-dom"
 import { useFetchTransactions, useTransactionState } from "@/zustand/hooks/transaction/transaction.hook"
 import { formatDate } from "@/lib/utils"

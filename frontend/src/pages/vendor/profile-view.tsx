@@ -7,7 +7,6 @@ import {
 import KycApi from "@/api/vendor/kyc";
 import type { UserAttributes } from "@shared/types/user";
 import type { kycDetails } from "@shared/types/kyc";
-import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardProfilePage() {
@@ -19,7 +18,6 @@ export default function DashboardProfilePage() {
     console.log('Save draft:', productData)
   }
   
-  const { user } = useAuthStore();
 
   const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
 
@@ -39,7 +37,7 @@ export default function DashboardProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
-        <VendorHeader vendorData={user} />
+        <VendorHeader />
         <div className="space-y-6">
             <h2 className="text-xl sm:text-2xl font-semibold">Profile Settings</h2>
             <div className="bg-white rounded-lg shadow-sm border">
