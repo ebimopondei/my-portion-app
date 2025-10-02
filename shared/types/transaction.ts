@@ -1,5 +1,5 @@
 import { Status, TransactionTypes } from "../enums";
-import { OrderWithUser } from "./order";
+import type { OrderWithUser } from "./order";
 import type { UserAttributes } from "./user";
 
 export interface TransactionAttribute {
