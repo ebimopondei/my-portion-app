@@ -1,5 +1,4 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '../database/models/User';
 import * as bcrypt from 'bcryptjs';
 import { JwtPayload, verify, sign, } from 'jsonwebtoken';
@@ -16,8 +15,6 @@ import { Wallet } from 'src/database/models/Wallet';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User)
-    private userModel: typeof User,
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService
   ) {}
@@ -26,7 +23,7 @@ export class AuthService {
   async register(createUserDto: createUserDto): Promise<registerResponse> {
     
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
-    const user = await this.userModel.create({ 
+    const user = await User.create({ 
       firstname: createUserDto.firstname, 
       lastname: createUserDto.lastname, 
       email: createUserDto.email,
@@ -58,7 +55,7 @@ export class AuthService {
     const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
     const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
 
-    const user = await this.userModel.findOne({ where: { email: loginDto.email } });
+    const user = await User.findOne({ where: { email: loginDto.email } });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }

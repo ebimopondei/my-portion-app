@@ -8,7 +8,7 @@ import {
 } from "../../components/vendor"
 import type { ProductAttribute } from "@shared/types/product";
 import type { UserAttributes } from "@shared/types/user";
-import { useProductState, useFetchUserProduct } from "@/zustand/hooks/products/product.hook";
+import { useProductState, useFetchUserProduct } from "@/zustand/hooks/product/product.hook";
 import { useAuthStore } from "@/zustand/store";
 
 

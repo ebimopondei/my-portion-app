@@ -49,9 +49,10 @@ export class VendorController {
     getOrderRecord(
         @ParsedToken() user: { id: string },
         @Query('limit') limit: string,
-        @Query('page') page: string
+        @Query('page') page: string,
+        @Query('status') status: string,
     ) {
-        return this.orderService.getProductOrderRecord(user.id, page, limit);
+        return this.orderService.getProductOrderRecord(user.id, page, limit, status);
     }
 
 }

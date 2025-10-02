@@ -13,7 +13,7 @@ import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
 import Footer from "@/components/Layout/footer"
 import { useCart } from "@/zustand/hooks"
-import { useFetchProduct, useProductState } from "@/zustand/hooks/products/product.hook"
+import { useFetchProduct, useProductState } from "@/zustand/hooks/product/product.hook"
 
 export default function DashboardPage() {
   

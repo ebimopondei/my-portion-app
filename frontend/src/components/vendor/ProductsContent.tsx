@@ -3,17 +3,15 @@ import { useState } from "react"
 import { VendorProductCard } from "../shared/ProductCard"
 import ProductDetailsModal from "./ProductDetailsModal"
 import type { ProductAttribute } from "@shared/types/product"
+import { useFetchUserProduct, useProductState } from "@/zustand/hooks/product/product.hook"
 
 interface ProductsContentProps {
-  vendorProducts: ProductAttribute[]
   onAddProduct: () => void
   onEditProduct: (product: ProductAttribute) => void
   onShareProduct: (product: ProductAttribute) => void
-  // onViewProduct: (product: ProductAttribute) => void
 }
 
-const ProductsContent = ({ 
-  vendorProducts, 
+const ProductsContent = ({
   onAddProduct, 
   onEditProduct, 
   onShareProduct 
@@ -25,6 +23,9 @@ const ProductsContent = ({
     setSelectedProduct(product)
     setShowDetailsModal(true)
   }
+
+  const { data: { user_products } } = useProductState()
+  useFetchUserProduct()
 
   return (
     <div className="space-y-6">
@@ -39,7 +40,7 @@ const ProductsContent = ({
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {vendorProducts.map(product => (
+        {user_products.map(product => (
           <VendorProductCard 
             key={product.id} 
             product={product}

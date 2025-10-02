@@ -2,7 +2,7 @@ import type { OrderCardProps } from "./types"
 import { Users, Package, Clock, MoreHorizontal } from "lucide-react"
 import { useState } from "react"
 import Modal from "../ui/modal"
-import type { OrderWithUser } from "@shared/types/product"
+import type { OrderWithUser } from "@shared/types/order"
 import type { Status } from "@shared/enums"
 
 const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
@@ -28,9 +28,6 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
     setSelectedCustomer(customer)
     setShowCustomerModal(true)
   }
-
-  console.log(order?.status)
-  console.log(order)
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -74,8 +71,8 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
       {/* Customer Orders Table */}
       <div className="space-y-4">
         <h4 className="font-medium text-gray-900">Customer Orders ({order?.orders.length})</h4>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm table table-compact">
+        <div className="overflow-auto h-40">
+          <table className="w-full text-sm table">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-2 w-20 font-medium text-gray-700">Customer</th>
@@ -95,7 +92,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
                   <td className="py-2 w-20">
                     <div>
                       <p className="font-medium text-gray-900"></p>
-                      {/* <p className="text-xs text-gray-500">{customer.timeAgo}</p> */}
+                      <p className="text-xs text-gray-500 capitalize">{customer.user.firstname}</p>
                     </div>
                   </td>
                   <td className="py-2 w-20 text-gray-600">{customer.portion}</td>

@@ -5,15 +5,9 @@ import {
   AddProductModal,
 } from "../../components/vendor"
 import type {  ProductAttribute } from "@shared/types/product";
-import { useProductState } from "@/zustand/hooks/products/product.hook";
-import { useAuthStore } from "@/zustand/store";
 
 
 export default function VendorProductsPage() {
-
-  const { data } = useProductState()
-
-  const vendorProducts = data.products
 
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
 
@@ -35,15 +29,11 @@ export default function VendorProductsPage() {
     console.log('Save draft:', productData)
   }
 
-
-  const { user } = useAuthStore();
-
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
-        <VendorHeader vendorData={user} />
+        <VendorHeader />
         <ProductsContent
-            vendorProducts={vendorProducts}
             onAddProduct={handleAddProduct}
             onEditProduct={handleEditProduct}
             onShareProduct={handleShareProduct}

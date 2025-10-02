@@ -21,9 +21,26 @@ import { AdminDashboardController } from './admin-dashboard/admin-dashboard.cont
 import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { TransactionModule } from './transaction/transaction.module';
+
+// import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from './database/models/User';
+import { Product } from 'src/database/models/Product';
+import { Order } from 'src/database/models/Order';
+import { Wallet } from 'src/database/models/Wallet';
+import { Bank } from 'src/database/models/Bank';
+import { KycBusiness } from 'src/database/models/KycBusiness';
+import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
+import { KycIdVerification } from 'src/database/models/KycIdVerification';
+import { KycPersonal } from 'src/database/models/KycPersonal';
+import { OrderRecord } from 'src/database/models/order-record';
+import { Rating } from 'src/database/models/Rating';
+import { SellerKyc } from 'src/database/models/SellerKYC';
+import { Transaction } from './database/models/Transaction';
 
 @Module({
   imports: [
+    SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, Transaction, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync( 
@@ -36,7 +53,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     VendorModule,
     MailerModule,
     WalletModule,
-    AdminDashboardModule
+    AdminDashboardModule,
+    TransactionModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

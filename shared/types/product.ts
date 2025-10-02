@@ -1,5 +1,5 @@
 import { Status } from "../enums";
-import type { OrderAttribute } from "./order";
+import type { OrderWithUser } from "./order";
 import type { UserAttributes } from "./user";
 
 export interface ProductAttribute {
@@ -26,9 +26,6 @@ export interface ProductAttribute {
 }
 
 
-export type OrderWithUser = OrderAttribute & {
-    user: UserAttributes;
-};
 
 export type ProductWithuser = ProductAttribute & {
     user: UserAttributes;

@@ -5,6 +5,9 @@ import { createDashboardSlice, type dashboardState } from "../slices/dashboard/d
 import { createProductsSlice, type ProductState } from "../slices/products/products.slice";
 import { createAuthSlice, type AuthState } from "../slices/auth";
 import { createAdminOrderSlice, type AdminOrdersState } from "../slices/admin/orders";
+import { createOrdersSlice, type OrderState } from "../slices/orders/orders.slice";
+import { createWalletSlice, type WalletState } from "../slices/wallet/wallet.slice";
+import { createTransactionSlice, type TransactionState } from "../slices/transaction/transaction.slice";
 
 interface GlobalState extends 
 CartItemContextType, 
@@ -25,6 +28,28 @@ export const useProductStore = create<ProductState
     ...createProductsSlice(...a)
 }
 ))
+
+export const useOrderStore = create<OrderState
+>()((...a) =>(
+{
+    ...createOrdersSlice(...a)
+}
+))
+
+export const useWalletStore = create<WalletState
+>()((...a) =>(
+{
+    ...createWalletSlice(...a)
+}
+))
+
+export const useTransactionStore = create<TransactionState
+>()((...a) =>(
+{
+    ...createTransactionSlice(...a)
+}
+))
+
 
 export const useAuthStore = create<AuthState>()((...a) => (
 {

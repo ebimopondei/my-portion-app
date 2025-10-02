@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Status } from '@shared/enums';
 import { Order } from 'src/database/models/Order';
 import { OrderRecord } from 'src/database/models/order-record';
 import { Product } from 'src/database/models/Product';
@@ -135,20 +136,47 @@ export class OrderService {
 
     }
 
-    async getProductOrderRecord(seller_id: string, page: string, limit: string) {
+    async getProductOrderRecord(seller_id: string, page: string, limit: string, status: string) {
+
+        const whereClause: Partial<Product> = { seller_id }
+
+        if (status && status != "all") {
+            whereClause.status = status as Status
+        }
 
         const start = ( Number(page) -1 ) * Number(limit);
         
-        const products = await Product.findAll({
-            where: {
-                seller_id
-            },
+        const product_orders = await Product.findAll({
+            where: whereClause,
             include: [{ model: Order, include: [User] }],
             order: [ ["createdAt", "DESC"]],
             offset: Number(start), limit: Number(limit)
         });
 
-        return { message: 'Order records retrieved', data: products };
+        const all_products_count = await Product.count(
+            {
+                where: { seller_id }
+            }
+        )
+        const pending_products_count = await Product.count( {where: { 
+            status: "pending",
+            seller_id
+        }})
+        const delivered_products_count = await Product.count( {
+            where: { 
+                status: "delivered",
+                seller_id
+            }
+        })
+
+        const data = { 
+            product_orders,
+            all_products_count,
+            pending_products_count,
+            delivered_products_count
+        }
+
+        return { message: 'Order records retrieved', data };
         
 
     }

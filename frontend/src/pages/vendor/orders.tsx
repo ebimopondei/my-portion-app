@@ -1,17 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {  
   VendorHeader, 
   OrdersContent,
   AddProductModal,
 } from "../../components/vendor"
-import type { ProductWithOrders } from "@shared/types/product";
-import OrderRecordApi from "@/api/vendor/orderRecord";
-import { useAuthStore } from "@/zustand/store";
 
 
 export default function DashboardOrdersPage() {
-
-  const [ recentOrders, setRecenOrders ] = useState<ProductWithOrders[]>([])
 
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
 
@@ -22,28 +17,13 @@ export default function DashboardOrdersPage() {
   const handleSaveDraft = (productData: any) => {
     console.log('Save draft:', productData)
   }
-  
-  const { user } = useAuthStore();
 
-  const { getOrderRecord } = OrderRecordApi()
-  
-  useEffect(()=>{
-
-    async function handleGetOrderRecord (){
-      const orderRecord = await getOrderRecord();
-      setRecenOrders(orderRecord.data)
-    }
-
-    handleGetOrderRecord()
-
-  },[])
 
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
-        <VendorHeader vendorData={user} />
+        <VendorHeader />
         <OrdersContent
-            recentOrders={recentOrders}
             onMarkDelivered={handleMarkDelivered}
         />
         

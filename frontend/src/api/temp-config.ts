@@ -49,13 +49,13 @@ api.interceptors.response.use(
     response => response,
     async (error) => {
 
-        if (error?.response?.status === 401) {
+        if (error?.response?.status === 401 && error.config.url != "/auth/login") {
             setTimeout( ()=>window.location.href = '/login', 3000);
             useAuthStore((state) => state.logoutAuth)()
             toast.error('Unauthorized access! Login.')
         }
         
-        return error.response.data;
+        return Promise.reject(error)
     }
 );
 
