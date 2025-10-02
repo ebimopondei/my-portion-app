@@ -5,7 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { getSequelizeConfig } from './database/setup';
 import { LoggerService } from './logger/logger.service';
 import { ProductModule } from './product/product.module';
-import { LoggerMiddleware, VerifyJwtMiddleware } from '../middleware';
+import { LoggerMiddleware } from '../middleware';
 import { ProductController } from './product/product.controller';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UserModule } from './user/user.module';
@@ -16,10 +16,11 @@ import { VendorModule } from './vendor/vendor.module';
 import { VendorController } from './vendor/vendor.controller';
 import { MailerModule } from './mailer/mailer.module';
 import { WalletModule } from './wallet/wallet.module';
-import { WalletController } from './wallet/wallet.controller';
 import { AdminDashboardService } from './admin-dashboard/admin-dashboard.service';
 import { AdminDashboardController } from './admin-dashboard/admin-dashboard.controller';
 import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -37,16 +38,13 @@ import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
     WalletModule,
     AdminDashboardModule
   ],
-  providers: [LoggerService, AdminDashboardService],
+  providers: [
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    LoggerService, AdminDashboardService],
   controllers: [AdminDashboardController]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(VerifyJwtMiddleware)
-      .exclude( { path: 'v1/product/all', method: RequestMethod.GET })
-      .exclude( { path: 'v1/product/:id', method: RequestMethod.GET })
-      .forRoutes(ProductController, AdminDashboardController, VendorController, OrderController, WalletController, UserController);
     consumer
     .apply(LoggerMiddleware)
     .forRoutes(UserController, VendorController, OrderController, ProductController);

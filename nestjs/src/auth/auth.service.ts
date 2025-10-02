@@ -80,7 +80,6 @@ export class AuthService {
     const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
     const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
     
-    console.log('Refresh token:', token);
     if (!token) {
       throw new UnauthorizedException('Refresh token is required');
     }
@@ -88,15 +87,16 @@ export class AuthService {
     try { 
 
       const decoded = verify(token, jwtSecretRefresh) as JwtPayload;
-      console.log('Decoded token:', decoded); 
       delete decoded?.iat; 
       delete decoded?.exp;
       const newToken = sign(decoded, jwtSecret, { expiresIn: '1h' });
       const newRefreshToken = sign(decoded, jwtSecretRefresh, { expiresIn: '1d' });
       return { success: true, data: { token: newToken, refreshToken: newRefreshToken }, message: 'Tokens refreshed successfully'  };
     } catch (error:any) {
-      console.log(error)
-      throw new UnauthorizedException(error.message || 'Invalid refresh token');
+      throw new UnauthorizedException({
+        message: error.message || 'Invalid refresh token',
+        reason: 'TOKEN_EXPIRED',
+      });
     }
   }
 }

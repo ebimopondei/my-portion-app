@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useNavigate} from 'react-router-dom';
 
 const API = () => {
+    
     const navigate = useNavigate();
 
     const backendHost = import.meta.env.VITE_APIENDPOINT;

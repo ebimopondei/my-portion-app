@@ -5,13 +5,13 @@ import {
   AddProductModal,
 } from "../../components/vendor"
 import type {  ProductAttribute } from "@shared/types/product";
-import { useProduct } from "@/zustand/hooks/products";
+import { useProductState } from "@/zustand/hooks/products/product.hook";
 import { useAuthStore } from "@/zustand/store";
 
 
 export default function VendorProductsPage() {
 
-  const { data } = useProduct()
+  const { data } = useProductState()
 
   const vendorProducts = data.products
 

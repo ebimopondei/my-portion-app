@@ -8,15 +8,15 @@ export interface ProductState {
     loading: boolean,
     error: string | null,
     products: ProductWithuser[],
-    vendor_products: ProductWithuser[],
+    user_products: ProductWithuser[],
     selectedProduct: ProductWithuser | null,
 
     clearSelectedProduct: () => void,
 
-    getProducts: (page?:number, limit?:number)=> Promise<void>,
     getProductsById: (id:string)=> Promise<void>,
     setSelectedProduct: (id:string)=> void,
-    getAllProducts: (page?:number, limit?:number)=> Promise<void>,
+    getProducts: (page?:number, limit?:number)=> Promise<void>,
+    getUserProducts: (page?:number, limit?:number)=> Promise<void>,
     createProduct: (product: ProductSchema) => Promise<void>
 
 }
@@ -30,23 +30,8 @@ return{
         loading: true,
         error: null,
         products: [],
-        vendor_products: [],
+        user_products: [],
         selectedProduct: null,
-
-        getProducts: async (page:number=1, limit:number=10) =>{
-            set({ loading: true, error: null})
-            try {
-                const res = await apiPrivate.get( `/product`, { params: { page, limit}} );
-                set({ vendor_products: res.data.data.product, loading: false })
-
-            }catch(err:any){
-                if (err.response) {
-                    set({ error: err.response.data.message, loading: false })
-                } else {
-                    set({ error: err.message, loading: false })
-                }
-            }
-        },
 
         getProductsById: async (id:string) =>{
             set({ loading: true, selectedProduct: null, error: null})
@@ -62,11 +47,28 @@ return{
             }
         },
 
-        getAllProducts: async (page:number=1, limit:number=10) =>{
+        getUserProducts: async (page:number=1, limit:number=10) =>{
             set({ loading: true, error: null})
             try {
 
-                const res = await api.get( `/product/all`, { params: { page, limit}} );
+                const res = await apiPrivate.get( `/product/me`, { params: { page, limit}} );
+                set({ user_products: res.data.data.product, loading: false })
+                
+
+            }catch(err:any){
+                if (err.response) {
+                    set({ error: err.response.data.message, loading: false })
+                } else {
+                    set({ error: err.message, loading: false })
+                }
+            }
+        },
+
+        getProducts: async (page:number=1, limit:number=10) =>{
+            set({ loading: true, error: null})
+            try {
+
+                const res = await api.get( `/product`, { params: { page, limit}} );
                 set({ products: res.data.data.product, loading: false })
                 
 

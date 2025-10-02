@@ -75,14 +75,14 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
       <div className="space-y-4">
         <h4 className="font-medium text-gray-900">Customer Orders ({order?.orders.length})</h4>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table table-compact">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-2 font-medium text-gray-700">Customer</th>
-                <th className="text-left py-2 font-medium text-gray-700">Portions</th>
-                <th className="text-left py-2 font-medium text-gray-700">Amount</th>
-                <th className="text-left py-2 font-medium text-gray-700">Status</th>
-                <th className="text-left py-2 font-medium text-gray-700">Actions</th>
+                <th className="text-left py-2 w-20 font-medium text-gray-700">Customer</th>
+                <th className="text-left py-2 w-20 font-medium text-gray-700">Portions</th>
+                <th className="text-left py-2 w-20 font-medium text-gray-700">Amount</th>
+                <th className="text-left py-2 w-20 font-medium text-gray-700">Status</th>
+                <th className="text-left py-2 w-20 font-medium text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -92,15 +92,15 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
                   className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
                   onClick={() => openCustomerModal(customer)}
                 >
-                  <td className="py-2">
+                  <td className="py-2 w-20">
                     <div>
-                      <p className="font-medium text-gray-900">{customer.user.firstname}</p>
+                      <p className="font-medium text-gray-900"></p>
                       {/* <p className="text-xs text-gray-500">{customer.timeAgo}</p> */}
                     </div>
                   </td>
-                  <td className="py-2 text-gray-600">{customer.portion}</td>
-                  <td className="py-2 text-green-600 font-medium">₦{Number(customer.amount) * customer.portion}</td>
-                  <td className="py-2">
+                  <td className="py-2 w-20 text-gray-600">{customer.portion}</td>
+                  <td className="py-2 w-20 text-green-600 font-medium">₦{Number(customer.amount) * customer.portion}</td>
+                  <td className="py-2 w-20">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                       customer.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                       customer.status === 'cancelled' ? 'bg-blue-100 text-blue-800' :
@@ -109,7 +109,7 @@ const OrderCard = ({ order, onMarkDelivered }: OrderCardProps) => {
                       {customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
                     </span>
                   </td>
-                  <td className="py-2">
+                  <td className="py-2 w-20">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation()
