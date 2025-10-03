@@ -7,7 +7,7 @@ export interface ModalState {
 
 export const createModalsSlice: StateCreator<
  ModalState
-> = (set, get) => ({
+> = (set) => ({
   isPaymentModalOpen: false,
   togglePaymentModal: () =>{
      set((state) => ({ isPaymentModalOpen: !state.isPaymentModalOpen }));

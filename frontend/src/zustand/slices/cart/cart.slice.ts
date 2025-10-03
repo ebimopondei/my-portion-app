@@ -38,7 +38,7 @@ export const createCartSlice: StateCreator<
   [],
   [],
   CartItemContextType
-> = (set, get) => ({
+> = (set) => ({
   checkoutItem: null,
   cartItems: [],
   cartCount: 0,
