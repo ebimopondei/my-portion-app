@@ -14,12 +14,13 @@ import { CartSlide } from "../components/home/cart-slide"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import useCheckOut from '@/hooks/form-hooks/use-check-out-hook';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useCart } from '@/zustand/hooks';
+import { useCartState } from '@/zustand/hooks/cart/cart.hook';
+import CheckoutPaymentModal from '@/components/modal/checkout-payment-modal';
+import { useModalStore } from '@/zustand/store';
 
 
 const Checkout: React.FC = () => {
-  const { cartItems, cartCount} = useCart()
-    
+  const { data: { cartItems, cartCount }} = useCartState()
   const navigate = useNavigate();
   
 
@@ -29,21 +30,8 @@ const Checkout: React.FC = () => {
   const serviceCharge = 100;
   const deliveryFee = 1000
   const shippingCost = cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
-//   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + serviceCharge + shippingCost;
 
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //   setShippingInfo(prev => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value
-  //   }));
-  // };
-
-  // const handlePaymentConfirmed = () => {
-  //   setPaymentConfirmed(true);
-  //   toast.success("Your order has been successfully processed. You will receive a confirmation email shortly.");
-  // };
 
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -53,6 +41,9 @@ const Checkout: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("")
 
   const { form, onCheckOut } = useCheckOut()
+
+      const { isPaymentModalOpen} = useModalStore()
+  
 
 
   const nigerianStates = [
@@ -303,6 +294,8 @@ const Checkout: React.FC = () => {
               </div>
             </div>
           </div>
+
+          <CheckoutPaymentModal key={String(isPaymentModalOpen)} />
         </div>
   );
 };

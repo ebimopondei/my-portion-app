@@ -4,12 +4,12 @@ import { Plus, Minus, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import { Link } from "react-router-dom"
-import { useCart } from "@/zustand/hooks"
+import { useCartState } from "@/zustand/hooks/cart/cart.hook"
 import { useAuthStore } from "@/zustand/store"
 
 
 export function CartContent() {
-  const { cartItems, updateCartItemQuantity, removeFromCart } = useCart()
+  const { data: { cartItems, updateCartItemQuantity, removeFromCart} } = useCartState()
   const { isLoggedIn } = useAuthStore()
 
 // @ts-expect-error
