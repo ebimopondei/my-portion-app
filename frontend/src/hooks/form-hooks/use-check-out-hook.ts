@@ -1,21 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 import { checkOutSchema } from '@shared/validation/check-out-schema'
 import type { CheckOutSchema } from '@shared/validation/check-out-schema'
 import { useState } from "react";
-import CheckOutApi from "@/api/checkout/check-out-api";
-import { useCart } from "@/zustand/hooks";
+import { useCartState } from "@/zustand/hooks/cart/cart.hook";
+import { useCartStore } from "@/zustand/store";
 
 export default function useCheckOut(){
 
-    const { cartItems } = useCart()
-
-
-    const { checkOut } = CheckOutApi();
-    const navigate = useNavigate()
+    const { data: { cartItems } } = useCartState()
+    const { checkout } = useCartStore()
     const [ isLoading, setIsLoading ] = useState<boolean>(false)
 
 
@@ -26,14 +21,7 @@ export default function useCheckOut(){
     async function onCheckOut(value:CheckOutSchema) {
         setIsLoading(true)
 
-        const response = await checkOut(value, cartItems)
-        if(response.success){
-            navigate(`/checkout/complete-payment/${response.data.id}`);
-            toast.success(response.message)
-        }else {
-            toast.error(response.message, { duration: 5000})
-        }
-
+        await checkout(value, cartItems)
         setIsLoading(false)
     }
 

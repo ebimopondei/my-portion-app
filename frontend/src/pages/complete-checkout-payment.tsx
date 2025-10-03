@@ -10,11 +10,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { CartSlide } from "../components/home/cart-slide"
 import CheckOutApi from '@/api/checkout/check-out-api';
-import { useCart } from '@/zustand/hooks';
+import { useCartState } from '@/zustand/hooks/cart/cart.hook';
 
 
 const CompleteCheckOutPayment: React.FC = () => {
-  const { cartItems, cartCount, clearCart} = useCart()
+  const { data: { cartItems, cartCount, clearCart }} = useCartState()
 
   const { order_record_id } = useParams();
 
@@ -158,20 +158,6 @@ const CompleteCheckOutPayment: React.FC = () => {
                                     </Button>
                                   </div>
                                 </div>
-                                {/* <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Routing Number:</span>
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-medium">{bankDetails.routingNumber}</span>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => copyToClipboard(bankDetails.routingNumber)}
-                                      className="h-6 w-6 p-0"
-                                    >
-                                      <Copy className="h-3 w-3" />
-                                    </Button>
-                                  </div>
-                                </div> */}
                                 <div className="flex justify-between">
                                   <span className="text-muted-foreground">Bank Name:</span>
                                   <span className="font-medium">{bankDetails.bankName}</span>
@@ -200,9 +186,6 @@ const CompleteCheckOutPayment: React.FC = () => {
                                 }
                               }
                             }
-                                
-                                // onClick={handlePaymentConfirmed}
-                              //   variant="payment"
                                 className="w-full"
                                 size="lg"
                               >

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UserAttributes } from '@shared/types/user';
 import { CreateProductDTO } from '@shared/validation/product-schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
@@ -147,10 +147,13 @@ export class ProductService {
             })
 
             if(Number(product?.available_portions) < item.quantity){
-                return {
-                    success: false,
-                    message: `Insufficient portions. Available portions for ${product?.name} is ${product?.available_portions}. Please reduce portion amount from cart.`
-                }
+                throw new ConflictException(
+                    {
+                        success: false,
+                        message: `Insufficient portions. Available portions for ${product?.name} is ${product?.available_portions}. Please reduce portion amount from cart.`,
+                        data: null,
+                    }
+                )
             }
         }
 

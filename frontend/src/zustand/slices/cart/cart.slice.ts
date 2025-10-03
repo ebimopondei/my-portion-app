@@ -1,5 +1,21 @@
+import { apiPrivate } from "@/api/temp-config";
 import type { CartItem } from "@/types/cart";
+import { useModalStore } from "@/zustand/store";
+import type { OrderAttribute } from "@shared/types/order";
+import type { CheckOutSchema } from "@shared/validation/check-out-schema";
+import toast from "react-hot-toast";
 import type { StateCreator } from "zustand";
+
+interface checkoutItem {
+        id: string,
+        product_id: string[],
+        status: string,
+        order_ids: string[],
+        user_id: string,
+        updatedAt: string,
+        createdAt: string,
+        orders: OrderAttribute[]
+    }
 
 export type CartItemContextType = {
   cartItems: Partial<CartItem>[];
@@ -11,6 +27,10 @@ export type CartItemContextType = {
   updateCartItemQuantity: (id:string, quantity: number) => void;
   ckStore: Partial<CartItem>[];   // looks like a cookie-store mirror?
   ckStoreCount: number;
+  checkoutItem: checkoutItem | null,
+  loading: boolean,
+  error: string | null,
+  checkout: (product: CheckOutSchema, cartItem: Partial<CartItem>[]) => Promise<void>,
 };
 
 export const createCartSlice: StateCreator<
@@ -18,12 +38,15 @@ export const createCartSlice: StateCreator<
   [],
   [],
   CartItemContextType
-> = (set) => ({
+> = (set, get) => ({
+  checkoutItem: null,
   cartItems: [],
   cartCount: 0,
   cartTotal: 0,
   ckStore: [],
   ckStoreCount: 0,
+  loading: true,
+  error: null,
   updateCartItemQuantity: (id, newQuantity) =>
         set((state) => {
           if (newQuantity <= 0) {
@@ -110,4 +133,22 @@ export const createCartSlice: StateCreator<
         ),
       };
     }),
+
+  checkout: async(product: CheckOutSchema, cartItems: Partial<CartItem>[]) => {
+    set({ loading: true, error: null})
+      try {
+          const res = await apiPrivate.post( `/product/check-out`, {
+              ...product, cartItems
+          } );
+          toast.success(res?.data.message);
+          set(({ checkoutItem: res.data.data, loading: false }))
+          useModalStore.getState().togglePaymentModal()
+        }catch(err:any){
+          if (err.response) {
+              toast.error(err.response.data.message, { duration: 5000})                    
+            } else {
+              toast.error(err.message, { duration: 5000})
+          }
+      }
+    }
 });

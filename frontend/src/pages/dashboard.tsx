@@ -12,7 +12,7 @@ import CitySelectionModal from "../components/home/city-selection-modal"
 import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
 import Footer from "@/components/Layout/footer"
-import { useCart } from "@/zustand/hooks"
+import { useCartState } from "@/zustand/hooks/cart/cart.hook"
 import { useFetchProduct, useProductState } from "@/zustand/hooks/product/product.hook"
 
 export default function DashboardPage() {
@@ -27,7 +27,7 @@ export default function DashboardPage() {
 
 
   const [searchQuery, setSearchQuery] = useState("")
-  const { addToCart, cartCount } = useCart()
+  const { data: { addToCart, cartCount }} = useCartState()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
