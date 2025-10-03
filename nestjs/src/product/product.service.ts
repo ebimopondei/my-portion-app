@@ -8,6 +8,8 @@ import { Sequelize } from 'sequelize-typescript';
 import { OrderRecord } from 'src/database/models/order-record';
 import { Order } from 'src/database/models/Order';
 import { User } from 'src/database/models/User';
+import { AddressAndCartSchema } from '@shared/validation/check-out-schema';
+import { Notification } from 'src/database/models/Notification';
 
 
 @Injectable()
@@ -132,12 +134,9 @@ export class ProductService {
 
     }
 
-    async checkOut(user_id: string, checkoutDTO: any) {
-
+    async checkOut(user_id: string, checkoutDTO: AddressAndCartSchema) {
 
         const orders: Order[] = [];
-
-        // check if portion is available
 
         for (const item of checkoutDTO.cartItems ) {
             const product = await Product.findOne( {
@@ -159,7 +158,6 @@ export class ProductService {
 
         let orderRecord = {}
 
-
         await this.sequelize.transaction( async ( t) => {
 
             const { dataValues} = await OrderRecord.create( {
@@ -178,6 +176,22 @@ export class ProductService {
                         status: 'pending',
                         user_id,
                 }, { transaction: t })
+
+                await Notification.create( {
+                    user_id: item.vendor_id,
+                    type: "order",
+                    title: 'New Order',
+                    message: `You have a new order for ${item.name}`,
+                    role_target: 'vendor',
+                })
+
+                await Notification.create( {
+                    user_id,
+                    type: "order",
+                    title: 'Order Created',
+                    message: `You have a new order for ${item.name} has been created`,
+                    role_target: 'user',
+                })
 
                 await OrderRecord.update( {
                         order_ids: order.id,

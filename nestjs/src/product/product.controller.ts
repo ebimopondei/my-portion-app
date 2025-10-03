@@ -4,30 +4,10 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ParsedToken } from 'decorators';
 import { User } from 'src/database/models/User';
 import { ZodValidationPipe } from 'pipes/zod-validation-pipe';
-import { CreateProductDTO, createProductSchema, productSchema } from '@shared/validation/product-schema';
-import z from 'zod';
+import { CreateProductDTO, createProductSchema } from '@shared/validation/product-schema';
+import { AddressAndCartSchema, addressAndCartSchema } from '@shared/validation/check-out-schema';
 import { Public } from 'src/auth/decorators/public.decorators';
 
-
-const CartItemSchema = z.object({
-     id: z.string().uuid(),
-  name: z.string(),
-  image: z.string(),
-  price: z.number(),
-  unit: z.string(),
-  vendor_id: z.string(),
-  quantity: z.number(),
-});
-
-
-const AddressAndCartSchema = z.object({
-     street_address: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.string(),
-  delivery_note: z.string().optional(),
-  cartItems: z.array(CartItemSchema),
-});
 
 @Controller('/v1/product')
 export class ProductController {
@@ -78,7 +58,7 @@ export class ProductController {
     @Post("check-out")
     checkOut(
         @ParsedToken() user: User, 
-        @Body(new ZodValidationPipe(AddressAndCartSchema)) checkoutDTO: any) {
+        @Body(new ZodValidationPipe(addressAndCartSchema)) checkoutDTO: AddressAndCartSchema) {
         return this.productService.checkOut( user.id, checkoutDTO);    
     }
 

@@ -37,10 +37,12 @@ import { OrderRecord } from 'src/database/models/order-record';
 import { Rating } from 'src/database/models/Rating';
 import { SellerKyc } from 'src/database/models/SellerKYC';
 import { Transaction } from './database/models/Transaction';
+import { Notification } from './database/models/Notification';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, Transaction, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
+    SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, Transaction, Notification, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync( 
@@ -54,7 +56,8 @@ import { Transaction } from './database/models/Transaction';
     MailerModule,
     WalletModule,
     AdminDashboardModule,
-    TransactionModule
+    TransactionModule,
+    NotificationModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
