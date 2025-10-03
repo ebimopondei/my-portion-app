@@ -5,8 +5,9 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
 import { useAuthStore } from "@/zustand/store"
+import { useFectchNotifications, useNotificactionState } from "@/zustand/hooks/notification/notification.hook"
 
-const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavbarProps) => {
+const VendorNavbar = ({ activeTab, setActiveTab }: VendorNavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -25,6 +26,9 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
     setActiveTab(tabId as any)
     setIsMobileMenuOpen(false)
   }
+
+  const { data: { notifications }} = useNotificactionState()
+  useFectchNotifications()
 
   return (
     <nav className="bg-white shadow-sm border-b relative">
@@ -50,9 +54,9 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
                 >
                   <Icon size={18} />
                   <span>{item.label}</span>
-                  {item.id === 'notifications' && notificationCount > 0 && (
+                  {item.id === 'notifications' && notifications.unreadNotificationCount > 0 && (
                     <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center">
-                      {notificationCount}
+                      {notifications.unreadNotificationCount}
                     </span>
                   )}
                 </Link>
@@ -78,11 +82,11 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
             
             <div className="flex items-center space-x-3">
               {/* Notifications Badge */}
-              {notificationCount > 0 && (
+              {notifications.unreadNotificationCount > 0 && (
                 <div className="relative">
                   <Bell className="w-5 h-5 text-gray-600" />
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center">
-                    {notificationCount}
+                    {notifications.unreadNotificationCount}
                   </span>
                 </div>
               )}
@@ -128,9 +132,9 @@ const VendorNavbar = ({ activeTab, setActiveTab, notificationCount }: VendorNavb
                           <Icon size={18} />
                           <span>{item.label}</span>
                         </div>
-                        {item.id === 'notifications' && notificationCount > 0 && (
+                        {item.id === 'notifications' && notifications.unreadNotificationCount > 0 && (
                           <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center">
-                            {notificationCount}
+                            {notifications.unreadNotificationCount}
                           </span>
                         )}
                       </Link>

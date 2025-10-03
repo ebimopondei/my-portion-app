@@ -9,6 +9,7 @@ import { createOrdersSlice, type OrderState } from "../slices/orders/orders.slic
 import { createWalletSlice, type WalletState } from "../slices/wallet/wallet.slice";
 import { createTransactionSlice, type TransactionState } from "../slices/transaction/transaction.slice";
 import { createModalsSlice, type ModalState } from "../modal/modal.slice";
+import { createNotificationsSlice, type NotificiationState } from "../slices/notification/notification.slice";
 
 interface GlobalState extends 
 CartItemContextType, 
@@ -41,6 +42,13 @@ export const useModalStore = create<ModalState
 >()((...a) =>(
 {
     ...createModalsSlice(...a)
+}
+))
+
+export const useNotificationStore = create<NotificiationState
+>()((...a) =>(
+{
+    ...createNotificationsSlice(...a)
 }
 ))
 

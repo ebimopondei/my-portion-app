@@ -12,20 +12,18 @@ import {
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
 
-// Import your shared types and enums
 import { Status, TransactionTypes } from "../../../../shared/enums"; // Adjust path as necessary, from your provided snippet it's "../../../shared/enums"
 
 
-// Import related models for ForeignKey and HasMany decorators (adjust paths as needed)
-import { User } from './User'; // Assuming your User model is in './User.ts'
-import { Order } from './Order'; // Assuming your Order model is in './Order.ts'
+import { User } from './User'; 
+import { Order } from './Order'; 
 import { TransactionAttribute } from '@shared/types/transaction';
 
 
 @Table({
   tableName: 'transaction',
   modelName: 'transaction',
-  timestamps: true, // Assuming you want createdAt and updatedAt
+  timestamps: true,
   paranoid: true,
 })
 
@@ -40,7 +38,7 @@ export class Transaction extends Model<TransactionAttribute> implements Transact
   @Column(DataTypes.UUID)
   declare order_id: string;
 
-  @ForeignKey(() => User) // References the User model
+  @ForeignKey(() => User) 
   @AllowNull(false)
   @Column(DataTypes.UUID)
   declare user_id: string;

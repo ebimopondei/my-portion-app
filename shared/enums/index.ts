@@ -55,6 +55,15 @@ export const Roles = {
     SUBADMIN: "subadmin"
 } as const;
 
+export const NotificationType = {
+    ORDER: "order",
+    PAYMENT: "payment",
+    PAYOUT: "payout",
+    SYSTEM: "system",
+    ALERT: "alert"
+} as const;
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 export type Roles = (typeof Roles)[keyof typeof Roles];
 
 export const MailEvent = {
